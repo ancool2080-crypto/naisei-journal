@@ -309,12 +309,20 @@ body::after {
   margin-bottom:8px;
 }
 .mood-btn {
-  flex:1;padding:14px 4px;border:none;background:none;
-  font-size:1.3rem;cursor:pointer;transition:.2s;
+  flex:1;padding:12px 4px;border:none;background:none;
+  cursor:pointer;transition:.2s;
   border-right:1px solid var(--night-line);
+  display:flex;flex-direction:column;align-items:center;gap:4px;
 }
 .mood-btn:last-child { border-right:none; }
-.mood-btn.selected { background:rgba(200,168,75,.12); }
+.mood-btn.selected { background:rgba(200,168,75,.1); }
+.mood-btn.selected .mood-kanji { color:var(--kin); }
+.mood-btn.selected .mood-moon { filter:drop-shadow(0 0 4px rgba(200,168,75,.6)); }
+.mood-moon { font-size:1.4rem;line-height:1; }
+.mood-kanji {
+  font-family:var(--font-title);font-size:.65rem;
+  color:var(--star-faint);letter-spacing:.05em;transition:.2s;
+}
 .mood-label {
   text-align:center;font-size:.68rem;color:var(--star-faint);letter-spacing:.1em;
 }
@@ -721,11 +729,26 @@ body::after {
         </div>
         <div class="rule"></div>
         <div class="mood-row" id="mood-selector">
-          <button class="mood-btn" data-mood="1" onclick="selectMood(1)">😞</button>
-          <button class="mood-btn" data-mood="2" onclick="selectMood(2)">😔</button>
-          <button class="mood-btn" data-mood="3" onclick="selectMood(3)">😐</button>
-          <button class="mood-btn" data-mood="4" onclick="selectMood(4)">🙂</button>
-          <button class="mood-btn" data-mood="5" onclick="selectMood(5)">😊</button>
+          <button class="mood-btn" data-mood="1" onclick="selectMood(1)">
+            <div class="mood-moon">🌑</div>
+            <div class="mood-kanji">苦</div>
+          </button>
+          <button class="mood-btn" data-mood="2" onclick="selectMood(2)">
+            <div class="mood-moon">🌒</div>
+            <div class="mood-kanji">憂</div>
+          </button>
+          <button class="mood-btn" data-mood="3" onclick="selectMood(3)">
+            <div class="mood-moon">🌓</div>
+            <div class="mood-kanji">平</div>
+          </button>
+          <button class="mood-btn" data-mood="4" onclick="selectMood(4)">
+            <div class="mood-moon">🌔</div>
+            <div class="mood-kanji">安</div>
+          </button>
+          <button class="mood-btn" data-mood="5" onclick="selectMood(5)">
+            <div class="mood-moon">🌕</div>
+            <div class="mood-kanji">喜</div>
+          </button>
         </div>
         <div class="mood-label" id="mood-label">選んでください</div>
       </div>
@@ -842,7 +865,13 @@ body::after {
 
   <nav class="nav-bar">
     <button class="nav-tab active" onclick="showModule('journal',this)">
-      <div class="nav-icon">✍</div><div>記録</div>
+      <div class="nav-icon">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <line x1="3" y1="17" x2="17" y2="3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+          <path d="M14 3 L17 6 L7 16 L3 17 L4 13 Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round" fill="none"/>
+          <line x1="3" y1="17" x2="5" y2="19" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity="0.5"/>
+        </svg>
+      </div><div>記録</div>
     </button>
     <button class="nav-tab" onclick="showModule('history',this)">
       <div class="nav-icon">◎</div><div>履歴</div>
@@ -954,7 +983,7 @@ let currentFilter = 'all';
 window._authMode = 'login';
 
 const MOOD_LABELS = {1:'とても辛い',2:'少し辛い',3:'普通',4:'良い',5:'とても良い'};
-const MOOD_EMOJIS = {1:'😞',2:'😔',3:'😐',4:'🙂',5:'😊'};
+const MOOD_EMOJIS = {1:'🌑 苦',2:'🌒 憂',3:'🌓 平',4:'🌔 安',5:'🌕 喜'};
 
 window.initApp = function() {
   setHeaderDate(); updateStreak(); updateApiStatus(); loadTodayDraft();
