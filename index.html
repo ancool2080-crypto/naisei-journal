@@ -5,364 +5,568 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#1C1A16">
+<meta name="theme-color" content="#070B14">
 <title>内省 — Naisei Journal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;700&family=Kaisei+Opti:wght@400;700&family=Zen+Antique&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;500;700&family=Zen+Antique&family=Kaisei+Opti:wght@400;700&display=swap" rel="stylesheet">
 <style>
+/* ═══════════════════════════════════════════
+   冬の星空 × 書物のページ
+   深夜藍黒 / 星光白 / 朱墨アクセント
+═══════════════════════════════════════════ */
 :root {
-  /* 和紙・墨・藍・朱 パレット */
-  --cream:       #F2EDE4;   /* 和紙 */
-  --warm-white:  #FAF7F0;   /* 白練 */
-  --ai:          #1C2B3A;   /* 藍 */
-  --ai-light:    #3D5A73;   /* 薄藍 */
-  --ai-dark:     #0F1E2D;   /* 深藍 */
-  --ai-pale:     #E8EFF5;   /* 水色 */
-  --shu:         #C0392B;   /* 朱 */
-  --shu-light:   #D96B5A;   /* 淡朱 */
-  --shu-pale:    #F7E8E5;   /* 桜 */
-  --kin:         #B8860B;   /* 金 */
-  --kin-light:   #D4A843;   /* 山吹 */
-  --kin-pale:    #FBF3DC;   /* 淡黄 */
-  --sumi:        #1C1A16;   /* 墨 */
-  --sumi-light:  #3D3A33;   /* 煤竹 */
-  --ink:         #1C1A16;
-  --ink-soft:    #3D3A33;
-  --mist:        #9BA8A0;   /* 鼠 */
-  /* 後方互換エイリアス */
-  --sage:        var(--ai-light);
-  --sage-light:  #5C7A8A;
-  --sage-dark:   var(--ai-dark);
-  --sage-pale:   var(--ai-pale);
-  --terra:       var(--shu);
-  --terra-light: var(--shu-light);
-  --terra-pale:  var(--shu-pale);
-  --ochre:       var(--kin);
-  --ochre-light: var(--kin-light);
-  --ochre-pale:  var(--kin-pale);
-  --bark:        #5C4A32;
-  --bark-light:  #8C7055;
-  --shadow:      rgba(28,26,22,0.12);
-  --shadow-md:   rgba(28,26,22,0.22);
-  --radius-sm:   4px;   /* 和風：角を立てる */
-  --radius-md:   8px;
-  --radius-lg:   12px;
-  --radius-xl:   20px;
-  --font-serif:  'Kaisei Opti', 'Noto Serif JP', serif;
-  --font-sans:   'Noto Serif JP', serif;
-  --font-title:  'Zen Antique', 'Kaisei Opti', serif;
+  --night:      #070B14;
+  --night-mid:  #0D1525;
+  --night-card: #111827;
+  --night-line: #1E2D45;
+  --star:       #E8EFF8;
+  --star-dim:   #8A9BB5;
+  --star-faint: #3A4A62;
+  --shu:        #C8402A;
+  --shu-glow:   rgba(200,64,42,.25);
+  --kin:        #C8A84B;
+  --kin-glow:   rgba(200,168,75,.2);
+  --ice:        #4A7FA5;
+  --ice-pale:   rgba(74,127,165,.15);
+  --shadow:     rgba(0,0,0,.5);
+  --font-title: 'Zen Antique','Noto Serif JP',serif;
+  --font-serif: 'Kaisei Opti','Noto Serif JP',serif;
+  --font-body:  'Noto Serif JP',serif;
+  --r-sm: 3px;
+  --r-md: 6px;
+  --r-lg: 10px;
 }
+
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-html{font-size:16px;-webkit-text-size-adjust:100%;}
-body{
-  font-family:var(--font-sans);
-  background:var(--cream);
-  background-image: repeating-linear-gradient(0deg,transparent,transparent 24px,rgba(28,26,22,.03) 24px,rgba(28,26,22,.03) 25px);
-  color:var(--ink);
+html{font-size:16px;-webkit-text-size-adjust:100%;scroll-behavior:smooth;}
+
+/* ── 星空背景 ── */
+body {
+  font-family:var(--font-body);
+  background:var(--night);
+  color:var(--star);
   min-height:100vh;
-  padding-bottom:calc(72px + env(safe-area-inset-bottom,0px));
+  padding-bottom:calc(68px + env(safe-area-inset-bottom,0px));
+  position:relative;
+  overflow-x:hidden;
+}
+body::before {
+  content:'';
+  position:fixed;inset:0;z-index:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%, #0D1E3A 0%, transparent 70%),
+    radial-gradient(ellipse 60% 40% at 80% 100%, #0A1528 0%, transparent 60%);
+  pointer-events:none;
+}
+/* 星粒 */
+body::after {
+  content:'';
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    radial-gradient(1px 1px at 10% 15%, rgba(232,239,248,.7) 0%, transparent 100%),
+    radial-gradient(1px 1px at 25% 8%,  rgba(232,239,248,.5) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 40% 22%, rgba(200,168,75,.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 60% 5%,  rgba(232,239,248,.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 75% 18%, rgba(232,239,248,.4) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 88% 10%, rgba(232,239,248,.7) 0%, transparent 100%),
+    radial-gradient(1px 1px at 15% 35%, rgba(232,239,248,.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 50% 30%, rgba(200,168,75,.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 92% 35%, rgba(232,239,248,.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 5%  50%, rgba(232,239,248,.4) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 33% 48%, rgba(232,239,248,.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 68% 42%, rgba(232,239,248,.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 82% 55%, rgba(200,168,75,.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 20% 62%, rgba(232,239,248,.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 55% 70%, rgba(232,239,248,.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 95% 68%, rgba(232,239,248,.5) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 45% 80%, rgba(232,239,248,.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 72% 85%, rgba(200,168,75,.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 8%  88%, rgba(232,239,248,.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 30% 92%, rgba(232,239,248,.3) 0%, transparent 100%);
 }
 
-/* ── ローディング ── */
-#app-loading{
+/* ── コンテンツ層 ── */
+#app-loading,#app-auth,#app-main { position:relative;z-index:1; }
+
+/* ══ ローディング ══ */
+#app-loading {
   position:fixed;inset:0;z-index:3000;
-  background:var(--sumi);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;
+  background:var(--night);
 }
-.loading-title{font-family:var(--font-title);color:#FAF7F0;font-size:2rem;letter-spacing:.3em;}
-.loading-sub{color:var(--mist);font-size:.85rem;letter-spacing:.2em;}
-.loading-dot{
-  width:8px;height:8px;background:var(--ochre-light);border-radius:50%;
-  animation:dotpulse 1.4s ease-in-out infinite;
+.loading-kanji {
+  font-family:var(--font-title);font-size:3rem;color:var(--star);
+  letter-spacing:.4em;text-indent:.4em;
+  animation:fadeIn 1.5s ease;
 }
-@keyframes dotpulse{0%,80%,100%{opacity:.2;transform:scale(.8);}40%{opacity:1;transform:scale(1.2);}}
+.loading-sub { color:var(--star-dim);font-size:.75rem;letter-spacing:.25em; }
+.loading-line {
+  width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--kin),transparent);
+  animation:shimmer 2s ease-in-out infinite;
+}
+@keyframes shimmer{0%,100%{opacity:.3;}50%{opacity:1;}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
 
-/* ── 認証画面 ── */
-#app-auth{
+/* ══ 認証画面 ══ */
+#app-auth {
   display:none;min-height:100vh;
-  background:var(--sumi);
   align-items:center;justify-content:center;padding:24px;
 }
-.auth-card{
-  background:var(--warm-white);border-radius:var(--radius-lg);
-  padding:40px 32px;width:100%;max-width:400px;
-  box-shadow:0 8px 32px var(--shadow-md);
+.auth-card {
+  width:100%;max-width:380px;
+  border:1px solid var(--night-line);
+  border-radius:var(--r-lg);
+  padding:40px 32px;
+  background:rgba(13,21,37,.95);
+  backdrop-filter:blur(12px);
+  box-shadow:0 0 40px rgba(74,127,165,.1), 0 0 80px rgba(0,0,0,.6);
 }
-.auth-logo{font-family:var(--font-title);font-size:2.4rem;color:var(--ai-dark);text-align:center;margin-bottom:4px;letter-spacing:.3em;}
-.auth-sub{text-align:center;color:var(--bark-light);font-size:.8rem;letter-spacing:.15em;margin-bottom:32px;}
-.auth-tabs{display:flex;gap:8px;margin-bottom:24px;}
-.auth-tab{
-  flex:1;padding:10px;border:2px solid var(--mist);border-radius:var(--radius-sm);
-  background:none;cursor:pointer;font-family:var(--font-sans);font-size:.9rem;color:var(--ink-soft);
-  transition:.2s;
+.auth-logo {
+  font-family:var(--font-title);font-size:2.4rem;color:var(--star);
+  text-align:center;margin-bottom:4px;letter-spacing:.35em;text-indent:.35em;
 }
-.auth-tab.active{border-color:var(--ai);background:var(--ai-pale);color:var(--ai-dark);font-weight:700;}
-.auth-form{display:flex;flex-direction:column;gap:14px;}
-.form-group label{display:block;font-size:.8rem;color:var(--ink-soft);margin-bottom:6px;letter-spacing:.05em;}
-.form-group input{
-  width:100%;padding:12px 14px;border:1.5px solid #DDD8CE;border-radius:var(--radius-sm);
-  font-family:var(--font-sans);font-size:.95rem;background:var(--cream);color:var(--ink);outline:none;
-  transition:.2s;
+.auth-sub { text-align:center;color:var(--star-faint);font-size:.72rem;letter-spacing:.2em;margin-bottom:32px; }
+.auth-divider {
+  height:1px;background:linear-gradient(90deg,transparent,var(--night-line),transparent);
+  margin-bottom:24px;
 }
-.form-group input:focus{border-color:var(--sage);}
-.auth-btn{
-  padding:14px;border:none;border-radius:var(--radius-sm);
-  background:var(--sumi);color:#FAF7F0;font-family:var(--font-sans);font-size:1rem;
-  font-weight:700;cursor:pointer;transition:.2s;margin-top:8px;
+.auth-tabs { display:flex;gap:1px;margin-bottom:24px;border:1px solid var(--night-line);border-radius:var(--r-sm); }
+.auth-tab {
+  flex:1;padding:10px;border:none;background:none;
+  font-family:var(--font-body);font-size:.85rem;color:var(--star-dim);cursor:pointer;transition:.2s;
+  letter-spacing:.05em;
 }
-.auth-btn:hover{background:var(--ai-dark);}
-.auth-error{color:var(--terra);font-size:.85rem;text-align:center;display:none;}
+.auth-tab.active { background:var(--night-line);color:var(--star); }
+.form-group { margin-bottom:14px; }
+.form-group label { display:block;font-size:.72rem;color:var(--star-dim);margin-bottom:6px;letter-spacing:.1em; }
+.form-group input {
+  width:100%;padding:12px 14px;
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--night-line);
+  border-radius:var(--r-sm);
+  font-family:var(--font-body);font-size:.9rem;color:var(--star);outline:none;transition:.2s;
+}
+.form-group input:focus { border-color:var(--ice);box-shadow:0 0 0 2px var(--ice-pale); }
+.form-group input::placeholder { color:var(--star-faint); }
+.auth-btn {
+  width:100%;padding:13px;margin-top:8px;border:none;
+  border-radius:var(--r-sm);
+  background:linear-gradient(135deg,var(--ice) 0%,#2A5A80 100%);
+  color:var(--star);font-family:var(--font-serif);font-size:.95rem;
+  letter-spacing:.15em;cursor:pointer;transition:.2s;
+}
+.auth-btn:hover { opacity:.85; }
+.auth-error { color:var(--shu);font-size:.8rem;text-align:center;margin-top:8px;display:none; }
 
-/* ── ヘッダー ── */
-.site-header{
+/* ══ ヘッダー ══ */
+.site-header {
   position:sticky;top:0;z-index:100;
-  background:var(--sumi);
-  padding:16px 20px 12px;
-  border-bottom:2px solid var(--ai);
-  padding-top:max(16px,calc(16px + env(safe-area-inset-top,0px)));
+  padding:14px 20px 12px;
+  padding-top:max(14px,calc(14px + env(safe-area-inset-top,0px)));
+  background:rgba(7,11,20,.85);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--night-line);
 }
-@media(display-mode:standalone){
-  .site-header{padding-top:max(20px,calc(env(safe-area-inset-top,0px)+10px));}
+.header-inner { display:flex;align-items:center;justify-content:space-between; }
+.header-left {}
+.header-title {
+  font-family:var(--font-title);font-size:1.4rem;color:var(--star);
+  letter-spacing:.3em;text-indent:.3em;line-height:1;
 }
-.header-inner{display:flex;align-items:center;justify-content:space-between;}
-.header-title{font-family:var(--font-title);color:#FAF7F0;font-size:1.5rem;letter-spacing:.3em;}
-.header-date{color:var(--mist);font-size:.75rem;letter-spacing:.08em;}
-.header-right{display:flex;align-items:center;gap:10px;}
-.streak-badge{
-  background:var(--shu);color:#FAF7F0;font-size:.7rem;font-weight:700;
-  padding:4px 10px;border-radius:2px;letter-spacing:.1em;font-family:var(--font-serif);
+.header-date { color:var(--star-faint);font-size:.68rem;letter-spacing:.12em;margin-top:4px; }
+.header-right { display:flex;align-items:center;gap:10px; }
+.streak-badge {
+  font-family:var(--font-serif);font-size:.68rem;color:var(--kin);
+  border:1px solid rgba(200,168,75,.4);
+  padding:3px 10px;border-radius:2px;letter-spacing:.08em;
+  background:rgba(200,168,75,.08);
 }
-.icon-btn{
-  width:36px;height:36px;border:none;border-radius:50%;
-  background:rgba(255,255,255,.15);color:#fff;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;font-size:1rem;transition:.2s;
+.icon-btn {
+  width:34px;height:34px;border:1px solid var(--night-line);border-radius:50%;
+  background:rgba(255,255,255,.04);color:var(--star-dim);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-size:.95rem;transition:.2s;
 }
-.icon-btn:hover{background:rgba(255,255,255,.25);}
+.icon-btn:hover { border-color:var(--ice);color:var(--star); }
 
-/* ── ナビ ── */
-.nav-bar{
+/* ══ ナビ ══ */
+.nav-bar {
   position:fixed;bottom:0;left:0;right:0;z-index:100;
-  background:var(--sumi);border-top:2px solid var(--ai);
-  display:flex;padding-bottom:env(safe-area-inset-bottom,0px);
+  background:rgba(7,11,20,.92);
+  backdrop-filter:blur(16px);
+  border-top:1px solid var(--night-line);
+  display:flex;
+  padding-bottom:env(safe-area-inset-bottom,0px);
 }
-.nav-tab{
+.nav-tab {
   flex:1;padding:10px 4px 8px;border:none;background:none;cursor:pointer;
   display:flex;flex-direction:column;align-items:center;gap:4px;
-  font-family:var(--font-serif);font-size:.65rem;color:var(--mist);
-  transition:.2s;letter-spacing:.1em;
+  font-family:var(--font-body);font-size:.6rem;color:var(--star-faint);
+  transition:.2s;letter-spacing:.08em;
 }
-.nav-tab .nav-icon{font-size:1.4rem;transition:.2s;}
-.nav-tab.active{color:var(--kin-light);}
-.nav-tab.active .nav-icon{transform:translateY(-2px);}
+.nav-icon { font-size:1.2rem;transition:.2s; }
+.nav-tab.active { color:var(--kin); }
+.nav-tab.active .nav-icon { transform:translateY(-2px); }
 
-/* ── メインコンテンツ ── */
-.main{padding:20px 16px;max-width:680px;margin:0 auto;}
-.module{display:none;}
-.module.active{display:block;}
+/* ══ メインコンテンツ ══ */
+.main { padding:0;max-width:660px;margin:0 auto; }
+.module { display:none; }
+.module.active { display:block; }
 
-/* ── セクションカード ── */
-.card{
-  background:var(--warm-white);border-radius:var(--radius-md);
-  padding:20px;margin-bottom:16px;
-  box-shadow:0 2px 8px var(--shadow);
-  border-top:3px solid var(--ai-dark);
+/* ══ ページ区切り ── 書物のページ感 ══ */
+.page-section {
+  padding:32px 20px;
+  border-bottom:1px solid var(--night-line);
+  position:relative;
 }
-.card-header{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
-.card-icon{font-size:1.3rem;}
-.card-title{font-family:var(--font-serif);font-size:1rem;color:var(--sumi);letter-spacing:.15em;font-weight:700;}
-.card-title span{font-family:var(--font-sans);font-size:.75rem;color:var(--bark-light);margin-left:6px;}
+.page-section::before {
+  content:attr(data-page);
+  position:absolute;top:32px;right:20px;
+  font-family:var(--font-serif);font-size:.65rem;
+  color:var(--star-faint);letter-spacing:.15em;
+}
+
+/* ── セクション見出し ── */
+.section-heading {
+  display:flex;align-items:baseline;gap:12px;
+  margin-bottom:24px;
+}
+.section-num {
+  font-family:var(--font-title);font-size:.75rem;color:var(--shu);
+  letter-spacing:.1em;min-width:16px;
+}
+.section-title {
+  font-family:var(--font-title);font-size:1rem;color:var(--star);
+  letter-spacing:.2em;
+}
+.section-sub {
+  font-size:.68rem;color:var(--star-faint);letter-spacing:.1em;margin-left:auto;
+}
+
+/* ── 区切り線 ── */
+.rule {
+  height:1px;
+  background:linear-gradient(90deg,var(--shu) 0%,transparent 60%);
+  margin-bottom:20px;opacity:.6;
+}
 
 /* ── テキストエリア ── */
-.journal-textarea{
-  width:100%;border:1.5px solid #E0DDD5;border-radius:var(--radius-sm);
-  padding:12px 14px;font-family:var(--font-sans);font-size:.9rem;
-  color:var(--ink);background:var(--cream);resize:none;outline:none;
-  line-height:1.7;transition:.2s;
+.j-textarea {
+  width:100%;
+  background:rgba(255,255,255,.03);
+  border:none;
+  border-bottom:1px solid var(--night-line);
+  padding:10px 4px;
+  font-family:var(--font-body);font-size:.9rem;
+  color:var(--star);resize:none;outline:none;
+  line-height:1.9;transition:.2s;
+  letter-spacing:.03em;
 }
-.journal-textarea:focus{border-color:var(--ai);}
-.journal-textarea::placeholder{color:#C0B9AE;}
+.j-textarea:focus { border-bottom-color:var(--ice);background:rgba(74,127,165,.04); }
+.j-textarea::placeholder { color:var(--star-faint); }
 
 /* ── 感謝エントリ ── */
-.gratitude-list{display:flex;flex-direction:column;gap:10px;}
-.gratitude-item{display:flex;align-items:flex-start;gap:10px;}
-.gratitude-num{
-  min-width:28px;height:28px;border-radius:50%;
-  background:var(--shu);color:#FAF7F0;
-  font-size:.82rem;font-weight:700;font-family:var(--font-title);
-  display:flex;align-items:center;justify-content:center;margin-top:4px;
+.gratitude-entry { margin-bottom:28px; }
+.gratitude-entry:last-child { margin-bottom:0; }
+.gratitude-marker {
+  display:flex;align-items:center;gap:10px;margin-bottom:8px;
 }
-.gratitude-col{flex:1;}
-.gratitude-col textarea{margin-bottom:6px;}
-.gratitude-why{font-size:.78rem;color:var(--bark-light);margin-bottom:4px;letter-spacing:.03em;}
-
-/* ── 目標リスト ── */
-.goal-list{display:flex;flex-direction:column;gap:12px;}
-.goal-item{border-left:3px solid var(--ai);padding-left:12px;}
-.goal-label{font-size:.75rem;color:var(--ai);font-weight:700;margin-bottom:6px;letter-spacing:.1em;font-family:var(--font-serif);}
-
-/* ── 手放すこと ── */
-.release-hint{font-size:.78rem;color:var(--bark-light);margin-bottom:8px;line-height:1.6;}
-
-/* ── 気分スコア ── */
-.mood-selector{display:flex;gap:8px;justify-content:center;margin:4px 0 8px;}
-.mood-btn{
-  width:48px;height:48px;border:2px solid #E0DDD5;border-radius:50%;background:var(--cream);
-  font-size:1.4rem;cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;
+.gratitude-kanji {
+  font-family:var(--font-title);font-size:.85rem;color:var(--shu);
+  width:20px;text-align:center;
 }
-.mood-btn.selected{border-color:var(--ochre);background:var(--ochre-pale);transform:scale(1.15);}
-.mood-label{text-align:center;font-size:.75rem;color:var(--bark-light);margin-top:4px;}
+.gratitude-line {
+  flex:1;height:1px;
+  background:linear-gradient(90deg,var(--night-line),transparent);
+}
+.why-label {
+  font-size:.68rem;color:var(--star-faint);letter-spacing:.12em;
+  margin:10px 0 6px 30px;
+}
+.why-textarea {
+  width:100%;
+  background:transparent;border:none;
+  border-bottom:1px dashed var(--star-faint);
+  padding:6px 4px 6px 30px;
+  font-family:var(--font-body);font-size:.82rem;
+  color:var(--star-dim);resize:none;outline:none;line-height:1.7;
+  letter-spacing:.03em;
+}
+.why-textarea:focus { border-bottom-color:var(--ice);color:var(--star); }
+.why-textarea::placeholder { color:var(--star-faint); }
+
+/* ── 目標エントリ ── */
+.goal-entry { margin-bottom:24px; }
+.goal-entry:last-child { margin-bottom:0; }
+.goal-marker {
+  font-family:var(--font-serif);font-size:.65rem;color:var(--ice);
+  letter-spacing:.15em;margin-bottom:6px;display:block;
+}
+
+/* ── 気分セレクタ ── */
+.mood-row {
+  display:flex;gap:0;justify-content:center;
+  border:1px solid var(--night-line);border-radius:var(--r-sm);overflow:hidden;
+  margin-bottom:8px;
+}
+.mood-btn {
+  flex:1;padding:14px 4px;border:none;background:none;
+  font-size:1.3rem;cursor:pointer;transition:.2s;
+  border-right:1px solid var(--night-line);
+}
+.mood-btn:last-child { border-right:none; }
+.mood-btn.selected { background:rgba(200,168,75,.12); }
+.mood-label {
+  text-align:center;font-size:.68rem;color:var(--star-faint);letter-spacing:.1em;
+}
+
+/* ── 記録ボタン ── */
+.record-btn {
+  width:100%;padding:15px;border:1px solid var(--night-line);
+  border-radius:var(--r-sm);
+  background:rgba(255,255,255,.03);
+  color:var(--star);font-family:var(--font-serif);font-size:.95rem;
+  letter-spacing:.2em;cursor:pointer;transition:.3s;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  margin-top:4px;
+}
+.record-btn:hover {
+  background:rgba(74,127,165,.12);
+  border-color:var(--ice);
+  box-shadow:0 0 20px rgba(74,127,165,.15);
+}
+.record-btn:disabled { opacity:.4;cursor:not-allowed; }
+.btn-star { color:var(--kin);font-size:.9rem; }
 
 /* ── AIアドバイス ── */
-.advice-box{
-  border:1.5px solid var(--ai-light);border-radius:var(--radius-md);
-  padding:20px;background:var(--ai-pale);margin-top:4px;
+.advice-wrap {
+  margin:0 20px 0;
+  border:1px solid var(--night-line);
+  border-radius:var(--r-md);
+  overflow:hidden;
+  display:none;
 }
-.advice-header{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
-.advice-icon{font-size:1.1rem;}
-.advice-title{font-family:var(--font-title);font-size:.9rem;color:var(--ai-dark);letter-spacing:.2em;}
-.advice-tag{
-  margin-left:auto;font-size:.65rem;padding:3px 8px;
-  border-radius:2px;background:var(--ai-dark);color:#FAF7F0;letter-spacing:.1em;
-}
-.advice-text{font-size:.88rem;line-height:1.9;color:var(--ink-soft);}
-.advice-quote{
-  border-left:3px solid var(--ochre);padding:10px 14px;margin:12px 0;
-  background:var(--ochre-pale);border-radius:0 var(--radius-sm) var(--radius-sm) 0;
-  font-size:.82rem;color:var(--bark);line-height:1.7;font-style:italic;
-  font-family:var(--font-serif);
-}
-.advice-loading{
+.advice-header-bar {
+  padding:12px 16px;
+  background:rgba(74,127,165,.08);
+  border-bottom:1px solid var(--night-line);
   display:flex;align-items:center;gap:10px;
-  color:var(--sage);font-size:.85rem;padding:8px 0;
 }
-.advice-loading-dots{display:flex;gap:4px;}
-.advice-loading-dots span{
-  width:6px;height:6px;background:var(--sage);border-radius:50%;
+.advice-header-title {
+  font-family:var(--font-title);font-size:.85rem;color:var(--ice);
+  letter-spacing:.2em;
+}
+.advice-tag {
+  margin-left:auto;font-size:.6rem;color:var(--star-faint);
+  border:1px solid var(--star-faint);padding:2px 8px;
+  letter-spacing:.08em;
+}
+.advice-body { padding:20px 16px; }
+.advice-text {
+  font-size:.88rem;line-height:2;color:var(--star-dim);
+  letter-spacing:.03em;margin-bottom:16px;
+}
+.advice-quote {
+  border-left:2px solid var(--shu);
+  padding:10px 16px;margin-bottom:16px;
+  background:rgba(200,64,42,.05);
+  font-family:var(--font-serif);font-size:.82rem;
+  color:var(--star-dim);line-height:1.9;
+}
+.advice-quote-src {
+  display:block;margin-top:6px;font-size:.68rem;
+  color:var(--star-faint);letter-spacing:.1em;
+}
+.advice-prompt {
+  border-top:1px solid var(--night-line);padding-top:14px;
+}
+.advice-prompt-label {
+  font-size:.65rem;color:var(--kin);letter-spacing:.15em;margin-bottom:6px;
+}
+.advice-prompt-text {
+  font-family:var(--font-serif);font-size:.85rem;
+  color:var(--star-dim);line-height:1.9;
+}
+.advice-loading {
+  display:flex;align-items:center;gap:10px;
+  color:var(--ice);font-size:.82rem;padding:4px 0;
+}
+.dot-flicker span {
+  display:inline-block;width:4px;height:4px;background:var(--ice);
+  border-radius:50%;margin:0 2px;
   animation:dotpulse 1.2s ease-in-out infinite;
 }
-.advice-loading-dots span:nth-child(2){animation-delay:.2s;}
-.advice-loading-dots span:nth-child(3){animation-delay:.4s;}
+.dot-flicker span:nth-child(2){animation-delay:.2s;}
+.dot-flicker span:nth-child(3){animation-delay:.4s;}
+@keyframes dotpulse{0%,80%,100%{opacity:.2;transform:scale(.7);}40%{opacity:1;transform:scale(1.2);}}
 
-/* ── ボタン ── */
-.btn-primary{
-  width:100%;padding:14px;border:none;border-radius:var(--radius-sm);
-  background:var(--ai-dark);color:#FAF7F0;font-family:var(--font-serif);font-size:.95rem;
-  font-weight:700;cursor:pointer;transition:.2s;letter-spacing:.15em;
-  display:flex;align-items:center;justify-content:center;gap:8px;
-}
-.btn-primary:hover{background:var(--ai-light);}
-.btn-primary:disabled{opacity:.5;cursor:not-allowed;}
-.btn-secondary{
-  padding:10px 20px;border:1.5px solid var(--ai);border-radius:var(--radius-sm);
-  background:none;color:var(--ai-dark);font-family:var(--font-sans);font-size:.85rem;
-  font-weight:700;cursor:pointer;transition:.2s;
-}
-.btn-secondary:hover{background:var(--ai-pale);}
-
-/* ── 保存バナー ── */
-.save-banner{
+/* ── セーブバナー ── */
+.save-banner {
   position:fixed;top:70px;left:50%;transform:translateX(-50%) translateY(-20px);
-  background:var(--sumi);color:#FAF7F0;padding:10px 20px;border:1px solid var(--ai);
-  border-radius:20px;font-size:.85rem;z-index:500;
-  opacity:0;transition:.3s;pointer-events:none;white-space:nowrap;
+  background:rgba(13,21,37,.95);color:var(--star);
+  padding:9px 20px;border:1px solid var(--night-line);
+  border-radius:2px;font-size:.8rem;letter-spacing:.1em;
+  z-index:500;opacity:0;transition:.3s;pointer-events:none;white-space:nowrap;
 }
 .save-banner.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
-/* ── 履歴モジュール ── */
-.history-filter{display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px;}
-.filter-btn{
-  padding:6px 14px;border:1.5px solid #E0DDD5;border-radius:20px;
-  background:none;font-family:var(--font-sans);font-size:.78rem;color:var(--ink-soft);
-  cursor:pointer;transition:.2s;white-space:nowrap;
+/* ══ 履歴モジュール ══ */
+.history-header {
+  padding:24px 20px 16px;
+  border-bottom:1px solid var(--night-line);
 }
-.filter-btn.active{border-color:var(--sage);background:var(--sage-pale);color:var(--sage-dark);}
-.history-entry{
-  background:var(--warm-white);border-radius:var(--radius-md);padding:16px;
-  margin-bottom:12px;box-shadow:0 2px 8px var(--shadow);cursor:pointer;
-  transition:.2s;border-left:4px solid transparent;
+.history-header-title {
+  font-family:var(--font-title);font-size:.9rem;color:var(--star);
+  letter-spacing:.2em;margin-bottom:12px;
 }
-.history-entry:hover{border-left-color:var(--ai);}
-.history-entry-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
-.history-date{font-size:.8rem;color:var(--bark-light);}
-.history-mood{font-size:1.1rem;}
-.history-gratitude{font-size:.85rem;color:var(--ink-soft);line-height:1.6;}
-.history-gratitude span{color:var(--ochre);font-weight:700;margin-right:4px;}
-.history-empty{text-align:center;padding:40px 20px;color:var(--bark-light);}
-.history-empty .empty-icon{font-size:2.5rem;margin-bottom:12px;}
-.history-empty p{font-size:.85rem;line-height:1.8;}
+.filter-row { display:flex;gap:8px;overflow-x:auto;padding-bottom:2px; }
+.filter-btn {
+  padding:5px 14px;border:1px solid var(--night-line);border-radius:2px;
+  background:none;font-family:var(--font-body);font-size:.72rem;
+  color:var(--star-faint);cursor:pointer;transition:.2s;white-space:nowrap;
+  letter-spacing:.08em;
+}
+.filter-btn.active { border-color:var(--ice);color:var(--star); }
 
-/* ── 統計モジュール ── */
-.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
-.stat-card{
-  background:var(--warm-white);border-radius:var(--radius-md);padding:16px;
-  box-shadow:0 2px 8px var(--shadow);text-align:center;
+.history-list { padding:0 20px 20px; }
+.history-entry {
+  padding:18px 0;border-bottom:1px solid var(--night-line);
+  cursor:pointer;transition:.2s;
+  display:flex;align-items:flex-start;gap:16px;
 }
-.stat-num{font-family:var(--font-title);font-size:2rem;color:var(--ai-dark);font-weight:700;}
-.stat-label{font-size:.72rem;color:var(--bark-light);margin-top:4px;letter-spacing:.05em;}
-.mood-chart{display:flex;align-items:flex-end;gap:6px;height:80px;margin-top:8px;}
-.mood-bar{
-  flex:1;background:var(--sage-light);border-radius:4px 4px 0 0;
-  min-height:4px;transition:.5s;position:relative;
+.history-entry:hover .history-entry-text { color:var(--star); }
+.history-entry-date {
+  min-width:64px;font-size:.68rem;color:var(--star-faint);
+  letter-spacing:.05em;padding-top:2px;font-family:var(--font-serif);
 }
-.mood-bar-label{position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);font-size:.6rem;color:var(--bark-light);}
-.goal-progress{margin-top:4px;}
-.goal-progress-item{margin-bottom:14px;}
-.goal-progress-header{display:flex;justify-content:space-between;margin-bottom:6px;}
-.goal-progress-name{font-size:.82rem;color:var(--ink-soft);}
-.goal-progress-count{font-size:.75rem;color:var(--sage-dark);font-weight:700;}
-.progress-bar-wrap{height:6px;background:#E5E0D8;border-radius:3px;overflow:hidden;}
-.progress-bar-fill{height:100%;background:var(--ai);border-radius:1px;transition:.5s;}
+.history-entry-body { flex:1; }
+.history-entry-text {
+  font-size:.85rem;color:var(--star-dim);line-height:1.7;
+  letter-spacing:.03em;transition:.2s;
+}
+.history-entry-mood { font-size:1rem;padding-top:2px; }
+.history-empty {
+  text-align:center;padding:60px 20px;color:var(--star-faint);
+}
+.history-empty p { font-size:.82rem;line-height:2;letter-spacing:.05em; }
 
-/* ── 設定モジュール ── */
-.setting-item{border-bottom:1px solid #EBE7DF;padding:16px 0;}
-.setting-item:last-child{border-bottom:none;}
-.setting-label{font-size:.82rem;color:var(--ink-soft);margin-bottom:8px;font-weight:700;}
-.setting-input{
-  width:100%;padding:10px 12px;border:1.5px solid #E0DDD5;border-radius:var(--radius-sm);
-  font-family:var(--font-sans);font-size:.88rem;color:var(--ink);background:var(--cream);outline:none;
+/* ══ 統計モジュール ══ */
+.stats-wrap { padding:20px; }
+.stats-grid { display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px; }
+.stat-card {
+  border:1px solid var(--night-line);border-radius:var(--r-sm);
+  padding:18px 14px;text-align:center;
+  background:rgba(255,255,255,.02);
 }
-.setting-input:focus{border-color:var(--sage);}
-.api-status{display:flex;align-items:center;gap:8px;margin-top:8px;font-size:.8rem;}
-.api-dot{width:8px;height:8px;border-radius:50%;background:#ccc;}
-.api-dot.ok{background:#4CAF50;}
-.api-dot.ng{background:var(--terra);}
-.philosophy-info{
-  background:var(--ai-pale);border-radius:var(--radius-sm);padding:14px;
-  font-size:.8rem;color:var(--ink-soft);line-height:1.8;margin-top:8px;
+.stat-num {
+  font-family:var(--font-title);font-size:2rem;color:var(--star);
+  margin-bottom:4px;
 }
-.signout-btn{
-  width:100%;padding:12px;border:1.5px solid #DDD;border-radius:var(--radius-sm);
-  background:none;color:var(--bark-light);font-family:var(--font-sans);font-size:.88rem;
-  cursor:pointer;transition:.2s;margin-top:8px;
-}
-.signout-btn:hover{background:var(--terra-pale);color:var(--terra);border-color:var(--terra-light);}
+.stat-label { font-size:.65rem;color:var(--star-faint);letter-spacing:.1em; }
 
-/* ── 詳細モーダル ── */
-.modal-overlay{
-  position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.5);
+.chart-section {
+  border:1px solid var(--night-line);border-radius:var(--r-sm);
+  padding:18px;margin-bottom:14px;background:rgba(255,255,255,.02);
+}
+.chart-title {
+  font-family:var(--font-serif);font-size:.72rem;color:var(--star-dim);
+  letter-spacing:.15em;margin-bottom:14px;
+}
+.mood-chart { display:flex;align-items:flex-end;gap:4px;height:64px; }
+.mood-bar {
+  flex:1;border-radius:1px 1px 0 0;min-height:2px;transition:.5s;position:relative;
+}
+.mood-bar-label {
+  position:absolute;bottom:-16px;left:50%;transform:translateX(-50%);
+  font-size:.55rem;color:var(--star-faint);white-space:nowrap;
+}
+
+.goal-progress-item { margin-bottom:16px; }
+.goal-progress-header {
+  display:flex;justify-content:space-between;margin-bottom:6px;
+}
+.goal-progress-name { font-size:.78rem;color:var(--star-dim); }
+.goal-progress-count { font-size:.7rem;color:var(--ice); }
+.progress-bar-wrap { height:2px;background:var(--night-line);border-radius:1px;overflow:hidden; }
+.progress-bar-fill { height:100%;background:var(--ice);border-radius:1px;transition:.5s; }
+
+/* ══ 設定モジュール ══ */
+.settings-wrap { padding:20px; }
+.setting-block {
+  border-bottom:1px solid var(--night-line);padding:20px 0;
+}
+.setting-block:last-child { border-bottom:none; }
+.setting-label {
+  font-family:var(--font-serif);font-size:.72rem;color:var(--star-dim);
+  letter-spacing:.15em;margin-bottom:10px;display:block;
+}
+.setting-input {
+  width:100%;padding:10px 12px;
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--night-line);border-radius:var(--r-sm);
+  font-family:var(--font-body);font-size:.88rem;color:var(--star);outline:none;
+}
+.setting-input:focus { border-color:var(--ice); }
+.api-status { display:flex;align-items:center;gap:8px;margin-top:8px;font-size:.72rem;color:var(--star-faint); }
+.api-dot { width:6px;height:6px;border-radius:50%;background:var(--star-faint); }
+.api-dot.ok { background:#4CAF50; }
+.api-dot.ng { background:var(--shu); }
+.save-setting-btn {
+  margin-top:10px;padding:9px 20px;
+  border:1px solid var(--night-line);border-radius:var(--r-sm);
+  background:none;font-family:var(--font-serif);font-size:.78rem;
+  color:var(--star-dim);cursor:pointer;transition:.2s;letter-spacing:.1em;
+}
+.save-setting-btn:hover { border-color:var(--ice);color:var(--star); }
+.signout-btn {
+  padding:9px 20px;border:1px solid var(--night-line);border-radius:var(--r-sm);
+  background:none;font-family:var(--font-body);font-size:.78rem;
+  color:var(--star-faint);cursor:pointer;transition:.2s;letter-spacing:.08em;
+}
+.signout-btn:hover { border-color:var(--shu);color:var(--shu); }
+.philosophy-note {
+  font-size:.72rem;color:var(--star-faint);line-height:2;letter-spacing:.05em;
+  border-left:2px solid var(--night-line);padding-left:12px;margin-top:8px;
+}
+
+/* ══ モーダル ══ */
+.modal-overlay {
+  position:fixed;inset:0;z-index:1000;
+  background:rgba(0,0,0,.7);backdrop-filter:blur(4px);
   display:none;align-items:flex-end;
 }
-.modal-overlay.open{display:flex;}
-.modal-sheet{
-  width:100%;background:var(--warm-white);border-radius:var(--radius-lg) var(--radius-lg) 0 0;
-  padding:24px 20px;padding-bottom:max(24px,calc(24px + env(safe-area-inset-bottom,0px)));
-  max-height:90vh;overflow-y:auto;animation:slideUp .3s ease;
+.modal-overlay.open { display:flex; }
+.modal-sheet {
+  width:100%;
+  background:var(--night-mid);
+  border-top:1px solid var(--night-line);
+  padding:24px 20px;
+  padding-bottom:max(24px,calc(24px + env(safe-area-inset-bottom,0px)));
+  max-height:88vh;overflow-y:auto;
+  animation:slideUp .25s ease;
 }
-@keyframes slideUp{from{transform:translateY(40px);opacity:0;}to{transform:translateY(0);opacity:1;}}
-.modal-handle{width:40px;height:4px;background:#DDD;border-radius:2px;margin:0 auto 20px;}
-.modal-date{font-size:.78rem;color:var(--bark-light);margin-bottom:16px;}
-.modal-section{margin-bottom:16px;}
-.modal-section-title{font-family:var(--font-serif);font-size:.85rem;color:var(--ai-dark);margin-bottom:8px;letter-spacing:.1em;}
-.modal-text{font-size:.85rem;color:var(--ink-soft);line-height:1.8;}
-.modal-close{
-  width:100%;padding:12px;border:none;background:var(--cream);border-radius:var(--radius-sm);
-  font-family:var(--font-sans);font-size:.9rem;color:var(--ink-soft);cursor:pointer;margin-top:16px;
+@keyframes slideUp{from{transform:translateY(30px);opacity:0;}to{transform:none;opacity:1;}}
+.modal-handle { width:32px;height:2px;background:var(--night-line);margin:0 auto 20px; }
+.modal-date { font-size:.72rem;color:var(--star-faint);margin-bottom:16px;letter-spacing:.1em; }
+.modal-section { margin-bottom:16px; }
+.modal-section-title {
+  font-family:var(--font-serif);font-size:.72rem;color:var(--ice);
+  letter-spacing:.15em;margin-bottom:6px;
+}
+.modal-text { font-size:.85rem;color:var(--star-dim);line-height:1.9; }
+.modal-close {
+  width:100%;padding:11px;margin-top:16px;
+  border:1px solid var(--night-line);border-radius:var(--r-sm);
+  background:none;font-family:var(--font-body);font-size:.85rem;
+  color:var(--star-faint);cursor:pointer;letter-spacing:.1em;
 }
 
-/* ── レスポンシブ ── */
-@media(min-width:680px){
-  .main{padding:24px 20px;}
+/* レスポンシブ */
+@media(min-width:660px){
   .stats-grid{grid-template-columns:repeat(4,1fr);}
+  .page-section{padding:36px 32px;}
+  .history-header,.history-list{padding-left:32px;padding-right:32px;}
+  .stats-wrap,.settings-wrap{padding:24px 32px;}
+  .advice-wrap{margin:0 32px 0;}
 }
 </style>
 </head>
@@ -370,36 +574,35 @@ body{
 
 <!-- ローディング -->
 <div id="app-loading">
-  <div class="loading-title">内省</div>
+  <div class="loading-kanji">内省</div>
+  <div class="loading-line"></div>
   <div class="loading-sub">naisei journal</div>
-  <div class="loading-dot"></div>
 </div>
 
-<!-- 認証画面 -->
-<div id="app-auth" style="display:none;min-height:100vh;background:var(--sage-dark);display:none;align-items:center;justify-content:center;padding:24px;">
+<!-- 認証 -->
+<div id="app-auth" style="display:none;min-height:100vh;display:none;align-items:center;justify-content:center;padding:24px;">
   <div class="auth-card">
     <div class="auth-logo">内省</div>
     <div class="auth-sub">naisei journal</div>
+    <div class="auth-divider"></div>
     <div class="auth-tabs">
       <button class="auth-tab active" onclick="switchAuthTab('login')">ログイン</button>
       <button class="auth-tab" onclick="switchAuthTab('register')">新規登録</button>
     </div>
-    <div class="auth-form">
-      <div class="form-group">
-        <label>メールアドレス</label>
-        <input type="email" id="auth-email" placeholder="email@example.com">
-      </div>
-      <div class="form-group">
-        <label>パスワード</label>
-        <input type="password" id="auth-pass" placeholder="6文字以上">
-      </div>
-      <div id="auth-name-group" class="form-group" style="display:none;">
-        <label>お名前（表示用）</label>
-        <input type="text" id="auth-name" placeholder="例：Masaki">
-      </div>
-      <div class="auth-error" id="auth-error"></div>
-      <button class="auth-btn" onclick="doAuth()">はじめる</button>
+    <div class="form-group">
+      <label>メールアドレス</label>
+      <input type="email" id="auth-email" placeholder="email@example.com">
     </div>
+    <div class="form-group">
+      <label>パスワード</label>
+      <input type="password" id="auth-pass" placeholder="6文字以上">
+    </div>
+    <div id="auth-name-group" class="form-group" style="display:none;">
+      <label>お名前</label>
+      <input type="text" id="auth-name" placeholder="例：Masaki">
+    </div>
+    <div class="auth-error" id="auth-error"></div>
+    <button class="auth-btn" onclick="doAuth()">はじめる ✦</button>
   </div>
 </div>
 
@@ -407,213 +610,229 @@ body{
 <div id="app-main" style="display:none;">
   <header class="site-header">
     <div class="header-inner">
-      <div>
+      <div class="header-left">
         <div class="header-title">内省</div>
         <div class="header-date" id="header-date"></div>
       </div>
       <div class="header-right">
-        <div class="streak-badge" id="streak-badge">🔥 0日</div>
-        <button class="icon-btn" title="設定" onclick="showModule('settings',this)">⚙️</button>
+        <div class="streak-badge" id="streak-badge">✦ 0日</div>
       </div>
     </div>
   </header>
 
   <main class="main">
 
-    <!-- ジャーナル入力 -->
+    <!-- ジャーナル -->
     <section id="mod-journal" class="module active">
 
-      <!-- 感謝 -->
-      <div class="card">
-        <div class="card-header">
-          <div class="card-icon">🙏</div>
-          <div class="card-title">感謝すること<span>今日の3つの恵み</span></div>
+      <!-- 一頁：感謝 -->
+      <div class="page-section" data-page="一">
+        <div class="section-heading">
+          <span class="section-num">壱</span>
+          <span class="section-title">感謝</span>
+          <span class="section-sub">今日の三つの恵み</span>
         </div>
-        <div class="gratitude-list">
-          <div class="gratitude-item">
-            <div class="gratitude-num">一</div>
-            <div class="gratitude-col">
-              <textarea class="journal-textarea" id="g1" rows="2" placeholder="感謝したいこと…"></textarea>
-              <div class="gratitude-why">なぜ感謝するのか</div>
-              <textarea class="journal-textarea" id="g1w" rows="1" placeholder="なぜなら…" style="font-size:.82rem;"></textarea>
-            </div>
+        <div class="rule"></div>
+
+        <div class="gratitude-entry">
+          <div class="gratitude-marker">
+            <span class="gratitude-kanji">一</span>
+            <div class="gratitude-line"></div>
           </div>
-          <div class="gratitude-item">
-            <div class="gratitude-num">二</div>
-            <div class="gratitude-col">
-              <textarea class="journal-textarea" id="g2" rows="2" placeholder="感謝したいこと…"></textarea>
-              <div class="gratitude-why">なぜ感謝するのか</div>
-              <textarea class="journal-textarea" id="g2w" rows="1" placeholder="なぜなら…" style="font-size:.82rem;"></textarea>
-            </div>
+          <textarea class="j-textarea" id="g1" rows="2" placeholder="感謝したいこと…"></textarea>
+          <div class="why-label">— なぜなら</div>
+          <textarea class="why-textarea" id="g1w" rows="1" placeholder="…"></textarea>
+        </div>
+
+        <div class="gratitude-entry">
+          <div class="gratitude-marker">
+            <span class="gratitude-kanji">二</span>
+            <div class="gratitude-line"></div>
           </div>
-          <div class="gratitude-item">
-            <div class="gratitude-num">三</div>
-            <div class="gratitude-col">
-              <textarea class="journal-textarea" id="g3" rows="2" placeholder="感謝したいこと…"></textarea>
-              <div class="gratitude-why">なぜ感謝するのか</div>
-              <textarea class="journal-textarea" id="g3w" rows="1" placeholder="なぜなら…" style="font-size:.82rem;"></textarea>
-            </div>
+          <textarea class="j-textarea" id="g2" rows="2" placeholder="感謝したいこと…"></textarea>
+          <div class="why-label">— なぜなら</div>
+          <textarea class="why-textarea" id="g2w" rows="1" placeholder="…"></textarea>
+        </div>
+
+        <div class="gratitude-entry">
+          <div class="gratitude-marker">
+            <span class="gratitude-kanji">三</span>
+            <div class="gratitude-line"></div>
           </div>
+          <textarea class="j-textarea" id="g3" rows="2" placeholder="感謝したいこと…"></textarea>
+          <div class="why-label">— なぜなら</div>
+          <textarea class="why-textarea" id="g3w" rows="1" placeholder="…"></textarea>
         </div>
       </div>
 
-      <!-- 長期目標 -->
-      <div class="card">
-        <div class="card-header">
-          <div class="card-icon">🎯</div>
-          <div class="card-title">長期目標<span>自分の管轄内に置くもの</span></div>
+      <!-- 二頁：目標 -->
+      <div class="page-section" data-page="二">
+        <div class="section-heading">
+          <span class="section-num">弐</span>
+          <span class="section-title">長期目標</span>
+          <span class="section-sub">自らの管轄内に置くもの</span>
         </div>
-        <div class="goal-list" id="goal-list">
-          <div class="goal-item">
-            <div class="goal-label">目標 1</div>
-            <textarea class="journal-textarea" id="goal1" rows="2" placeholder="長期的に目指すこと…"></textarea>
-          </div>
-          <div class="goal-item">
-            <div class="goal-label">目標 2</div>
-            <textarea class="journal-textarea" id="goal2" rows="2" placeholder="長期的に目指すこと…"></textarea>
-          </div>
-          <div class="goal-item">
-            <div class="goal-label">目標 3（任意）</div>
-            <textarea class="journal-textarea" id="goal3" rows="2" placeholder="長期的に目指すこと…"></textarea>
-          </div>
+        <div class="rule"></div>
+
+        <div class="goal-entry">
+          <span class="goal-marker">目標 一</span>
+          <textarea class="j-textarea" id="goal1" rows="2" placeholder="長期的に目指すこと…"></textarea>
+        </div>
+        <div class="goal-entry">
+          <span class="goal-marker">目標 二</span>
+          <textarea class="j-textarea" id="goal2" rows="2" placeholder="長期的に目指すこと…"></textarea>
+        </div>
+        <div class="goal-entry">
+          <span class="goal-marker">目標 三（任意）</span>
+          <textarea class="j-textarea" id="goal3" rows="2" placeholder="長期的に目指すこと…"></textarea>
         </div>
       </div>
 
-      <!-- 今日の取り組み -->
-      <div class="card">
-        <div class="card-header">
-          <div class="card-icon">⚡</div>
-          <div class="card-title">今日の取り組み<span>If-Then形式で具体的に</span></div>
+      <!-- 三頁：今日の取り組み -->
+      <div class="page-section" data-page="三">
+        <div class="section-heading">
+          <span class="section-num">参</span>
+          <span class="section-title">今日の取り組み</span>
+          <span class="section-sub">If — Then の形で</span>
         </div>
-        <textarea class="journal-textarea" id="today-action" rows="4"
-          placeholder="例：もし職場に着いたら、まず5分だけ問題集を開く&#10;目標1に向けて：…&#10;目標2に向けて：…"></textarea>
+        <div class="rule"></div>
+        <textarea class="j-textarea" id="today-action" rows="4"
+          placeholder="もし〔状況〕が来たら、私は〔行動〕をする&#10;&#10;目標一に向けて：&#10;目標二に向けて："></textarea>
       </div>
 
-      <!-- 手放すこと -->
-      <div class="card">
-        <div class="card-header">
-          <div class="card-icon">🍃</div>
-          <div class="card-title">今日手放すこと<span>管轄外への執着を置く</span></div>
+      <!-- 四頁：手放すこと -->
+      <div class="page-section" data-page="四">
+        <div class="section-heading">
+          <span class="section-num">肆</span>
+          <span class="section-title">今日手放すこと</span>
+          <span class="section-sub">管轄外への執着を置く</span>
         </div>
-        <div class="release-hint">コントロールできないことへの執着を、ここに書いて手放しましょう。</div>
-        <textarea class="journal-textarea" id="release" rows="2" placeholder="例：他者の評価、天候、過去の失敗…"></textarea>
+        <div class="rule"></div>
+        <textarea class="j-textarea" id="release" rows="2"
+          placeholder="例：他者の評価、天候、過去の失敗…"></textarea>
       </div>
 
-      <!-- 気分スコア -->
-      <div class="card">
-        <div class="card-header">
-          <div class="card-icon">💭</div>
-          <div class="card-title">今日の気分<span>心の波形を記録する</span></div>
+      <!-- 五頁：気分 -->
+      <div class="page-section" data-page="五">
+        <div class="section-heading">
+          <span class="section-num">伍</span>
+          <span class="section-title">今日の気分</span>
+          <span class="section-sub">心の波形を記録する</span>
         </div>
-        <div class="mood-selector" id="mood-selector">
-          <button class="mood-btn" data-mood="1" onclick="selectMood(1)" title="とても辛い">😞</button>
-          <button class="mood-btn" data-mood="2" onclick="selectMood(2)" title="少し辛い">😔</button>
-          <button class="mood-btn" data-mood="3" onclick="selectMood(3)" title="普通">😐</button>
-          <button class="mood-btn" data-mood="4" onclick="selectMood(4)" title="良い">🙂</button>
-          <button class="mood-btn" data-mood="5" onclick="selectMood(5)" title="とても良い">😊</button>
+        <div class="rule"></div>
+        <div class="mood-row" id="mood-selector">
+          <button class="mood-btn" data-mood="1" onclick="selectMood(1)">😞</button>
+          <button class="mood-btn" data-mood="2" onclick="selectMood(2)">😔</button>
+          <button class="mood-btn" data-mood="3" onclick="selectMood(3)">😐</button>
+          <button class="mood-btn" data-mood="4" onclick="selectMood(4)">🙂</button>
+          <button class="mood-btn" data-mood="5" onclick="selectMood(5)">😊</button>
         </div>
-        <div class="mood-label" id="mood-label">タップして今日の気分を選ぶ</div>
+        <div class="mood-label" id="mood-label">選んでください</div>
       </div>
 
-      <!-- 今日感じたこと -->
-      <div class="card">
-        <div class="card-header">
-          <div class="card-icon">📝</div>
-          <div class="card-title">今日感じたこと<span>うまくいかなかったことも</span></div>
+      <!-- 六頁：感じたこと -->
+      <div class="page-section" data-page="六">
+        <div class="section-heading">
+          <span class="section-num">陸</span>
+          <span class="section-title">今日感じたこと</span>
+          <span class="section-sub">うまくいかなかったことも</span>
         </div>
-        <textarea class="journal-textarea" id="reflection" rows="5"
-          placeholder="今日を振り返って…&#10;うまくいったこと、難しかったこと、感じたことを自由に。"></textarea>
+        <div class="rule"></div>
+        <textarea class="j-textarea" id="reflection" rows="6"
+          placeholder="今日を振り返って…&#10;うまくいったこと、難しかったこと、感じたことを。"></textarea>
       </div>
 
-      <!-- 保存・AIアドバイスボタン -->
-      <button class="btn-primary" id="save-btn" onclick="saveAndAdvise()">
-        <span>🌿</span> 記録して内省アドバイスを受ける
-      </button>
-
-      <!-- AIアドバイス表示エリア -->
-      <div id="advice-area" style="margin-top:16px;display:none;">
-        <div class="advice-box">
-          <div class="advice-header">
-            <div class="advice-icon">🕊️</div>
-            <div class="advice-title">哲学的内省</div>
-            <div class="advice-tag" id="advice-philosophy-tag">ストア派・仏教</div>
-          </div>
-          <div id="advice-content"></div>
-        </div>
+      <!-- 記録ボタン -->
+      <div class="page-section" style="border-bottom:none;">
+        <button class="record-btn" id="save-btn" onclick="saveAndAdvise()">
+          <span class="btn-star">✦</span>
+          記録して内省を受ける
+          <span class="btn-star">✦</span>
+        </button>
       </div>
+
+      <!-- AIアドバイス -->
+      <div class="advice-wrap" id="advice-area">
+        <div class="advice-header-bar">
+          <span style="font-size:.9rem;color:var(--kin);">✦</span>
+          <div class="advice-header-title">哲学的内省</div>
+          <div class="advice-tag" id="advice-philosophy-tag">ストア派・仏教</div>
+        </div>
+        <div class="advice-body" id="advice-content"></div>
+      </div>
+      <div style="height:24px;"></div>
+
     </section>
 
     <!-- 履歴 -->
     <section id="mod-history" class="module">
-      <div class="history-filter">
-        <button class="filter-btn active" onclick="filterHistory('all',this)">すべて</button>
-        <button class="filter-btn" onclick="filterHistory('week',this)">今週</button>
-        <button class="filter-btn" onclick="filterHistory('month',this)">今月</button>
+      <div class="history-header">
+        <div class="history-header-title">記録の軌跡</div>
+        <div class="filter-row">
+          <button class="filter-btn active" onclick="filterHistory('all',this)">すべて</button>
+          <button class="filter-btn" onclick="filterHistory('week',this)">今週</button>
+          <button class="filter-btn" onclick="filterHistory('month',this)">今月</button>
+        </div>
       </div>
-      <div id="history-list"></div>
+      <div class="history-list" id="history-list"></div>
     </section>
 
     <!-- 統計 -->
     <section id="mod-stats" class="module">
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-num" id="stat-total">0</div>
-          <div class="stat-label">総記録数</div>
+      <div class="stats-wrap">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-num" id="stat-total">0</div>
+            <div class="stat-label">総記録数</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num" id="stat-streak">0</div>
+            <div class="stat-label">連続記録</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num" id="stat-avg-mood">—</div>
+            <div class="stat-label">平均気分</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num" id="stat-this-month">0</div>
+            <div class="stat-label">今月</div>
+          </div>
         </div>
-        <div class="stat-card">
-          <div class="stat-num" id="stat-streak">0</div>
-          <div class="stat-label">現在の連続</div>
+        <div class="chart-section">
+          <div class="chart-title">直近七日の気分推移</div>
+          <div class="mood-chart" id="mood-chart"></div>
+          <div style="height:20px;"></div>
         </div>
-        <div class="stat-card">
-          <div class="stat-num" id="stat-avg-mood">—</div>
-          <div class="stat-label">平均気分</div>
+        <div class="chart-section">
+          <div class="chart-title">目標への取り組み</div>
+          <div id="goal-progress"></div>
         </div>
-        <div class="stat-card">
-          <div class="stat-num" id="stat-this-month">0</div>
-          <div class="stat-label">今月の記録</div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-header">
-          <div class="card-icon">📈</div>
-          <div class="card-title">直近7日の気分推移</div>
-        </div>
-        <div class="mood-chart" id="mood-chart"></div>
-      </div>
-      <div class="card">
-        <div class="card-header">
-          <div class="card-icon">🎯</div>
-          <div class="card-title">目標への取り組み回数</div>
-        </div>
-        <div class="goal-progress" id="goal-progress"></div>
       </div>
     </section>
 
     <!-- 設定 -->
     <section id="mod-settings" class="module">
-      <div class="card">
-        <div class="setting-item">
-          <div class="setting-label">Claude APIキー</div>
-          <input type="password" class="setting-input" id="api-key-input"
-            placeholder="sk-ant-..." autocomplete="off">
+      <div class="settings-wrap">
+        <div class="setting-block">
+          <span class="setting-label">Claude APIキー</span>
+          <input type="password" class="setting-input" id="api-key-input" placeholder="sk-ant-..." autocomplete="off">
           <div class="api-status">
             <div class="api-dot" id="api-dot"></div>
             <span id="api-status-text">未設定</span>
           </div>
-          <button class="btn-secondary" style="margin-top:10px;" onclick="saveApiKey()">保存する</button>
+          <button class="save-setting-btn" onclick="saveApiKey()">保存する</button>
         </div>
-        <div class="setting-item">
-          <div class="setting-label">哲学的アドバイスについて</div>
-          <div class="philosophy-info">
-            このアプリのAIアドバイスは、<strong>ストア派哲学</strong>（エピクテトス・マルクス・アウレリウス・セネカ）と<strong>仏教哲学</strong>（無常・慈悲・正念）を統合した知見をもとに生成されます。<br><br>
-            感謝の記述 → 仏教「縁起」＋ストア派「世界市民」<br>
-            目標・行動 → ストア派「コントロールの二分法」＋If-Then<br>
-            ネガティブ感情 → 仏教「サティ」→ ストア派「論理的再構成」
+        <div class="setting-block">
+          <span class="setting-label">哲学的アドバイスについて</span>
+          <div class="philosophy-note">
+            ストア派（エピクテトス・マルクス・アウレリウス・セネカ）と<br>
+            仏教（無常・縁起・慈悲・正念）を統合した知見をもとに、<br>
+            AIが哲学的な問いかけと格言を生成します。
           </div>
         </div>
-        <div class="setting-item">
-          <div class="setting-label">アカウント</div>
-          <div style="font-size:.85rem;color:var(--ink-soft);margin-bottom:8px;" id="user-email-display"></div>
+        <div class="setting-block">
+          <span class="setting-label">アカウント</span>
+          <div style="font-size:.8rem;color:var(--star-faint);margin-bottom:10px;" id="user-email-display"></div>
           <button class="signout-btn" onclick="doSignOut()">ログアウト</button>
         </div>
       </div>
@@ -623,20 +842,16 @@ body{
 
   <nav class="nav-bar">
     <button class="nav-tab active" onclick="showModule('journal',this)">
-      <div class="nav-icon">✍️</div>
-      <div>記録</div>
+      <div class="nav-icon">✍</div><div>記録</div>
     </button>
     <button class="nav-tab" onclick="showModule('history',this)">
-      <div class="nav-icon">📖</div>
-      <div>履歴</div>
+      <div class="nav-icon">◎</div><div>履歴</div>
     </button>
     <button class="nav-tab" onclick="showModule('stats',this)">
-      <div class="nav-icon">📊</div>
-      <div>統計</div>
+      <div class="nav-icon">◈</div><div>統計</div>
     </button>
     <button class="nav-tab" onclick="showModule('settings',this)">
-      <div class="nav-icon">⚙️</div>
-      <div>設定</div>
+      <div class="nav-icon">⚙</div><div>設定</div>
     </button>
   </nav>
 </div>
@@ -650,19 +865,16 @@ body{
   </div>
 </div>
 
-<!-- 保存バナー -->
-<div class="save-banner" id="save-banner">✅ 記録を保存しました</div>
+<!-- バナー -->
+<div class="save-banner" id="save-banner">記録しました</div>
 
 <!-- Firebase -->
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
          signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
-import { getFirestore, collection, doc, setDoc, getDocs,
-         query, orderBy, limit } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+import { getFirestore, doc, setDoc } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
-// ─── Firebase設定 ───────────────────────────
-// ⚠️ 下記をご自身のFirebaseプロジェクト設定に書き換えてください
 const firebaseConfig = {
   apiKey: "AIzaSyA-YorX3wT3_7JrhisT7uLBLcCRpSnINtE",
   authDomain: "naisei-journal.firebaseapp.com",
@@ -671,33 +883,26 @@ const firebaseConfig = {
   messagingSenderId: "344160418132",
   appId: "1:344160418132:web:30dacbd933f8f436d430c1"
 };
-// ────────────────────────────────────────────
 
-let app, auth, db, currentUser = null;
+let currentUser = null;
 let firebaseReady = false;
+let _auth, _db;
 
 try {
-  app = initializeApp(firebaseConfig);
-  auth = getAuth(app);
-  db = getFirestore(app);
+  const app = initializeApp(firebaseConfig);
+  _auth = getAuth(app);
+  _db   = getFirestore(app);
   firebaseReady = true;
-} catch(e) {
-  console.warn('Firebase init failed, running in localStorage-only mode');
-}
+} catch(e) { console.warn('Firebase init failed'); }
 
-// グローバルに公開
-window._auth = auth;
-window._db = db;
 window._firebaseReady = firebaseReady;
-window._currentUser = () => currentUser;
-window._collection = collection;
-window._doc = doc;
-window._setDoc = setDoc;
-window._getDocs = getDocs;
-window._query = query;
-window._orderBy = orderBy;
-window._limit = limit;
-window._signOut = () => signOut(auth);
+window._currentUser   = () => currentUser;
+window._signOut       = () => _auth ? signOut(_auth) : Promise.resolve();
+window._saveToFirestore = async (entry) => {
+  if(!firebaseReady || !currentUser) return;
+  const ref = doc(_db, 'users', currentUser.uid, 'entries', entry.date);
+  await setDoc(ref, entry);
+};
 
 window.doAuth = async function() {
   const email = document.getElementById('auth-email').value.trim();
@@ -706,12 +911,13 @@ window.doAuth = async function() {
   errEl.style.display = 'none';
   try {
     if (window._authMode === 'login') {
-      await signInWithEmailAndPassword(auth, email, pass);
+      await signInWithEmailAndPassword(_auth, email, pass);
     } else {
-      await createUserWithEmailAndPassword(auth, email, pass);
+      await createUserWithEmailAndPassword(_auth, email, pass);
     }
   } catch(e) {
-    errEl.textContent = e.code === 'auth/invalid-credential' ? 'メールまたはパスワードが違います'
+    errEl.textContent =
+      e.code === 'auth/invalid-credential' ? 'メールまたはパスワードが違います'
       : e.code === 'auth/email-already-in-use' ? 'このメールはすでに登録されています'
       : e.code === 'auth/weak-password' ? 'パスワードは6文字以上にしてください'
       : e.message;
@@ -720,7 +926,7 @@ window.doAuth = async function() {
 };
 
 if (firebaseReady) {
-  onAuthStateChanged(auth, user => {
+  onAuthStateChanged(_auth, user => {
     currentUser = user;
     window._currentUser = () => currentUser;
     document.getElementById('app-loading').style.display = 'none';
@@ -731,7 +937,6 @@ if (firebaseReady) {
       window.initApp();
     } else {
       document.getElementById('app-auth').style.display = 'flex';
-      document.getElementById('app-main').style.display = 'none';
     }
   });
 } else {
@@ -744,7 +949,6 @@ if (firebaseReady) {
 
 <!-- アプリJS -->
 <script>
-// ── 状態 ──────────────────────────────────────────
 let selectedMood = 0;
 let currentFilter = 'all';
 window._authMode = 'login';
@@ -752,12 +956,8 @@ window._authMode = 'login';
 const MOOD_LABELS = {1:'とても辛い',2:'少し辛い',3:'普通',4:'良い',5:'とても良い'};
 const MOOD_EMOJIS = {1:'😞',2:'😔',3:'😐',4:'🙂',5:'😊'};
 
-// ── 初期化 ────────────────────────────────────────
 window.initApp = function() {
-  setHeaderDate();
-  updateStreak();
-  updateApiStatus();
-  loadTodayDraft();
+  setHeaderDate(); updateStreak(); updateApiStatus(); loadTodayDraft();
 };
 
 function setHeaderDate() {
@@ -767,11 +967,10 @@ function setHeaderDate() {
     `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日（${days[d.getDay()]}）`;
 }
 
-// ── 認証UI ───────────────────────────────────────
 window.switchAuthTab = function(mode) {
   window._authMode = mode;
   document.querySelectorAll('.auth-tab').forEach((t,i) => {
-    t.classList.toggle('active', (mode==='login'&&i===0)||(mode==='register'&&i===1));
+    t.classList.toggle('active',(mode==='login'&&i===0)||(mode==='register'&&i===1));
   });
   document.getElementById('auth-name-group').style.display = mode==='register'?'block':'none';
   document.getElementById('auth-error').style.display = 'none';
@@ -784,35 +983,29 @@ window.doSignOut = async function() {
   }
 };
 
-// ── ナビ ─────────────────────────────────────────
 window.showModule = function(name, el) {
   document.querySelectorAll('.module').forEach(m => m.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('mod-' + name).classList.add('active');
+  document.getElementById('mod-'+name).classList.add('active');
   if(el) el.classList.add('active');
-  if(name === 'history') renderHistory();
-  if(name === 'stats')   renderStats();
+  window.scrollTo(0,0);
+  if(name==='history') renderHistory();
+  if(name==='stats')   renderStats();
 };
 
-// ── 気分 ─────────────────────────────────────────
 window.selectMood = function(v) {
   selectedMood = v;
-  document.querySelectorAll('.mood-btn').forEach(b => {
-    b.classList.toggle('selected', parseInt(b.dataset.mood) === v);
-  });
-  document.getElementById('mood-label').textContent = MOOD_EMOJIS[v] + ' ' + MOOD_LABELS[v];
+  document.querySelectorAll('.mood-btn').forEach(b =>
+    b.classList.toggle('selected', parseInt(b.dataset.mood)===v));
+  document.getElementById('mood-label').textContent = MOOD_EMOJIS[v]+' '+MOOD_LABELS[v];
 };
 
-// ── APIキー ───────────────────────────────────────
 window.saveApiKey = function() {
   const key = document.getElementById('api-key-input').value.trim();
-  if(key && !key.startsWith('sk-ant-')) {
-    alert('正しいAPIキー形式ではありません（sk-ant-で始まります）');
-    return;
-  }
+  if(key && !key.startsWith('sk-ant-')) { alert('正しいAPIキー形式ではありません（sk-ant-で始まります）'); return; }
   localStorage.setItem('naisei_apikey', key);
   updateApiStatus();
-  showBanner('✅ APIキーを保存しました');
+  showBanner('APIキーを保存しました');
 };
 
 function updateApiStatus() {
@@ -821,424 +1014,227 @@ function updateApiStatus() {
   const txt = document.getElementById('api-status-text');
   if(!dot) return;
   if(key.startsWith('sk-ant-')) {
-    dot.className = 'api-dot ok';
-    txt.textContent = '設定済み';
-    const inp = document.getElementById('api-key-input');
-    if(inp) inp.value = key;
+    dot.className='api-dot ok'; txt.textContent='設定済み';
+    const inp=document.getElementById('api-key-input'); if(inp) inp.value=key;
   } else {
-    dot.className = 'api-dot ng';
-    txt.textContent = '未設定（設定するとAIアドバイスが利用できます）';
+    dot.className='api-dot ng'; txt.textContent='未設定（設定するとAIアドバイスが使えます）';
   }
 }
+function getApiKey(){ return localStorage.getItem('naisei_apikey')||''; }
 
-function getApiKey() { return localStorage.getItem('naisei_apikey') || ''; }
-
-// ── 下書き保存 ────────────────────────────────────
 function loadTodayDraft() {
-  const today = getTodayKey();
-  const draft = JSON.parse(localStorage.getItem('naisei_draft_' + today) || '{}');
+  const draft = JSON.parse(localStorage.getItem('naisei_draft_'+getTodayKey())||'{}');
   if(!draft.date) return;
   ['g1','g1w','g2','g2w','g3','g3w','goal1','goal2','goal3','today-action','release','reflection']
-    .forEach(id => { const el=document.getElementById(id); if(el&&draft[id]) el.value=draft[id]; });
+    .forEach(id=>{ const el=document.getElementById(id); if(el&&draft[id]) el.value=draft[id]; });
   if(draft.mood) selectMood(draft.mood);
 }
-
 function saveDraft() {
-  const today = getTodayKey();
-  const draft = { date: today };
+  const draft={date:getTodayKey()};
   ['g1','g1w','g2','g2w','g3','g3w','goal1','goal2','goal3','today-action','release','reflection']
-    .forEach(id => { const el=document.getElementById(id); if(el) draft[id]=el.value; });
-  draft.mood = selectedMood;
-  localStorage.setItem('naisei_draft_' + today, JSON.stringify(draft));
+    .forEach(id=>{ const el=document.getElementById(id); if(el) draft[id]=el.value; });
+  draft.mood=selectedMood;
+  localStorage.setItem('naisei_draft_'+getTodayKey(), JSON.stringify(draft));
 }
+setInterval(saveDraft, 30000);
 
-// ── 保存 & AIアドバイス ───────────────────────────
 window.saveAndAdvise = async function() {
   const btn = document.getElementById('save-btn');
-  btn.disabled = true;
-  btn.innerHTML = '<span>⏳</span> 保存中...';
-
+  btn.disabled=true; btn.innerHTML='<span class="btn-star">✦</span> 保存中… <span class="btn-star">✦</span>';
   const entry = buildEntry();
   await saveEntry(entry);
   updateStreak();
-  showBanner('✅ 記録を保存しました');
+  showBanner('記録しました');
 
-  // AI アドバイス
-  const adviceArea = document.getElementById('advice-area');
-  const adviceContent = document.getElementById('advice-content');
-  adviceArea.style.display = 'block';
-  adviceContent.innerHTML = `
-    <div class="advice-loading">
-      <div class="advice-loading-dots">
-        <span></span><span></span><span></span>
-      </div>
-      <span>哲学的内省を生成中…</span>
-    </div>`;
-  adviceArea.scrollIntoView({behavior:'smooth',block:'center'});
+  const area = document.getElementById('advice-area');
+  const content = document.getElementById('advice-content');
+  area.style.display='block';
+  content.innerHTML=`<div class="advice-loading"><div class="dot-flicker"><span></span><span></span><span></span></div><span>哲学的内省を生成中…</span></div>`;
+  area.scrollIntoView({behavior:'smooth',block:'start'});
 
   const apiKey = getApiKey();
-  if(!apiKey) {
-    adviceContent.innerHTML = renderFallbackAdvice(entry);
-  } else {
-    try {
-      const advice = await callClaudeAPI(entry, apiKey);
-      adviceContent.innerHTML = advice;
-    } catch(e) {
-      adviceContent.innerHTML = renderFallbackAdvice(entry);
-    }
+  if(!apiKey) { content.innerHTML=renderFallbackAdvice(entry); }
+  else {
+    try { content.innerHTML = await callClaudeAPI(entry,apiKey); }
+    catch(e) { content.innerHTML=renderFallbackAdvice(entry); }
   }
-
-  btn.disabled = false;
-  btn.innerHTML = '<span>🌿</span> 記録して内省アドバイスを受ける';
+  btn.disabled=false; btn.innerHTML='<span class="btn-star">✦</span> 記録して内省を受ける <span class="btn-star">✦</span>';
 };
 
 function buildEntry() {
-  const get = id => (document.getElementById(id)||{}).value || '';
+  const get = id => (document.getElementById(id)||{}).value||'';
   return {
-    id: Date.now(),
-    date: getTodayKey(),
-    dateLabel: document.getElementById('header-date').textContent,
-    g1: get('g1'), g1w: get('g1w'),
-    g2: get('g2'), g2w: get('g2w'),
-    g3: get('g3'), g3w: get('g3w'),
-    goal1: get('goal1'), goal2: get('goal2'), goal3: get('goal3'),
-    action: get('today-action'),
-    release: get('release'),
-    mood: selectedMood,
-    reflection: get('reflection'),
+    id:Date.now(), date:getTodayKey(),
+    dateLabel:document.getElementById('header-date').textContent,
+    g1:get('g1'),g1w:get('g1w'), g2:get('g2'),g2w:get('g2w'), g3:get('g3'),g3w:get('g3w'),
+    goal1:get('goal1'),goal2:get('goal2'),goal3:get('goal3'),
+    action:get('today-action'), release:get('release'),
+    mood:selectedMood, reflection:get('reflection'),
   };
 }
 
 async function saveEntry(entry) {
-  // localStorage（バックアップ）
   const all = getLocalEntries();
-  const idx = all.findIndex(e => e.date === entry.date);
-  if(idx >= 0) all[idx] = entry; else all.push(entry);
+  const idx = all.findIndex(e=>e.date===entry.date);
+  if(idx>=0) all[idx]=entry; else all.push(entry);
   localStorage.setItem('naisei_entries', JSON.stringify(all));
   saveDraft();
-
-  // Firestore
-  const user = window._currentUser ? window._currentUser() : null;
-  if(window._firebaseReady && user) {
-    try {
-      const ref = window._doc(window._db, 'users', user.uid, 'entries', entry.date);
-      await window._setDoc(ref, entry);
-    } catch(e) { console.warn('Firestore save failed:', e); }
-  }
+  try { if(window._saveToFirestore) await window._saveToFirestore(entry); } catch(e){}
 }
+function getLocalEntries(){ return JSON.parse(localStorage.getItem('naisei_entries')||'[]'); }
 
-function getLocalEntries() {
-  return JSON.parse(localStorage.getItem('naisei_entries') || '[]');
-}
-
-// ── Claude API呼び出し ────────────────────────────
 async function callClaudeAPI(entry, apiKey) {
-  const systemPrompt = buildSystemPrompt();
-  const userPrompt   = buildUserPrompt(entry);
-
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': apiKey,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true'
+  const res = await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{
+      'Content-Type':'application/json',
+      'x-api-key':apiKey,
+      'anthropic-version':'2023-06-01',
+      'anthropic-dangerous-direct-browser-access':'true'
     },
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-6',
-      max_tokens: 1000,
-      system: systemPrompt,
-      messages: [{ role: 'user', content: userPrompt }]
+    body:JSON.stringify({
+      model:'claude-sonnet-4-6',
+      max_tokens:1000,
+      system:buildSystemPrompt(),
+      messages:[{role:'user',content:buildUserPrompt(entry)}]
     })
   });
-
-  if(!res.ok) throw new Error('API error: ' + res.status);
+  if(!res.ok) throw new Error('API '+res.status);
   const data = await res.json();
-  const text = data.content?.find(c => c.type === 'text')?.text || '';
+  const text = data.content?.find(c=>c.type==='text')?.text||'';
   return formatAdviceHTML(text);
 }
 
-function buildSystemPrompt() {
-  return `あなたは「内省（Naisei）」というジャーナリングアプリの哲学的アドバイザーです。
+function buildSystemPrompt(){
+  return `あなたは「内省（Naisei）」のジャーナリング哲学アドバイザーです。
 
-【役割】
-ユーザーが記録した日々のジャーナリング（感謝・目標・振り返り）に対し、ストア派哲学と仏教哲学を統合した視点から、深みのある内省的アドバイスを提供します。
+【哲学基盤】
+▶ ストア派：エピクテトス「コントロールの二分法」、マルクス・アウレリウス「内なる城塞」、セネカ「時間の価値」、メメント・モリ
+▶ 仏教：諸行無常（Anicca）、縁起、慈悲（Metta）、正念（Sati）、非執着
 
-【哲学的基盤】
-▶ ストア派：エピクテトス「コントロールの二分法（管轄内・管轄外）」、マルクス・アウレリウス「内なる城塞」、セネカ「時間の価値」、メメント・モリ、ネガティブ・ビジュアライゼーション
-▶ 仏教：諸行無常（Anicca）、縁起（Pratītyasamutpāda）、慈悲（Metta）、正念（Sati）、一切皆苦（Dukkha）、非執着
+【アドバイス戦略】
+- 感謝 → 仏教「縁起」で視野拡大 → ストア派「世界市民」で利他的行動へ
+- 目標・行動 → ストア派「コントロール二分法」→ 仏教「非執着」で結果を手放す
+- ネガティブ感情 → 仏教「サティ」で観察 → ストア派「論理的再構成」
 
-【アドバイス戦略（文脈に応じて切り替え）】
-- 感謝の記述 → 仏教「縁起」で視野拡大 → ストア派「世界市民倫理」で利他的行動へ昇華
-- 目標・行動 → ストア派「コントロール二分法」でプロセスに焦点 → 仏教「非執着」で結果への固執を手放す
-- ネガティブ感情・手放すこと → 仏教「サティ（観察）」から入り → ストア派「論理的再構成」へ
+【出力】以下のJSONのみ（前後のテキスト・バッククォート不要）：
+{"philosophy":"ストア派|仏教|統合","quote":"格言（日本語）","quote_source":"出典","advice":"アドバイス本文（2〜3文、です・ます調）","reflection_prompt":"問いかけ（1文）"}
 
-【出力形式】
-以下のJSON形式のみで返答してください（余分なテキスト・マークダウン記号は一切付けない）：
-{
-  "philosophy": "ストア派" | "仏教" | "統合",
-  "quote": "格言（日本語）",
-  "quote_source": "出典",
-  "advice": "アドバイス本文（2〜4文、です・ます調）",
-  "reflection_prompt": "内省を促す問いかけ（1文）"
+【トーン】命令形禁止・空虚な共感禁止・静寂さのある敬体・ソクラテス的問い返し`;
 }
 
-【トーン原則】
-- 命令形・「べき」は使わない
-- 「大変でしたね」などの空虚な共感は避ける
-- 静寂さを感じさせる簡潔な敬体
-- ソクラテス的に「問い返す」姿勢
-- 引用する格言は確実に存在する一次資料のもの（推測で帰属させない）`;
+function buildUserPrompt(e){
+  const m = e.mood?`${MOOD_EMOJIS[e.mood]} ${MOOD_LABELS[e.mood]}`:'未選択';
+  return `【本日のジャーナル】${e.dateLabel}
+感謝①：${e.g1}${e.g1w?`（なぜなら：${e.g1w}）`:''}
+感謝②：${e.g2}${e.g2w?`（なぜなら：${e.g2w}）`:''}
+感謝③：${e.g3}${e.g3w?`（なぜなら：${e.g3w}）`:''}
+目標1：${e.goal1} / 目標2：${e.goal2}${e.goal3?` / 目標3：${e.goal3}`:''}
+今日の取り組み：${e.action}
+手放すこと：${e.release}
+気分：${m}
+感じたこと：${e.reflection}
+→JSONで返してください。`;
 }
 
-function buildUserPrompt(entry) {
-  const moodText = entry.mood ? `${MOOD_EMOJIS[entry.mood]} ${MOOD_LABELS[entry.mood]}（${entry.mood}/5）` : '未選択';
-  return `【本日のジャーナル】
-日付：${entry.dateLabel}
-
-▼感謝すること
-① ${entry.g1}${entry.g1w ? `（なぜなら：${entry.g1w}）` : ''}
-② ${entry.g2}${entry.g2w ? `（なぜなら：${entry.g2w}）` : ''}
-③ ${entry.g3}${entry.g3w ? `（なぜなら：${entry.g3w}）` : ''}
-
-▼長期目標
-目標1：${entry.goal1}
-目標2：${entry.goal2}
-${entry.goal3 ? `目標3：${entry.goal3}` : ''}
-
-▼今日の取り組み（If-Then）
-${entry.action}
-
-▼今日手放すこと
-${entry.release}
-
-▼今日の気分
-${moodText}
-
-▼今日感じたこと
-${entry.reflection}
-
-上記のジャーナル全体を踏まえて、最も適切な哲学的アドバイスをJSONで返してください。`;
+function formatAdviceHTML(raw){
+  try{
+    const data=JSON.parse(raw.replace(/```json|```/g,'').trim());
+    return `<div class="advice-text">${escHtml(data.advice)}</div>
+${data.quote?`<div class="advice-quote">「${escHtml(data.quote)}」<span class="advice-quote-src">— ${escHtml(data.quote_source||'')} —</span></div>`:''}
+<div class="advice-prompt"><div class="advice-prompt-label">✦ 今日の問いかけ</div><div class="advice-prompt-text">${escHtml(data.reflection_prompt||'')}</div></div>`;
+  }catch{ return `<div class="advice-text">${escHtml(raw)}</div>`; }
 }
 
-function formatAdviceHTML(rawText) {
-  try {
-    const clean = rawText.replace(/```json|```/g,'').trim();
-    const data = JSON.parse(clean);
-    return `
-      <div class="advice-text">${escHtml(data.advice)}</div>
-      ${data.quote ? `
-      <div class="advice-quote">
-        「${escHtml(data.quote)}」<br>
-        <span style="font-size:.75rem;color:var(--bark-light);font-style:normal;">— ${escHtml(data.quote_source||'')} —</span>
-      </div>` : ''}
-      <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--sage-light);">
-        <div style="font-size:.72rem;color:var(--sage);margin-bottom:4px;letter-spacing:.05em;">🕊 今日の問いかけ</div>
-        <div style="font-size:.85rem;color:var(--ink-soft);line-height:1.8;font-family:var(--font-serif);">${escHtml(data.reflection_prompt||'')}</div>
-      </div>`;
-  } catch {
-    return `<div class="advice-text">${escHtml(rawText)}</div>`;
-  }
+function renderFallbackAdvice(entry){
+  const neg=(entry.reflection||'').match(/辛|悩|怒|不安|失敗|できなかった|最悪/);
+  if(neg) return `<div class="advice-text">その感情を排除しようとせず、まず「私の中に、今この波が生じている」という事実を、嵐を眺めるように静かに実況してみてください。他者の行動や環境はあなたの管轄外ですが、それに対するあなたの「解釈と判断」は、完全にあなたの管轄内にあります。</div>
+<div class="advice-quote">「もし君が外部の事柄によって苦しんでいるなら、その苦痛はその事柄自体によるのではなく、それに対する君の判断によるものである。」<span class="advice-quote-src">— マルクス・アウレリウス『自省録』—</span></div>
+<div class="advice-prompt"><div class="advice-prompt-label">✦ 今日の問いかけ</div><div class="advice-prompt-text">この出来事を「一時的に生じた無常の現象」として眺めるとき、あなたの内側に何か変化はありますか？</div></div>`;
+  return `<div class="advice-text">今日の感謝を書き記したことで、あなたは縁起のネットワーク—無数の他者の営みと自然の循環—に静かに目を向けました。その気づきは、見返りを求めない利他の種となり得ます。</div>
+<div class="advice-quote">「母親が自己のひとり子を、命を賭して護るように、生きとし生けるものの上に、限りなき慈しみの意を注げ。」<span class="advice-quote-src">— スッタニパータ「慈経」—</span></div>
+<div class="advice-prompt"><div class="advice-prompt-label">✦ 今日の問いかけ</div><div class="advice-prompt-text">今日感謝した出来事の背景に、どのような「見えないつながり」がありそうでしょうか？</div></div>`;
 }
 
-function renderFallbackAdvice(entry) {
-  // APIキー未設定時のデモアドバイス（ストア派・仏教テンプレート）
-  const hasNegative = (entry.reflection||'').match(/辛|悩|怒|不安|失敗|できなかった|最悪/);
-  if(hasNegative) {
-    return `
-      <div class="advice-text">その感情を排除しようとせず、まず「私の中に、今この波が生じている」という事実を、嵐を眺めるように静かに実況してみてください。他者の行動や環境はあなたの管轄外ですが、それに対するあなたの「解釈と判断」は、完全にあなたの管轄内にあります。</div>
-      <div class="advice-quote">
-        「もし君が外部の事柄によって苦しんでいるなら、その苦痛はその事柄自体によるのではなく、それに対する君の判断によるものである。そして君はその判断を今すぐ消し去る力を持っている。」<br>
-        <span style="font-size:.75rem;color:var(--bark-light);font-style:normal;">— マルクス・アウレリウス『自省録』—</span>
-      </div>
-      <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--sage-light);">
-        <div style="font-size:.72rem;color:var(--sage);margin-bottom:4px;">🕊 今日の問いかけ</div>
-        <div style="font-size:.85rem;color:var(--ink-soft);line-height:1.8;font-family:var(--font-serif);">この出来事を「一時的に生じた無常の現象」として眺めるとき、あなたの内側に何か変化はありますか？</div>
-      </div>`;
-  }
-  return `
-    <div class="advice-text">今日の感謝を書き記したことで、あなたは縁起のネットワーク—無数の他者の営みと自然の循環—に対して、静かに目を向けました。その温かな気づきは、見返りを求めない利他の種となり得ます。</div>
-    <div class="advice-quote">
-      「母親が自己のひとり子を、命を賭して護るように、生きとし生けるものの上に、限りなき慈しみの意を注げ。」<br>
-      <span style="font-size:.75rem;color:var(--bark-light);font-style:normal;">— スッタニパータ「慈経」—</span>
-    </div>
-    <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--sage-light);">
-      <div style="font-size:.72rem;color:var(--sage);margin-bottom:4px;">🕊 今日の問いかけ</div>
-      <div style="font-size:.85rem;color:var(--ink-soft);line-height:1.8;font-family:var(--font-serif);">今日感謝した出来事の背景に、どのような「見えないつながり」がありそうでしょうか？</div>
-    </div>`;
-}
-
-// ── 履歴 ─────────────────────────────────────────
-function renderHistory() {
-  const all = getLocalEntries().sort((a,b) => b.id - a.id);
-  const now = new Date();
-  const filtered = all.filter(e => {
-    if(currentFilter === 'all') return true;
-    const d = new Date(e.date);
-    if(currentFilter === 'week') {
-      const diff = (now - d) / 86400000;
-      return diff <= 7;
-    }
-    if(currentFilter === 'month') {
-      return d.getMonth()===now.getMonth() && d.getFullYear()===now.getFullYear();
-    }
+function renderHistory(){
+  const all=getLocalEntries().sort((a,b)=>b.id-a.id);
+  const now=new Date();
+  const filtered=all.filter(e=>{
+    if(currentFilter==='all') return true;
+    const d=new Date(e.date);
+    if(currentFilter==='week') return (now-d)/86400000<=7;
+    if(currentFilter==='month') return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();
     return true;
   });
-
-  const el = document.getElementById('history-list');
-  if(!filtered.length) {
-    el.innerHTML = `<div class="history-empty">
-      <div class="empty-icon">📖</div>
-      <p>まだ記録がありません。<br>最初のジャーナルを書いてみましょう。</p>
-    </div>`;
+  const el=document.getElementById('history-list');
+  if(!filtered.length){
+    el.innerHTML=`<div class="history-empty"><p>まだ記録がありません。<br>最初のページを開きましょう。</p></div>`;
     return;
   }
-  el.innerHTML = filtered.map(e => `
+  el.innerHTML=filtered.map(e=>`
     <div class="history-entry" onclick="openEntryModal('${e.id}')">
-      <div class="history-entry-header">
-        <div class="history-date">${e.dateLabel || e.date}</div>
-        <div class="history-mood">${e.mood ? MOOD_EMOJIS[e.mood] : '—'}</div>
+      <div class="history-entry-date">${e.date}</div>
+      <div class="history-entry-body">
+        <div class="history-entry-text">${e.g1?escHtml(e.g1.substring(0,36))+(e.g1.length>36?'…':''):'—'}</div>
       </div>
-      <div class="history-gratitude">
-        ${e.g1 ? `<span>🙏</span>${escHtml(e.g1.substring(0,30))}${e.g1.length>30?'…':''}` : ''}
-      </div>
+      <div class="history-entry-mood">${e.mood?MOOD_EMOJIS[e.mood]:'—'}</div>
     </div>`).join('');
 }
 
-window.filterHistory = function(f, el) {
-  currentFilter = f;
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  el.classList.add('active');
-  renderHistory();
+window.filterHistory=function(f,el){
+  currentFilter=f;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active'); renderHistory();
 };
 
-// ── モーダル ──────────────────────────────────────
-window.openEntryModal = function(id) {
-  const all = getLocalEntries();
-  const entry = all.find(e => String(e.id) === String(id));
+window.openEntryModal=function(id){
+  const entry=getLocalEntries().find(e=>String(e.id)===String(id));
   if(!entry) return;
-
-  const body = document.getElementById('modal-body');
-  body.innerHTML = `
-    <div class="modal-date">${entry.dateLabel || entry.date}　${entry.mood ? MOOD_EMOJIS[entry.mood]+' '+MOOD_LABELS[entry.mood] : ''}</div>
-    ${entry.g1 ? `<div class="modal-section">
-      <div class="modal-section-title">🙏 感謝</div>
-      <div class="modal-text">① ${escHtml(entry.g1)}${entry.g1w?`<br><span style="font-size:.78rem;color:var(--bark-light);">なぜなら：${escHtml(entry.g1w)}</span>`:''}
-        ${entry.g2?`<br>② ${escHtml(entry.g2)}${entry.g2w?`<br><span style="font-size:.78rem;color:var(--bark-light);">なぜなら：${escHtml(entry.g2w)}</span>`:''}`:''} 
-        ${entry.g3?`<br>③ ${escHtml(entry.g3)}${entry.g3w?`<br><span style="font-size:.78rem;color:var(--bark-light);">なぜなら：${escHtml(entry.g3w)}</span>`:''}`:''}</div>
-    </div>` : ''}
-    ${entry.action ? `<div class="modal-section">
-      <div class="modal-section-title">⚡ 今日の取り組み</div>
-      <div class="modal-text">${escHtml(entry.action).replace(/\n/g,'<br>')}</div>
-    </div>` : ''}
-    ${entry.release ? `<div class="modal-section">
-      <div class="modal-section-title">🍃 手放したこと</div>
-      <div class="modal-text">${escHtml(entry.release)}</div>
-    </div>` : ''}
-    ${entry.reflection ? `<div class="modal-section">
-      <div class="modal-section-title">📝 今日感じたこと</div>
-      <div class="modal-text">${escHtml(entry.reflection).replace(/\n/g,'<br>')}</div>
-    </div>` : ''}`;
-
+  document.getElementById('modal-body').innerHTML=`
+    <div class="modal-date">${entry.dateLabel||entry.date}　${entry.mood?MOOD_EMOJIS[entry.mood]+' '+MOOD_LABELS[entry.mood]:''}</div>
+    ${entry.g1?`<div class="modal-section"><div class="modal-section-title">感謝</div>
+      <div class="modal-text">一　${escHtml(entry.g1)}${entry.g1w?`<br><span style="font-size:.75rem;color:var(--star-faint);">なぜなら：${escHtml(entry.g1w)}</span>`:''}
+      ${entry.g2?`<br>二　${escHtml(entry.g2)}${entry.g2w?`<br><span style="font-size:.75rem;color:var(--star-faint);">なぜなら：${escHtml(entry.g2w)}</span>`:''}`:''} 
+      ${entry.g3?`<br>三　${escHtml(entry.g3)}${entry.g3w?`<br><span style="font-size:.75rem;color:var(--star-faint);">なぜなら：${escHtml(entry.g3w)}</span>`:''}`:''}</div></div>`:''}
+    ${entry.action?`<div class="modal-section"><div class="modal-section-title">今日の取り組み</div><div class="modal-text">${escHtml(entry.action).replace(/\n/g,'<br>')}</div></div>`:''}
+    ${entry.release?`<div class="modal-section"><div class="modal-section-title">手放したこと</div><div class="modal-text">${escHtml(entry.release)}</div></div>`:''}
+    ${entry.reflection?`<div class="modal-section"><div class="modal-section-title">感じたこと</div><div class="modal-text">${escHtml(entry.reflection).replace(/\n/g,'<br>')}</div></div>`:''}`;
   document.getElementById('modal-overlay').classList.add('open');
 };
+window.closeModal=function(e){ if(e.target===document.getElementById('modal-overlay')) closeModalDirect(); };
+window.closeModalDirect=function(){ document.getElementById('modal-overlay').classList.remove('open'); };
 
-window.closeModal = function(e) {
-  if(e.target === document.getElementById('modal-overlay')) closeModalDirect();
-};
-window.closeModalDirect = function() {
-  document.getElementById('modal-overlay').classList.remove('open');
-};
-
-// ── 統計 ─────────────────────────────────────────
-function renderStats() {
-  const all = getLocalEntries();
-  const now = new Date();
-
-  // 基本統計
-  document.getElementById('stat-total').textContent = all.length;
-  const streak = calcStreak(all);
-  document.getElementById('stat-streak').textContent = streak;
-  document.getElementById('stat-this-month').textContent =
-    all.filter(e => { const d=new Date(e.date); return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear(); }).length;
-
-  const moods = all.filter(e=>e.mood).map(e=>e.mood);
-  document.getElementById('stat-avg-mood').textContent =
-    moods.length ? (moods.reduce((a,b)=>a+b,0)/moods.length).toFixed(1) : '—';
-
-  // 気分グラフ（直近7日）
-  const chartEl = document.getElementById('mood-chart');
-  const days7 = [];
-  for(let i=6;i>=0;i--) {
-    const d = new Date(now); d.setDate(d.getDate()-i);
-    const key = d.toISOString().split('T')[0];
-    const entry = all.find(e=>e.date===key);
-    days7.push({ label: `${d.getMonth()+1}/${d.getDate()}`, mood: entry?.mood||0 });
-  }
-  chartEl.innerHTML = days7.map(d => `
-    <div class="mood-bar" style="height:${d.mood?d.mood*16:4}px;background:${d.mood?'var(--ai-light)':'#DDD8CE'};">
-      <div class="mood-bar-label">${d.label}</div>
-    </div>`).join('');
-
-  // 目標進捗
-  const goalCounts = {};
-  all.forEach(e => {
-    if(e.goal1) goalCounts[e.goal1.substring(0,20)] = (goalCounts[e.goal1.substring(0,20)]||0) + (e.action?1:0);
-  });
-  const progressEl = document.getElementById('goal-progress');
-  const latest = all[all.length-1];
-  const goals = [latest?.goal1, latest?.goal2, latest?.goal3].filter(Boolean);
-  if(!goals.length) {
-    progressEl.innerHTML = '<div style="font-size:.85rem;color:var(--bark-light);text-align:center;padding:16px;">目標を記録すると進捗が表示されます</div>';
-    return;
-  }
-  progressEl.innerHTML = goals.map(g => {
-    const count = all.filter(e => e.goal1===g||e.goal2===g||e.goal3===g).length;
-    const pct = Math.min(100, count * 3);
-    return `<div class="goal-progress-item">
-      <div class="goal-progress-header">
-        <div class="goal-progress-name">${escHtml(g.substring(0,30))}</div>
-        <div class="goal-progress-count">${count}日</div>
-      </div>
-      <div class="progress-bar-wrap">
-        <div class="progress-bar-fill" style="width:${pct}%"></div>
-      </div>
-    </div>`;
-  }).join('');
+function renderStats(){
+  const all=getLocalEntries(), now=new Date();
+  document.getElementById('stat-total').textContent=all.length;
+  document.getElementById('stat-streak').textContent=calcStreak(all);
+  document.getElementById('stat-this-month').textContent=
+    all.filter(e=>{const d=new Date(e.date);return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();}).length;
+  const moods=all.filter(e=>e.mood).map(e=>e.mood);
+  document.getElementById('stat-avg-mood').textContent=moods.length?(moods.reduce((a,b)=>a+b,0)/moods.length).toFixed(1):'—';
+  const chartEl=document.getElementById('mood-chart');
+  const days7=[];
+  for(let i=6;i>=0;i--){const d=new Date(now);d.setDate(d.getDate()-i);const key=d.toISOString().split('T')[0];const entry=all.find(e=>e.date===key);days7.push({label:`${d.getMonth()+1}/${d.getDate()}`,mood:entry?.mood||0});}
+  chartEl.innerHTML=days7.map(d=>`<div class="mood-bar" style="height:${d.mood?d.mood*12:2}px;background:${d.mood?'var(--ice)':'var(--night-line)'};"><div class="mood-bar-label">${d.label}</div></div>`).join('');
+  const progressEl=document.getElementById('goal-progress');
+  const latest=all[all.length-1];
+  const goals=[latest?.goal1,latest?.goal2,latest?.goal3].filter(Boolean);
+  if(!goals.length){progressEl.innerHTML='<div style="font-size:.78rem;color:var(--star-faint);text-align:center;padding:16px;">目標を記録すると表示されます</div>';return;}
+  progressEl.innerHTML=goals.map(g=>{const count=all.filter(e=>e.goal1===g||e.goal2===g||e.goal3===g).length;const pct=Math.min(100,count*3);return`<div class="goal-progress-item"><div class="goal-progress-header"><div class="goal-progress-name">${escHtml(g.substring(0,28))}</div><div class="goal-progress-count">${count}日</div></div><div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:${pct}%"></div></div></div>`;}).join('');
 }
 
-// ── ストリーク計算 ────────────────────────────────
-function calcStreak(entries) {
+function calcStreak(entries){
   if(!entries.length) return 0;
-  const dates = [...new Set(entries.map(e=>e.date))].sort().reverse();
-  const today = getTodayKey();
-  let streak = 0, current = today;
-  for(const d of dates) {
-    if(d === current) { streak++; const dt=new Date(current); dt.setDate(dt.getDate()-1); current=dt.toISOString().split('T')[0]; }
-    else if(d < current) break;
-  }
-  document.getElementById('streak-badge').textContent = `🔥 ${streak}日`;
+  const dates=[...new Set(entries.map(e=>e.date))].sort().reverse();
+  const today=getTodayKey();let streak=0,current=today;
+  for(const d of dates){if(d===current){streak++;const dt=new Date(current);dt.setDate(dt.getDate()-1);current=dt.toISOString().split('T')[0];}else if(d<current)break;}
+  document.getElementById('streak-badge').textContent=`✦ ${streak}日`;
   return streak;
 }
-
-function updateStreak() {
-  calcStreak(getLocalEntries());
-}
-
-// ── バナー ────────────────────────────────────────
-function showBanner(msg) {
-  const b = document.getElementById('save-banner');
-  b.textContent = msg;
-  b.classList.add('show');
-  setTimeout(()=>b.classList.remove('show'), 2500);
-}
-
-// ── ユーティリティ ────────────────────────────────
-function getTodayKey() { return new Date().toISOString().split('T')[0]; }
-function escHtml(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-
-// 自動下書き保存（30秒ごと）
-setInterval(saveDraft, 30000);
+function updateStreak(){ calcStreak(getLocalEntries()); }
+function showBanner(msg){ const b=document.getElementById('save-banner');b.textContent=msg;b.classList.add('show');setTimeout(()=>b.classList.remove('show'),2500); }
+function getTodayKey(){ return new Date().toISOString().split('T')[0]; }
+function escHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 </script>
 </body>
 </html>
