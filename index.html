@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#3D5740">
+<title>内省 — Naisei Journal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;700&family=Zen+Kaku+Gothic+New:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream:       #F7F3EC;
+  --warm-white:  #FDFAF5;
+  --sage:        #5C7A5F;
+  --sage-light:  #8AAE8D;
+  --sage-dark:   #3D5740;
+  --sage-pale:   #EBF1EB;
+  --terra:       #C0714F;
+  --terra-light: #DDA08A;
+  --terra-pale:  #F5E6DF;
+  --ochre:       #C89A3E;
+  --ochre-light: #EDD98A;
+  --ochre-pale:  #FBF5E0;
+  --bark:        #6B4F3A;
+  --bark-light:  #A07A5F;
+  --ink:         #2A2118;
+  --ink-soft:    #4A3F35;
+  --mist:        #B8C4B0;
+  --shadow:      rgba(42,33,24,0.10);
+  --shadow-md:   rgba(42,33,24,0.18);
+  --radius-sm:   8px;
+  --radius-md:   16px;
+  --radius-lg:   24px;
+  --radius-xl:   36px;
+  --font-serif:  'Shippori Mincho', serif;
+  --font-sans:   'Zen Kaku Gothic New', sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:16px;-webkit-text-size-adjust:100%;}
+body{
+  font-family:var(--font-sans);
+  background:var(--cream);
+  color:var(--ink);
+  min-height:100vh;
+  padding-bottom:calc(72px + env(safe-area-inset-bottom,0px));
+}
+
+/* ── ローディング ── */
+#app-loading{
+  position:fixed;inset:0;z-index:3000;
+  background:var(--sage-dark);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;
+}
+.loading-title{font-family:var(--font-serif);color:#fff;font-size:1.8rem;letter-spacing:.15em;}
+.loading-sub{color:var(--mist);font-size:.85rem;letter-spacing:.2em;}
+.loading-dot{
+  width:8px;height:8px;background:var(--ochre-light);border-radius:50%;
+  animation:dotpulse 1.4s ease-in-out infinite;
+}
+@keyframes dotpulse{0%,80%,100%{opacity:.2;transform:scale(.8);}40%{opacity:1;transform:scale(1.2);}}
+
+/* ── 認証画面 ── */
+#app-auth{
+  display:none;min-height:100vh;
+  background:var(--sage-dark);
+  align-items:center;justify-content:center;padding:24px;
+}
+.auth-card{
+  background:var(--warm-white);border-radius:var(--radius-lg);
+  padding:40px 32px;width:100%;max-width:400px;
+  box-shadow:0 8px 32px var(--shadow-md);
+}
+.auth-logo{font-family:var(--font-serif);font-size:2rem;color:var(--sage-dark);text-align:center;margin-bottom:4px;}
+.auth-sub{text-align:center;color:var(--bark-light);font-size:.8rem;letter-spacing:.15em;margin-bottom:32px;}
+.auth-tabs{display:flex;gap:8px;margin-bottom:24px;}
+.auth-tab{
+  flex:1;padding:10px;border:2px solid var(--mist);border-radius:var(--radius-sm);
+  background:none;cursor:pointer;font-family:var(--font-sans);font-size:.9rem;color:var(--ink-soft);
+  transition:.2s;
+}
+.auth-tab.active{border-color:var(--sage);background:var(--sage-pale);color:var(--sage-dark);font-weight:700;}
+.auth-form{display:flex;flex-direction:column;gap:14px;}
+.form-group label{display:block;font-size:.8rem;color:var(--ink-soft);margin-bottom:6px;letter-spacing:.05em;}
+.form-group input{
+  width:100%;padding:12px 14px;border:1.5px solid #DDD8CE;border-radius:var(--radius-sm);
+  font-family:var(--font-sans);font-size:.95rem;background:var(--cream);color:var(--ink);outline:none;
+  transition:.2s;
+}
+.form-group input:focus{border-color:var(--sage);}
+.auth-btn{
+  padding:14px;border:none;border-radius:var(--radius-sm);
+  background:var(--sage-dark);color:#fff;font-family:var(--font-sans);font-size:1rem;
+  font-weight:700;cursor:pointer;transition:.2s;margin-top:8px;
+}
+.auth-btn:hover{background:var(--sage);}
+.auth-error{color:var(--terra);font-size:.85rem;text-align:center;display:none;}
+
+/* ── ヘッダー ── */
+.site-header{
+  position:sticky;top:0;z-index:100;
+  background:var(--sage-dark);
+  padding:16px 20px 12px;
+  padding-top:max(16px,calc(16px + env(safe-area-inset-top,0px)));
+}
+@media(display-mode:standalone){
+  .site-header{padding-top:max(20px,calc(env(safe-area-inset-top,0px)+10px));}
+}
+.header-inner{display:flex;align-items:center;justify-content:space-between;}
+.header-title{font-family:var(--font-serif);color:#fff;font-size:1.3rem;letter-spacing:.12em;}
+.header-date{color:var(--mist);font-size:.75rem;letter-spacing:.08em;}
+.header-right{display:flex;align-items:center;gap:10px;}
+.streak-badge{
+  background:var(--ochre);color:#fff;font-size:.7rem;font-weight:700;
+  padding:4px 10px;border-radius:20px;letter-spacing:.05em;
+}
+.icon-btn{
+  width:36px;height:36px;border:none;border-radius:50%;
+  background:rgba(255,255,255,.15);color:#fff;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-size:1rem;transition:.2s;
+}
+.icon-btn:hover{background:rgba(255,255,255,.25);}
+
+/* ── ナビ ── */
+.nav-bar{
+  position:fixed;bottom:0;left:0;right:0;z-index:100;
+  background:var(--warm-white);border-top:1px solid #E5E0D8;
+  display:flex;padding-bottom:env(safe-area-inset-bottom,0px);
+}
+.nav-tab{
+  flex:1;padding:10px 4px 8px;border:none;background:none;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  font-family:var(--font-sans);font-size:.65rem;color:var(--bark-light);
+  transition:.2s;letter-spacing:.05em;
+}
+.nav-tab .nav-icon{font-size:1.4rem;transition:.2s;}
+.nav-tab.active{color:var(--sage-dark);}
+.nav-tab.active .nav-icon{transform:translateY(-2px);}
+
+/* ── メインコンテンツ ── */
+.main{padding:20px 16px;max-width:680px;margin:0 auto;}
+.module{display:none;}
+.module.active{display:block;}
+
+/* ── セクションカード ── */
+.card{
+  background:var(--warm-white);border-radius:var(--radius-md);
+  padding:20px;margin-bottom:16px;
+  box-shadow:0 2px 8px var(--shadow);
+}
+.card-header{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+.card-icon{font-size:1.3rem;}
+.card-title{font-family:var(--font-serif);font-size:1rem;color:var(--ink);letter-spacing:.08em;}
+.card-title span{font-family:var(--font-sans);font-size:.75rem;color:var(--bark-light);margin-left:6px;}
+
+/* ── テキストエリア ── */
+.journal-textarea{
+  width:100%;border:1.5px solid #E0DDD5;border-radius:var(--radius-sm);
+  padding:12px 14px;font-family:var(--font-sans);font-size:.9rem;
+  color:var(--ink);background:var(--cream);resize:none;outline:none;
+  line-height:1.7;transition:.2s;
+}
+.journal-textarea:focus{border-color:var(--sage);}
+.journal-textarea::placeholder{color:#C0B9AE;}
+
+/* ── 感謝エントリ ── */
+.gratitude-list{display:flex;flex-direction:column;gap:10px;}
+.gratitude-item{display:flex;align-items:flex-start;gap:10px;}
+.gratitude-num{
+  min-width:28px;height:28px;border-radius:50%;
+  background:var(--ochre);color:#fff;
+  font-size:.75rem;font-weight:700;font-family:var(--font-serif);
+  display:flex;align-items:center;justify-content:center;margin-top:4px;
+}
+.gratitude-col{flex:1;}
+.gratitude-col textarea{margin-bottom:6px;}
+.gratitude-why{font-size:.78rem;color:var(--bark-light);margin-bottom:4px;letter-spacing:.03em;}
+
+/* ── 目標リスト ── */
+.goal-list{display:flex;flex-direction:column;gap:12px;}
+.goal-item{border-left:3px solid var(--sage);padding-left:12px;}
+.goal-label{font-size:.75rem;color:var(--sage);font-weight:700;margin-bottom:6px;letter-spacing:.05em;}
+
+/* ── 手放すこと ── */
+.release-hint{font-size:.78rem;color:var(--bark-light);margin-bottom:8px;line-height:1.6;}
+
+/* ── 気分スコア ── */
+.mood-selector{display:flex;gap:8px;justify-content:center;margin:4px 0 8px;}
+.mood-btn{
+  width:48px;height:48px;border:2px solid #E0DDD5;border-radius:50%;background:var(--cream);
+  font-size:1.4rem;cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;
+}
+.mood-btn.selected{border-color:var(--ochre);background:var(--ochre-pale);transform:scale(1.15);}
+.mood-label{text-align:center;font-size:.75rem;color:var(--bark-light);margin-top:4px;}
+
+/* ── AIアドバイス ── */
+.advice-box{
+  border:1.5px solid var(--sage-light);border-radius:var(--radius-md);
+  padding:20px;background:var(--sage-pale);margin-top:4px;
+}
+.advice-header{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+.advice-icon{font-size:1.1rem;}
+.advice-title{font-family:var(--font-serif);font-size:.9rem;color:var(--sage-dark);letter-spacing:.08em;}
+.advice-tag{
+  margin-left:auto;font-size:.65rem;padding:3px 8px;
+  border-radius:20px;background:var(--sage-dark);color:#fff;letter-spacing:.05em;
+}
+.advice-text{font-size:.88rem;line-height:1.9;color:var(--ink-soft);}
+.advice-quote{
+  border-left:3px solid var(--ochre);padding:10px 14px;margin:12px 0;
+  background:var(--ochre-pale);border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+  font-size:.82rem;color:var(--bark);line-height:1.7;font-style:italic;
+  font-family:var(--font-serif);
+}
+.advice-loading{
+  display:flex;align-items:center;gap:10px;
+  color:var(--sage);font-size:.85rem;padding:8px 0;
+}
+.advice-loading-dots{display:flex;gap:4px;}
+.advice-loading-dots span{
+  width:6px;height:6px;background:var(--sage);border-radius:50%;
+  animation:dotpulse 1.2s ease-in-out infinite;
+}
+.advice-loading-dots span:nth-child(2){animation-delay:.2s;}
+.advice-loading-dots span:nth-child(3){animation-delay:.4s;}
+
+/* ── ボタン ── */
+.btn-primary{
+  width:100%;padding:14px;border:none;border-radius:var(--radius-sm);
+  background:var(--sage-dark);color:#fff;font-family:var(--font-sans);font-size:.95rem;
+  font-weight:700;cursor:pointer;transition:.2s;letter-spacing:.05em;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.btn-primary:hover{background:var(--sage);}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed;}
+.btn-secondary{
+  padding:10px 20px;border:1.5px solid var(--sage);border-radius:var(--radius-sm);
+  background:none;color:var(--sage-dark);font-family:var(--font-sans);font-size:.85rem;
+  font-weight:700;cursor:pointer;transition:.2s;
+}
+.btn-secondary:hover{background:var(--sage-pale);}
+
+/* ── 保存バナー ── */
+.save-banner{
+  position:fixed;top:70px;left:50%;transform:translateX(-50%) translateY(-20px);
+  background:var(--sage-dark);color:#fff;padding:10px 20px;
+  border-radius:20px;font-size:.85rem;z-index:500;
+  opacity:0;transition:.3s;pointer-events:none;white-space:nowrap;
+}
+.save-banner.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ── 履歴モジュール ── */
+.history-filter{display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px;}
+.filter-btn{
+  padding:6px 14px;border:1.5px solid #E0DDD5;border-radius:20px;
+  background:none;font-family:var(--font-sans);font-size:.78rem;color:var(--ink-soft);
+  cursor:pointer;transition:.2s;white-space:nowrap;
+}
+.filter-btn.active{border-color:var(--sage);background:var(--sage-pale);color:var(--sage-dark);}
+.history-entry{
+  background:var(--warm-white);border-radius:var(--radius-md);padding:16px;
+  margin-bottom:12px;box-shadow:0 2px 8px var(--shadow);cursor:pointer;
+  transition:.2s;border-left:4px solid transparent;
+}
+.history-entry:hover{border-left-color:var(--sage);}
+.history-entry-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.history-date{font-size:.8rem;color:var(--bark-light);}
+.history-mood{font-size:1.1rem;}
+.history-gratitude{font-size:.85rem;color:var(--ink-soft);line-height:1.6;}
+.history-gratitude span{color:var(--ochre);font-weight:700;margin-right:4px;}
+.history-empty{text-align:center;padding:40px 20px;color:var(--bark-light);}
+.history-empty .empty-icon{font-size:2.5rem;margin-bottom:12px;}
+.history-empty p{font-size:.85rem;line-height:1.8;}
+
+/* ── 統計モジュール ── */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
+.stat-card{
+  background:var(--warm-white);border-radius:var(--radius-md);padding:16px;
+  box-shadow:0 2px 8px var(--shadow);text-align:center;
+}
+.stat-num{font-family:var(--font-serif);font-size:2rem;color:var(--sage-dark);font-weight:700;}
+.stat-label{font-size:.72rem;color:var(--bark-light);margin-top:4px;letter-spacing:.05em;}
+.mood-chart{display:flex;align-items:flex-end;gap:6px;height:80px;margin-top:8px;}
+.mood-bar{
+  flex:1;background:var(--sage-light);border-radius:4px 4px 0 0;
+  min-height:4px;transition:.5s;position:relative;
+}
+.mood-bar-label{position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);font-size:.6rem;color:var(--bark-light);}
+.goal-progress{margin-top:4px;}
+.goal-progress-item{margin-bottom:14px;}
+.goal-progress-header{display:flex;justify-content:space-between;margin-bottom:6px;}
+.goal-progress-name{font-size:.82rem;color:var(--ink-soft);}
+.goal-progress-count{font-size:.75rem;color:var(--sage-dark);font-weight:700;}
+.progress-bar-wrap{height:6px;background:#E5E0D8;border-radius:3px;overflow:hidden;}
+.progress-bar-fill{height:100%;background:var(--sage);border-radius:3px;transition:.5s;}
+
+/* ── 設定モジュール ── */
+.setting-item{border-bottom:1px solid #EBE7DF;padding:16px 0;}
+.setting-item:last-child{border-bottom:none;}
+.setting-label{font-size:.82rem;color:var(--ink-soft);margin-bottom:8px;font-weight:700;}
+.setting-input{
+  width:100%;padding:10px 12px;border:1.5px solid #E0DDD5;border-radius:var(--radius-sm);
+  font-family:var(--font-sans);font-size:.88rem;color:var(--ink);background:var(--cream);outline:none;
+}
+.setting-input:focus{border-color:var(--sage);}
+.api-status{display:flex;align-items:center;gap:8px;margin-top:8px;font-size:.8rem;}
+.api-dot{width:8px;height:8px;border-radius:50%;background:#ccc;}
+.api-dot.ok{background:#4CAF50;}
+.api-dot.ng{background:var(--terra);}
+.philosophy-info{
+  background:var(--sage-pale);border-radius:var(--radius-sm);padding:14px;
+  font-size:.8rem;color:var(--ink-soft);line-height:1.8;margin-top:8px;
+}
+.signout-btn{
+  width:100%;padding:12px;border:1.5px solid #DDD;border-radius:var(--radius-sm);
+  background:none;color:var(--bark-light);font-family:var(--font-sans);font-size:.88rem;
+  cursor:pointer;transition:.2s;margin-top:8px;
+}
+.signout-btn:hover{background:var(--terra-pale);color:var(--terra);border-color:var(--terra-light);}
+
+/* ── 詳細モーダル ── */
+.modal-overlay{
+  position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.5);
+  display:none;align-items:flex-end;
+}
+.modal-overlay.open{display:flex;}
+.modal-sheet{
+  width:100%;background:var(--warm-white);border-radius:var(--radius-lg) var(--radius-lg) 0 0;
+  padding:24px 20px;padding-bottom:max(24px,calc(24px + env(safe-area-inset-bottom,0px)));
+  max-height:90vh;overflow-y:auto;animation:slideUp .3s ease;
+}
+@keyframes slideUp{from{transform:translateY(40px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+.modal-handle{width:40px;height:4px;background:#DDD;border-radius:2px;margin:0 auto 20px;}
+.modal-date{font-size:.78rem;color:var(--bark-light);margin-bottom:16px;}
+.modal-section{margin-bottom:16px;}
+.modal-section-title{font-family:var(--font-serif);font-size:.85rem;color:var(--sage-dark);margin-bottom:8px;}
+.modal-text{font-size:.85rem;color:var(--ink-soft);line-height:1.8;}
+.modal-close{
+  width:100%;padding:12px;border:none;background:var(--cream);border-radius:var(--radius-sm);
+  font-family:var(--font-sans);font-size:.9rem;color:var(--ink-soft);cursor:pointer;margin-top:16px;
+}
+
+/* ── レスポンシブ ── */
+@media(min-width:680px){
+  .main{padding:24px 20px;}
+  .stats-grid{grid-template-columns:repeat(4,1fr);}
+}
+</style>
+</head>
+<body>
+
+<!-- ローディング -->
+<div id="app-loading">
+  <div class="loading-title">内省</div>
+  <div class="loading-sub">naisei journal</div>
+  <div class="loading-dot"></div>
+</div>
+
+<!-- 認証画面 -->
+<div id="app-auth" style="display:none;min-height:100vh;background:var(--sage-dark);display:none;align-items:center;justify-content:center;padding:24px;">
+  <div class="auth-card">
+    <div class="auth-logo">内省</div>
+    <div class="auth-sub">naisei journal</div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" onclick="switchAuthTab('login')">ログイン</button>
+      <button class="auth-tab" onclick="switchAuthTab('register')">新規登録</button>
+    </div>
+    <div class="auth-form">
+      <div class="form-group">
+        <label>メールアドレス</label>
+        <input type="email" id="auth-email" placeholder="email@example.com">
+      </div>
+      <div class="form-group">
+        <label>パスワード</label>
+        <input type="password" id="auth-pass" placeholder="6文字以上">
+      </div>
+      <div id="auth-name-group" class="form-group" style="display:none;">
+        <label>お名前（表示用）</label>
+        <input type="text" id="auth-name" placeholder="例：Masaki">
+      </div>
+      <div class="auth-error" id="auth-error"></div>
+      <button class="auth-btn" onclick="doAuth()">はじめる</button>
+    </div>
+  </div>
+</div>
+
+<!-- アプリ本体 -->
+<div id="app-main" style="display:none;">
+  <header class="site-header">
+    <div class="header-inner">
+      <div>
+        <div class="header-title">内省</div>
+        <div class="header-date" id="header-date"></div>
+      </div>
+      <div class="header-right">
+        <div class="streak-badge" id="streak-badge">🔥 0日</div>
+        <button class="icon-btn" title="設定" onclick="showModule('settings',this)">⚙️</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+
+    <!-- ジャーナル入力 -->
+    <section id="mod-journal" class="module active">
+
+      <!-- 感謝 -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">🙏</div>
+          <div class="card-title">感謝すること<span>今日の3つの恵み</span></div>
+        </div>
+        <div class="gratitude-list">
+          <div class="gratitude-item">
+            <div class="gratitude-num">一</div>
+            <div class="gratitude-col">
+              <textarea class="journal-textarea" id="g1" rows="2" placeholder="感謝したいこと…"></textarea>
+              <div class="gratitude-why">なぜ感謝するのか</div>
+              <textarea class="journal-textarea" id="g1w" rows="1" placeholder="なぜなら…" style="font-size:.82rem;"></textarea>
+            </div>
+          </div>
+          <div class="gratitude-item">
+            <div class="gratitude-num">二</div>
+            <div class="gratitude-col">
+              <textarea class="journal-textarea" id="g2" rows="2" placeholder="感謝したいこと…"></textarea>
+              <div class="gratitude-why">なぜ感謝するのか</div>
+              <textarea class="journal-textarea" id="g2w" rows="1" placeholder="なぜなら…" style="font-size:.82rem;"></textarea>
+            </div>
+          </div>
+          <div class="gratitude-item">
+            <div class="gratitude-num">三</div>
+            <div class="gratitude-col">
+              <textarea class="journal-textarea" id="g3" rows="2" placeholder="感謝したいこと…"></textarea>
+              <div class="gratitude-why">なぜ感謝するのか</div>
+              <textarea class="journal-textarea" id="g3w" rows="1" placeholder="なぜなら…" style="font-size:.82rem;"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 長期目標 -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">🎯</div>
+          <div class="card-title">長期目標<span>自分の管轄内に置くもの</span></div>
+        </div>
+        <div class="goal-list" id="goal-list">
+          <div class="goal-item">
+            <div class="goal-label">目標 1</div>
+            <textarea class="journal-textarea" id="goal1" rows="2" placeholder="長期的に目指すこと…"></textarea>
+          </div>
+          <div class="goal-item">
+            <div class="goal-label">目標 2</div>
+            <textarea class="journal-textarea" id="goal2" rows="2" placeholder="長期的に目指すこと…"></textarea>
+          </div>
+          <div class="goal-item">
+            <div class="goal-label">目標 3（任意）</div>
+            <textarea class="journal-textarea" id="goal3" rows="2" placeholder="長期的に目指すこと…"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- 今日の取り組み -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">⚡</div>
+          <div class="card-title">今日の取り組み<span>If-Then形式で具体的に</span></div>
+        </div>
+        <textarea class="journal-textarea" id="today-action" rows="4"
+          placeholder="例：もし職場に着いたら、まず5分だけ問題集を開く&#10;目標1に向けて：…&#10;目標2に向けて：…"></textarea>
+      </div>
+
+      <!-- 手放すこと -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">🍃</div>
+          <div class="card-title">今日手放すこと<span>管轄外への執着を置く</span></div>
+        </div>
+        <div class="release-hint">コントロールできないことへの執着を、ここに書いて手放しましょう。</div>
+        <textarea class="journal-textarea" id="release" rows="2" placeholder="例：他者の評価、天候、過去の失敗…"></textarea>
+      </div>
+
+      <!-- 気分スコア -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">💭</div>
+          <div class="card-title">今日の気分<span>心の波形を記録する</span></div>
+        </div>
+        <div class="mood-selector" id="mood-selector">
+          <button class="mood-btn" data-mood="1" onclick="selectMood(1)" title="とても辛い">😞</button>
+          <button class="mood-btn" data-mood="2" onclick="selectMood(2)" title="少し辛い">😔</button>
+          <button class="mood-btn" data-mood="3" onclick="selectMood(3)" title="普通">😐</button>
+          <button class="mood-btn" data-mood="4" onclick="selectMood(4)" title="良い">🙂</button>
+          <button class="mood-btn" data-mood="5" onclick="selectMood(5)" title="とても良い">😊</button>
+        </div>
+        <div class="mood-label" id="mood-label">タップして今日の気分を選ぶ</div>
+      </div>
+
+      <!-- 今日感じたこと -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">📝</div>
+          <div class="card-title">今日感じたこと<span>うまくいかなかったことも</span></div>
+        </div>
+        <textarea class="journal-textarea" id="reflection" rows="5"
+          placeholder="今日を振り返って…&#10;うまくいったこと、難しかったこと、感じたことを自由に。"></textarea>
+      </div>
+
+      <!-- 保存・AIアドバイスボタン -->
+      <button class="btn-primary" id="save-btn" onclick="saveAndAdvise()">
+        <span>🌿</span> 記録して内省アドバイスを受ける
+      </button>
+
+      <!-- AIアドバイス表示エリア -->
+      <div id="advice-area" style="margin-top:16px;display:none;">
+        <div class="advice-box">
+          <div class="advice-header">
+            <div class="advice-icon">🕊️</div>
+            <div class="advice-title">哲学的内省</div>
+            <div class="advice-tag" id="advice-philosophy-tag">ストア派・仏教</div>
+          </div>
+          <div id="advice-content"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 履歴 -->
+    <section id="mod-history" class="module">
+      <div class="history-filter">
+        <button class="filter-btn active" onclick="filterHistory('all',this)">すべて</button>
+        <button class="filter-btn" onclick="filterHistory('week',this)">今週</button>
+        <button class="filter-btn" onclick="filterHistory('month',this)">今月</button>
+      </div>
+      <div id="history-list"></div>
+    </section>
+
+    <!-- 統計 -->
+    <section id="mod-stats" class="module">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-num" id="stat-total">0</div>
+          <div class="stat-label">総記録数</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="stat-streak">0</div>
+          <div class="stat-label">現在の連続</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="stat-avg-mood">—</div>
+          <div class="stat-label">平均気分</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="stat-this-month">0</div>
+          <div class="stat-label">今月の記録</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">📈</div>
+          <div class="card-title">直近7日の気分推移</div>
+        </div>
+        <div class="mood-chart" id="mood-chart"></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">🎯</div>
+          <div class="card-title">目標への取り組み回数</div>
+        </div>
+        <div class="goal-progress" id="goal-progress"></div>
+      </div>
+    </section>
+
+    <!-- 設定 -->
+    <section id="mod-settings" class="module">
+      <div class="card">
+        <div class="setting-item">
+          <div class="setting-label">Claude APIキー</div>
+          <input type="password" class="setting-input" id="api-key-input"
+            placeholder="sk-ant-..." autocomplete="off">
+          <div class="api-status">
+            <div class="api-dot" id="api-dot"></div>
+            <span id="api-status-text">未設定</span>
+          </div>
+          <button class="btn-secondary" style="margin-top:10px;" onclick="saveApiKey()">保存する</button>
+        </div>
+        <div class="setting-item">
+          <div class="setting-label">哲学的アドバイスについて</div>
+          <div class="philosophy-info">
+            このアプリのAIアドバイスは、<strong>ストア派哲学</strong>（エピクテトス・マルクス・アウレリウス・セネカ）と<strong>仏教哲学</strong>（無常・慈悲・正念）を統合した知見をもとに生成されます。<br><br>
+            感謝の記述 → 仏教「縁起」＋ストア派「世界市民」<br>
+            目標・行動 → ストア派「コントロールの二分法」＋If-Then<br>
+            ネガティブ感情 → 仏教「サティ」→ ストア派「論理的再構成」
+          </div>
+        </div>
+        <div class="setting-item">
+          <div class="setting-label">アカウント</div>
+          <div style="font-size:.85rem;color:var(--ink-soft);margin-bottom:8px;" id="user-email-display"></div>
+          <button class="signout-btn" onclick="doSignOut()">ログアウト</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <nav class="nav-bar">
+    <button class="nav-tab active" onclick="showModule('journal',this)">
+      <div class="nav-icon">✍️</div>
+      <div>記録</div>
+    </button>
+    <button class="nav-tab" onclick="showModule('history',this)">
+      <div class="nav-icon">📖</div>
+      <div>履歴</div>
+    </button>
+    <button class="nav-tab" onclick="showModule('stats',this)">
+      <div class="nav-icon">📊</div>
+      <div>統計</div>
+    </button>
+    <button class="nav-tab" onclick="showModule('settings',this)">
+      <div class="nav-icon">⚙️</div>
+      <div>設定</div>
+    </button>
+  </nav>
+</div>
+
+<!-- 詳細モーダル -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal-sheet" id="modal-sheet">
+    <div class="modal-handle"></div>
+    <div id="modal-body"></div>
+    <button class="modal-close" onclick="closeModalDirect()">閉じる</button>
+  </div>
+</div>
+
+<!-- 保存バナー -->
+<div class="save-banner" id="save-banner">✅ 記録を保存しました</div>
+
+<!-- Firebase -->
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
+         signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+import { getFirestore, collection, doc, setDoc, getDocs,
+         query, orderBy, limit } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+
+// ─── Firebase設定 ───────────────────────────
+// ⚠️ 下記をご自身のFirebaseプロジェクト設定に書き換えてください
+const firebaseConfig = {
+  apiKey: "AIzaSyA-YorX3wT3_7JrhisT7uLBLcCRpSnINtE",
+  authDomain: "naisei-journal.firebaseapp.com",
+  projectId: "naisei-journal",
+  storageBucket: "naisei-journal.firebasestorage.app",
+  messagingSenderId: "344160418132",
+  appId: "1:344160418132:web:30dacbd933f8f436d430c1"
+};
+// ────────────────────────────────────────────
+
+let app, auth, db, currentUser = null;
+let firebaseReady = false;
+
+try {
+  app = initializeApp(firebaseConfig);
+  auth = getAuth(app);
+  db = getFirestore(app);
+  firebaseReady = true;
+} catch(e) {
+  console.warn('Firebase init failed, running in localStorage-only mode');
+}
+
+// グローバルに公開
+window._auth = auth;
+window._db = db;
+window._firebaseReady = firebaseReady;
+window._currentUser = () => currentUser;
+window._collection = collection;
+window._doc = doc;
+window._setDoc = setDoc;
+window._getDocs = getDocs;
+window._query = query;
+window._orderBy = orderBy;
+window._limit = limit;
+window._signOut = () => signOut(auth);
+
+window.doAuth = async function() {
+  const email = document.getElementById('auth-email').value.trim();
+  const pass  = document.getElementById('auth-pass').value;
+  const errEl = document.getElementById('auth-error');
+  errEl.style.display = 'none';
+  try {
+    if (window._authMode === 'login') {
+      await signInWithEmailAndPassword(auth, email, pass);
+    } else {
+      await createUserWithEmailAndPassword(auth, email, pass);
+    }
+  } catch(e) {
+    errEl.textContent = e.code === 'auth/invalid-credential' ? 'メールまたはパスワードが違います'
+      : e.code === 'auth/email-already-in-use' ? 'このメールはすでに登録されています'
+      : e.code === 'auth/weak-password' ? 'パスワードは6文字以上にしてください'
+      : e.message;
+    errEl.style.display = 'block';
+  }
+};
+
+if (firebaseReady) {
+  onAuthStateChanged(auth, user => {
+    currentUser = user;
+    window._currentUser = () => currentUser;
+    document.getElementById('app-loading').style.display = 'none';
+    if (user) {
+      document.getElementById('app-auth').style.display = 'none';
+      document.getElementById('app-main').style.display = 'block';
+      document.getElementById('user-email-display').textContent = user.email;
+      window.initApp();
+    } else {
+      document.getElementById('app-auth').style.display = 'flex';
+      document.getElementById('app-main').style.display = 'none';
+    }
+  });
+} else {
+  document.getElementById('app-loading').style.display = 'none';
+  document.getElementById('app-auth').style.display = 'none';
+  document.getElementById('app-main').style.display = 'block';
+  window.initApp();
+}
+</script>
+
+<!-- アプリJS -->
+<script>
+// ── 状態 ──────────────────────────────────────────
+let selectedMood = 0;
+let currentFilter = 'all';
+window._authMode = 'login';
+
+const MOOD_LABELS = {1:'とても辛い',2:'少し辛い',3:'普通',4:'良い',5:'とても良い'};
+const MOOD_EMOJIS = {1:'😞',2:'😔',3:'😐',4:'🙂',5:'😊'};
+
+// ── 初期化 ────────────────────────────────────────
+window.initApp = function() {
+  setHeaderDate();
+  updateStreak();
+  updateApiStatus();
+  loadTodayDraft();
+};
+
+function setHeaderDate() {
+  const d = new Date();
+  const days = ['日','月','火','水','木','金','土'];
+  document.getElementById('header-date').textContent =
+    `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日（${days[d.getDay()]}）`;
+}
+
+// ── 認証UI ───────────────────────────────────────
+window.switchAuthTab = function(mode) {
+  window._authMode = mode;
+  document.querySelectorAll('.auth-tab').forEach((t,i) => {
+    t.classList.toggle('active', (mode==='login'&&i===0)||(mode==='register'&&i===1));
+  });
+  document.getElementById('auth-name-group').style.display = mode==='register'?'block':'none';
+  document.getElementById('auth-error').style.display = 'none';
+};
+
+window.doSignOut = async function() {
+  if(confirm('ログアウトしますか？')) {
+    if(window._firebaseReady) await window._signOut();
+    location.reload();
+  }
+};
+
+// ── ナビ ─────────────────────────────────────────
+window.showModule = function(name, el) {
+  document.querySelectorAll('.module').forEach(m => m.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('mod-' + name).classList.add('active');
+  if(el) el.classList.add('active');
+  if(name === 'history') renderHistory();
+  if(name === 'stats')   renderStats();
+};
+
+// ── 気分 ─────────────────────────────────────────
+window.selectMood = function(v) {
+  selectedMood = v;
+  document.querySelectorAll('.mood-btn').forEach(b => {
+    b.classList.toggle('selected', parseInt(b.dataset.mood) === v);
+  });
+  document.getElementById('mood-label').textContent = MOOD_EMOJIS[v] + ' ' + MOOD_LABELS[v];
+};
+
+// ── APIキー ───────────────────────────────────────
+window.saveApiKey = function() {
+  const key = document.getElementById('api-key-input').value.trim();
+  if(key && !key.startsWith('sk-ant-')) {
+    alert('正しいAPIキー形式ではありません（sk-ant-で始まります）');
+    return;
+  }
+  localStorage.setItem('naisei_apikey', key);
+  updateApiStatus();
+  showBanner('✅ APIキーを保存しました');
+};
+
+function updateApiStatus() {
+  const key = localStorage.getItem('naisei_apikey') || '';
+  const dot = document.getElementById('api-dot');
+  const txt = document.getElementById('api-status-text');
+  if(!dot) return;
+  if(key.startsWith('sk-ant-')) {
+    dot.className = 'api-dot ok';
+    txt.textContent = '設定済み';
+    const inp = document.getElementById('api-key-input');
+    if(inp) inp.value = key;
+  } else {
+    dot.className = 'api-dot ng';
+    txt.textContent = '未設定（設定するとAIアドバイスが利用できます）';
+  }
+}
+
+function getApiKey() { return localStorage.getItem('naisei_apikey') || ''; }
+
+// ── 下書き保存 ────────────────────────────────────
+function loadTodayDraft() {
+  const today = getTodayKey();
+  const draft = JSON.parse(localStorage.getItem('naisei_draft_' + today) || '{}');
+  if(!draft.date) return;
+  ['g1','g1w','g2','g2w','g3','g3w','goal1','goal2','goal3','today-action','release','reflection']
+    .forEach(id => { const el=document.getElementById(id); if(el&&draft[id]) el.value=draft[id]; });
+  if(draft.mood) selectMood(draft.mood);
+}
+
+function saveDraft() {
+  const today = getTodayKey();
+  const draft = { date: today };
+  ['g1','g1w','g2','g2w','g3','g3w','goal1','goal2','goal3','today-action','release','reflection']
+    .forEach(id => { const el=document.getElementById(id); if(el) draft[id]=el.value; });
+  draft.mood = selectedMood;
+  localStorage.setItem('naisei_draft_' + today, JSON.stringify(draft));
+}
+
+// ── 保存 & AIアドバイス ───────────────────────────
+window.saveAndAdvise = async function() {
+  const btn = document.getElementById('save-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span>⏳</span> 保存中...';
+
+  const entry = buildEntry();
+  await saveEntry(entry);
+  updateStreak();
+  showBanner('✅ 記録を保存しました');
+
+  // AI アドバイス
+  const adviceArea = document.getElementById('advice-area');
+  const adviceContent = document.getElementById('advice-content');
+  adviceArea.style.display = 'block';
+  adviceContent.innerHTML = `
+    <div class="advice-loading">
+      <div class="advice-loading-dots">
+        <span></span><span></span><span></span>
+      </div>
+      <span>哲学的内省を生成中…</span>
+    </div>`;
+  adviceArea.scrollIntoView({behavior:'smooth',block:'center'});
+
+  const apiKey = getApiKey();
+  if(!apiKey) {
+    adviceContent.innerHTML = renderFallbackAdvice(entry);
+  } else {
+    try {
+      const advice = await callClaudeAPI(entry, apiKey);
+      adviceContent.innerHTML = advice;
+    } catch(e) {
+      adviceContent.innerHTML = renderFallbackAdvice(entry);
+    }
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = '<span>🌿</span> 記録して内省アドバイスを受ける';
+};
+
+function buildEntry() {
+  const get = id => (document.getElementById(id)||{}).value || '';
+  return {
+    id: Date.now(),
+    date: getTodayKey(),
+    dateLabel: document.getElementById('header-date').textContent,
+    g1: get('g1'), g1w: get('g1w'),
+    g2: get('g2'), g2w: get('g2w'),
+    g3: get('g3'), g3w: get('g3w'),
+    goal1: get('goal1'), goal2: get('goal2'), goal3: get('goal3'),
+    action: get('today-action'),
+    release: get('release'),
+    mood: selectedMood,
+    reflection: get('reflection'),
+  };
+}
+
+async function saveEntry(entry) {
+  // localStorage（バックアップ）
+  const all = getLocalEntries();
+  const idx = all.findIndex(e => e.date === entry.date);
+  if(idx >= 0) all[idx] = entry; else all.push(entry);
+  localStorage.setItem('naisei_entries', JSON.stringify(all));
+  saveDraft();
+
+  // Firestore
+  const user = window._currentUser ? window._currentUser() : null;
+  if(window._firebaseReady && user) {
+    try {
+      const ref = window._doc(window._db, 'users', user.uid, 'entries', entry.date);
+      await window._setDoc(ref, entry);
+    } catch(e) { console.warn('Firestore save failed:', e); }
+  }
+}
+
+function getLocalEntries() {
+  return JSON.parse(localStorage.getItem('naisei_entries') || '[]');
+}
+
+// ── Claude API呼び出し ────────────────────────────
+async function callClaudeAPI(entry, apiKey) {
+  const systemPrompt = buildSystemPrompt();
+  const userPrompt   = buildUserPrompt(entry);
+
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 1000,
+      system: systemPrompt,
+      messages: [{ role: 'user', content: userPrompt }]
+    })
+  });
+
+  if(!res.ok) throw new Error('API error: ' + res.status);
+  const data = await res.json();
+  const text = data.content?.find(c => c.type === 'text')?.text || '';
+  return formatAdviceHTML(text);
+}
+
+function buildSystemPrompt() {
+  return `あなたは「内省（Naisei）」というジャーナリングアプリの哲学的アドバイザーです。
+
+【役割】
+ユーザーが記録した日々のジャーナリング（感謝・目標・振り返り）に対し、ストア派哲学と仏教哲学を統合した視点から、深みのある内省的アドバイスを提供します。
+
+【哲学的基盤】
+▶ ストア派：エピクテトス「コントロールの二分法（管轄内・管轄外）」、マルクス・アウレリウス「内なる城塞」、セネカ「時間の価値」、メメント・モリ、ネガティブ・ビジュアライゼーション
+▶ 仏教：諸行無常（Anicca）、縁起（Pratītyasamutpāda）、慈悲（Metta）、正念（Sati）、一切皆苦（Dukkha）、非執着
+
+【アドバイス戦略（文脈に応じて切り替え）】
+- 感謝の記述 → 仏教「縁起」で視野拡大 → ストア派「世界市民倫理」で利他的行動へ昇華
+- 目標・行動 → ストア派「コントロール二分法」でプロセスに焦点 → 仏教「非執着」で結果への固執を手放す
+- ネガティブ感情・手放すこと → 仏教「サティ（観察）」から入り → ストア派「論理的再構成」へ
+
+【出力形式】
+以下のJSON形式のみで返答してください（余分なテキスト・マークダウン記号は一切付けない）：
+{
+  "philosophy": "ストア派" | "仏教" | "統合",
+  "quote": "格言（日本語）",
+  "quote_source": "出典",
+  "advice": "アドバイス本文（2〜4文、です・ます調）",
+  "reflection_prompt": "内省を促す問いかけ（1文）"
+}
+
+【トーン原則】
+- 命令形・「べき」は使わない
+- 「大変でしたね」などの空虚な共感は避ける
+- 静寂さを感じさせる簡潔な敬体
+- ソクラテス的に「問い返す」姿勢
+- 引用する格言は確実に存在する一次資料のもの（推測で帰属させない）`;
+}
+
+function buildUserPrompt(entry) {
+  const moodText = entry.mood ? `${MOOD_EMOJIS[entry.mood]} ${MOOD_LABELS[entry.mood]}（${entry.mood}/5）` : '未選択';
+  return `【本日のジャーナル】
+日付：${entry.dateLabel}
+
+▼感謝すること
+① ${entry.g1}${entry.g1w ? `（なぜなら：${entry.g1w}）` : ''}
+② ${entry.g2}${entry.g2w ? `（なぜなら：${entry.g2w}）` : ''}
+③ ${entry.g3}${entry.g3w ? `（なぜなら：${entry.g3w}）` : ''}
+
+▼長期目標
+目標1：${entry.goal1}
+目標2：${entry.goal2}
+${entry.goal3 ? `目標3：${entry.goal3}` : ''}
+
+▼今日の取り組み（If-Then）
+${entry.action}
+
+▼今日手放すこと
+${entry.release}
+
+▼今日の気分
+${moodText}
+
+▼今日感じたこと
+${entry.reflection}
+
+上記のジャーナル全体を踏まえて、最も適切な哲学的アドバイスをJSONで返してください。`;
+}
+
+function formatAdviceHTML(rawText) {
+  try {
+    const clean = rawText.replace(/```json|```/g,'').trim();
+    const data = JSON.parse(clean);
+    return `
+      <div class="advice-text">${escHtml(data.advice)}</div>
+      ${data.quote ? `
+      <div class="advice-quote">
+        「${escHtml(data.quote)}」<br>
+        <span style="font-size:.75rem;color:var(--bark-light);font-style:normal;">— ${escHtml(data.quote_source||'')} —</span>
+      </div>` : ''}
+      <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--sage-light);">
+        <div style="font-size:.72rem;color:var(--sage);margin-bottom:4px;letter-spacing:.05em;">🕊 今日の問いかけ</div>
+        <div style="font-size:.85rem;color:var(--ink-soft);line-height:1.8;font-family:var(--font-serif);">${escHtml(data.reflection_prompt||'')}</div>
+      </div>`;
+  } catch {
+    return `<div class="advice-text">${escHtml(rawText)}</div>`;
+  }
+}
+
+function renderFallbackAdvice(entry) {
+  // APIキー未設定時のデモアドバイス（ストア派・仏教テンプレート）
+  const hasNegative = (entry.reflection||'').match(/辛|悩|怒|不安|失敗|できなかった|最悪/);
+  if(hasNegative) {
+    return `
+      <div class="advice-text">その感情を排除しようとせず、まず「私の中に、今この波が生じている」という事実を、嵐を眺めるように静かに実況してみてください。他者の行動や環境はあなたの管轄外ですが、それに対するあなたの「解釈と判断」は、完全にあなたの管轄内にあります。</div>
+      <div class="advice-quote">
+        「もし君が外部の事柄によって苦しんでいるなら、その苦痛はその事柄自体によるのではなく、それに対する君の判断によるものである。そして君はその判断を今すぐ消し去る力を持っている。」<br>
+        <span style="font-size:.75rem;color:var(--bark-light);font-style:normal;">— マルクス・アウレリウス『自省録』—</span>
+      </div>
+      <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--sage-light);">
+        <div style="font-size:.72rem;color:var(--sage);margin-bottom:4px;">🕊 今日の問いかけ</div>
+        <div style="font-size:.85rem;color:var(--ink-soft);line-height:1.8;font-family:var(--font-serif);">この出来事を「一時的に生じた無常の現象」として眺めるとき、あなたの内側に何か変化はありますか？</div>
+      </div>`;
+  }
+  return `
+    <div class="advice-text">今日の感謝を書き記したことで、あなたは縁起のネットワーク—無数の他者の営みと自然の循環—に対して、静かに目を向けました。その温かな気づきは、見返りを求めない利他の種となり得ます。</div>
+    <div class="advice-quote">
+      「母親が自己のひとり子を、命を賭して護るように、生きとし生けるものの上に、限りなき慈しみの意を注げ。」<br>
+      <span style="font-size:.75rem;color:var(--bark-light);font-style:normal;">— スッタニパータ「慈経」—</span>
+    </div>
+    <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--sage-light);">
+      <div style="font-size:.72rem;color:var(--sage);margin-bottom:4px;">🕊 今日の問いかけ</div>
+      <div style="font-size:.85rem;color:var(--ink-soft);line-height:1.8;font-family:var(--font-serif);">今日感謝した出来事の背景に、どのような「見えないつながり」がありそうでしょうか？</div>
+    </div>`;
+}
+
+// ── 履歴 ─────────────────────────────────────────
+function renderHistory() {
+  const all = getLocalEntries().sort((a,b) => b.id - a.id);
+  const now = new Date();
+  const filtered = all.filter(e => {
+    if(currentFilter === 'all') return true;
+    const d = new Date(e.date);
+    if(currentFilter === 'week') {
+      const diff = (now - d) / 86400000;
+      return diff <= 7;
+    }
+    if(currentFilter === 'month') {
+      return d.getMonth()===now.getMonth() && d.getFullYear()===now.getFullYear();
+    }
+    return true;
+  });
+
+  const el = document.getElementById('history-list');
+  if(!filtered.length) {
+    el.innerHTML = `<div class="history-empty">
+      <div class="empty-icon">📖</div>
+      <p>まだ記録がありません。<br>最初のジャーナルを書いてみましょう。</p>
+    </div>`;
+    return;
+  }
+  el.innerHTML = filtered.map(e => `
+    <div class="history-entry" onclick="openEntryModal('${e.id}')">
+      <div class="history-entry-header">
+        <div class="history-date">${e.dateLabel || e.date}</div>
+        <div class="history-mood">${e.mood ? MOOD_EMOJIS[e.mood] : '—'}</div>
+      </div>
+      <div class="history-gratitude">
+        ${e.g1 ? `<span>🙏</span>${escHtml(e.g1.substring(0,30))}${e.g1.length>30?'…':''}` : ''}
+      </div>
+    </div>`).join('');
+}
+
+window.filterHistory = function(f, el) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  renderHistory();
+};
+
+// ── モーダル ──────────────────────────────────────
+window.openEntryModal = function(id) {
+  const all = getLocalEntries();
+  const entry = all.find(e => String(e.id) === String(id));
+  if(!entry) return;
+
+  const body = document.getElementById('modal-body');
+  body.innerHTML = `
+    <div class="modal-date">${entry.dateLabel || entry.date}　${entry.mood ? MOOD_EMOJIS[entry.mood]+' '+MOOD_LABELS[entry.mood] : ''}</div>
+    ${entry.g1 ? `<div class="modal-section">
+      <div class="modal-section-title">🙏 感謝</div>
+      <div class="modal-text">① ${escHtml(entry.g1)}${entry.g1w?`<br><span style="font-size:.78rem;color:var(--bark-light);">なぜなら：${escHtml(entry.g1w)}</span>`:''}
+        ${entry.g2?`<br>② ${escHtml(entry.g2)}${entry.g2w?`<br><span style="font-size:.78rem;color:var(--bark-light);">なぜなら：${escHtml(entry.g2w)}</span>`:''}`:''} 
+        ${entry.g3?`<br>③ ${escHtml(entry.g3)}${entry.g3w?`<br><span style="font-size:.78rem;color:var(--bark-light);">なぜなら：${escHtml(entry.g3w)}</span>`:''}`:''}</div>
+    </div>` : ''}
+    ${entry.action ? `<div class="modal-section">
+      <div class="modal-section-title">⚡ 今日の取り組み</div>
+      <div class="modal-text">${escHtml(entry.action).replace(/\n/g,'<br>')}</div>
+    </div>` : ''}
+    ${entry.release ? `<div class="modal-section">
+      <div class="modal-section-title">🍃 手放したこと</div>
+      <div class="modal-text">${escHtml(entry.release)}</div>
+    </div>` : ''}
+    ${entry.reflection ? `<div class="modal-section">
+      <div class="modal-section-title">📝 今日感じたこと</div>
+      <div class="modal-text">${escHtml(entry.reflection).replace(/\n/g,'<br>')}</div>
+    </div>` : ''}`;
+
+  document.getElementById('modal-overlay').classList.add('open');
+};
+
+window.closeModal = function(e) {
+  if(e.target === document.getElementById('modal-overlay')) closeModalDirect();
+};
+window.closeModalDirect = function() {
+  document.getElementById('modal-overlay').classList.remove('open');
+};
+
+// ── 統計 ─────────────────────────────────────────
+function renderStats() {
+  const all = getLocalEntries();
+  const now = new Date();
+
+  // 基本統計
+  document.getElementById('stat-total').textContent = all.length;
+  const streak = calcStreak(all);
+  document.getElementById('stat-streak').textContent = streak;
+  document.getElementById('stat-this-month').textContent =
+    all.filter(e => { const d=new Date(e.date); return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear(); }).length;
+
+  const moods = all.filter(e=>e.mood).map(e=>e.mood);
+  document.getElementById('stat-avg-mood').textContent =
+    moods.length ? (moods.reduce((a,b)=>a+b,0)/moods.length).toFixed(1) : '—';
+
+  // 気分グラフ（直近7日）
+  const chartEl = document.getElementById('mood-chart');
+  const days7 = [];
+  for(let i=6;i>=0;i--) {
+    const d = new Date(now); d.setDate(d.getDate()-i);
+    const key = d.toISOString().split('T')[0];
+    const entry = all.find(e=>e.date===key);
+    days7.push({ label: `${d.getMonth()+1}/${d.getDate()}`, mood: entry?.mood||0 });
+  }
+  chartEl.innerHTML = days7.map(d => `
+    <div class="mood-bar" style="height:${d.mood?d.mood*16:4}px;background:${d.mood?'var(--sage-light)':'#E5E0D8'};">
+      <div class="mood-bar-label">${d.label}</div>
+    </div>`).join('');
+
+  // 目標進捗
+  const goalCounts = {};
+  all.forEach(e => {
+    if(e.goal1) goalCounts[e.goal1.substring(0,20)] = (goalCounts[e.goal1.substring(0,20)]||0) + (e.action?1:0);
+  });
+  const progressEl = document.getElementById('goal-progress');
+  const latest = all[all.length-1];
+  const goals = [latest?.goal1, latest?.goal2, latest?.goal3].filter(Boolean);
+  if(!goals.length) {
+    progressEl.innerHTML = '<div style="font-size:.85rem;color:var(--bark-light);text-align:center;padding:16px;">目標を記録すると進捗が表示されます</div>';
+    return;
+  }
+  progressEl.innerHTML = goals.map(g => {
+    const count = all.filter(e => e.goal1===g||e.goal2===g||e.goal3===g).length;
+    const pct = Math.min(100, count * 3);
+    return `<div class="goal-progress-item">
+      <div class="goal-progress-header">
+        <div class="goal-progress-name">${escHtml(g.substring(0,30))}</div>
+        <div class="goal-progress-count">${count}日</div>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" style="width:${pct}%"></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── ストリーク計算 ────────────────────────────────
+function calcStreak(entries) {
+  if(!entries.length) return 0;
+  const dates = [...new Set(entries.map(e=>e.date))].sort().reverse();
+  const today = getTodayKey();
+  let streak = 0, current = today;
+  for(const d of dates) {
+    if(d === current) { streak++; const dt=new Date(current); dt.setDate(dt.getDate()-1); current=dt.toISOString().split('T')[0]; }
+    else if(d < current) break;
+  }
+  document.getElementById('streak-badge').textContent = `🔥 ${streak}日`;
+  return streak;
+}
+
+function updateStreak() {
+  calcStreak(getLocalEntries());
+}
+
+// ── バナー ────────────────────────────────────────
+function showBanner(msg) {
+  const b = document.getElementById('save-banner');
+  b.textContent = msg;
+  b.classList.add('show');
+  setTimeout(()=>b.classList.remove('show'), 2500);
+}
+
+// ── ユーティリティ ────────────────────────────────
+function getTodayKey() { return new Date().toISOString().split('T')[0]; }
+function escHtml(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+// 自動下書き保存（30秒ごと）
+setInterval(saveDraft, 30000);
+</script>
+</body>
+</html>
