@@ -576,6 +576,126 @@ body::after {
   .stats-wrap,.settings-wrap{padding:24px 32px;}
   .advice-wrap{margin:0 32px 0;}
 }
+
+/* ══ 逆ジャーナル モジュール ══ */
+.reverse-wrap { padding:0; }
+
+.reverse-intro {
+  padding:28px 20px 20px;
+  border-bottom:1px solid var(--night-line);
+}
+.reverse-intro-title {
+  font-family:var(--font-title);font-size:.9rem;color:var(--star);
+  letter-spacing:.25em;margin-bottom:6px;
+}
+.reverse-intro-sub {
+  font-size:.68rem;color:var(--star-faint);letter-spacing:.1em;line-height:1.8;
+}
+
+/* 問い生成ボタン */
+.gen-btn {
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  width:calc(100% - 40px);margin:20px 20px 0;
+  padding:13px;
+  border:1px solid var(--night-line);border-radius:var(--r-sm);
+  background:rgba(255,255,255,.03);
+  color:var(--star-dim);font-family:var(--font-serif);font-size:.88rem;
+  letter-spacing:.15em;cursor:pointer;transition:.3s;
+}
+.gen-btn:hover {
+  border-color:var(--kin);color:var(--kin);
+  box-shadow:0 0 16px rgba(200,168,75,.12);
+}
+.gen-btn:disabled { opacity:.35;cursor:not-allowed; }
+.gen-btn-star { color:var(--kin);font-size:.8rem; }
+
+/* 参照バナー */
+.ref-banner {
+  margin:14px 20px 0;
+  padding:10px 14px;
+  border-left:2px solid var(--star-faint);
+  font-size:.7rem;color:var(--star-faint);line-height:1.8;letter-spacing:.05em;
+  display:none;
+}
+.ref-banner.show { display:block; }
+.ref-date { color:var(--kin);font-family:var(--font-serif); }
+
+/* 問いカード */
+.questions-area {
+  padding:16px 20px 0;
+  display:none;
+}
+.questions-area.show { display:block; }
+
+.q-card {
+  margin-bottom:20px;
+  border-bottom:1px solid var(--night-line);
+  padding-bottom:20px;
+}
+.q-card:last-of-type { border-bottom:none; }
+
+.q-header {
+  display:flex;align-items:baseline;gap:10px;margin-bottom:10px;
+}
+.q-num {
+  font-family:var(--font-title);font-size:.7rem;color:var(--shu);
+  letter-spacing:.1em;min-width:14px;
+}
+.q-text {
+  font-family:var(--font-serif);font-size:.9rem;color:var(--star);
+  line-height:1.8;letter-spacing:.05em;
+}
+.q-philosophy {
+  font-size:.62rem;color:var(--star-faint);letter-spacing:.1em;
+  margin-left:auto;border:1px solid var(--night-line);
+  padding:2px 7px;border-radius:2px;white-space:nowrap;
+}
+
+.q-textarea {
+  width:100%;background:rgba(255,255,255,.025);
+  border:none;border-bottom:1px solid var(--night-line);
+  padding:10px 4px;font-family:var(--font-body);font-size:.88rem;
+  color:var(--star);resize:none;outline:none;line-height:1.9;
+  transition:.2s;letter-spacing:.03em;
+}
+.q-textarea:focus { border-bottom-color:var(--ice);background:rgba(74,127,165,.04); }
+.q-textarea::placeholder { color:var(--star-faint); }
+
+/* 回答保存ボタン */
+.q-save-btn {
+  width:calc(100% - 40px);margin:4px 20px 24px;
+  padding:13px;border:1px solid var(--night-line);border-radius:var(--r-sm);
+  background:rgba(255,255,255,.03);color:var(--star-dim);
+  font-family:var(--font-serif);font-size:.88rem;
+  letter-spacing:.15em;cursor:pointer;transition:.3s;
+  display:none;
+}
+.q-save-btn.show { display:block; }
+.q-save-btn:hover {
+  border-color:var(--ice);color:var(--star);
+  box-shadow:0 0 16px rgba(74,127,165,.12);
+}
+
+/* ローディング */
+.q-loading {
+  padding:32px 20px;
+  display:flex;flex-direction:column;align-items:center;gap:14px;
+  display:none;
+}
+.q-loading.show { display:flex; }
+.q-loading-text { font-size:.78rem;color:var(--star-faint);letter-spacing:.12em; }
+.q-line-anim {
+  width:80px;height:1px;
+  background:linear-gradient(90deg,transparent,var(--kin),transparent);
+  animation:shimmer 1.8s ease-in-out infinite;
+}
+
+/* 回答済みバッジ */
+.answered-badge {
+  display:inline-block;margin-left:8px;
+  font-size:.58rem;color:var(--kin);border:1px solid rgba(200,168,75,.4);
+  padding:1px 6px;border-radius:2px;letter-spacing:.08em;vertical-align:middle;
+}
 </style>
 </head>
 <body>
@@ -861,6 +981,51 @@ body::after {
       </div>
     </section>
 
+
+    <!-- 逆ジャーナル -->
+    <section id="mod-reverse" class="module">
+      <div class="reverse-wrap">
+
+        <div class="reverse-intro">
+          <div class="reverse-intro-title">問 — 逆ジャーナル</div>
+          <div class="reverse-intro-sub">
+            昨日の記録をもとに、AIが今日の問いを三つ生成します。<br>
+            答えることで、内省がより深まります。
+          </div>
+        </div>
+
+        <!-- 参照バナー -->
+        <div class="ref-banner" id="ref-banner">
+          <span class="ref-date" id="ref-date-label"></span> の記録を参照しています
+        </div>
+
+        <!-- 生成ボタン -->
+        <button class="gen-btn" id="gen-btn" onclick="generateQuestions()">
+          <span class="gen-btn-star">✦</span>
+          今日の問いを生成する
+          <span class="gen-btn-star">✦</span>
+        </button>
+
+        <!-- ローディング -->
+        <div class="q-loading" id="q-loading">
+          <div class="q-line-anim"></div>
+          <div class="q-loading-text">昨日の記録から問いを紡いでいます…</div>
+          <div class="q-line-anim"></div>
+        </div>
+
+        <!-- 問いエリア -->
+        <div class="questions-area" id="questions-area">
+          <div id="q-cards"></div>
+        </div>
+
+        <!-- 回答保存ボタン -->
+        <button class="q-save-btn" id="q-save-btn" onclick="saveReverseAnswers()">
+          回答を記録する
+        </button>
+
+      </div>
+    </section>
+
   </main>
 
   <nav class="nav-bar">
@@ -878,6 +1043,9 @@ body::after {
     </button>
     <button class="nav-tab" onclick="showModule('stats',this)">
       <div class="nav-icon">◈</div><div>統計</div>
+    </button>
+    <button class="nav-tab" onclick="showModule('reverse',this)">
+      <div class="nav-icon">✦</div><div>問</div>
     </button>
     <button class="nav-tab" onclick="showModule('settings',this)">
       <div class="nav-icon">⚙</div><div>設定</div>
@@ -1264,6 +1432,173 @@ function updateStreak(){ calcStreak(getLocalEntries()); }
 function showBanner(msg){ const b=document.getElementById('save-banner');b.textContent=msg;b.classList.add('show');setTimeout(()=>b.classList.remove('show'),2500); }
 function getTodayKey(){ return new Date().toISOString().split('T')[0]; }
 function escHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+// ══ 逆ジャーナル ══════════════════════════════════════════
+let reverseQuestions = [];
+let reverseRefEntry  = null;
+
+function getPrevEntry() {
+  const all = getLocalEntries().sort((a,b) => b.id - a.id);
+  const todayKey = getTodayKey();
+  // 今日以外の直近エントリ
+  return all.find(e => e.date !== todayKey) || null;
+}
+
+window.generateQuestions = async function() {
+  const btn = document.getElementById('gen-btn');
+  const loading = document.getElementById('q-loading');
+  const area  = document.getElementById('questions-area');
+  const savBtn = document.getElementById('q-save-btn');
+  const refBanner = document.getElementById('ref-banner');
+
+  btn.disabled = true;
+  loading.classList.add('show');
+  area.classList.remove('show');
+  savBtn.classList.remove('show');
+
+  const prevEntry = getPrevEntry();
+  reverseRefEntry = prevEntry;
+
+  // 参照バナー表示
+  if (prevEntry) {
+    document.getElementById('ref-date-label').textContent = prevEntry.dateLabel || prevEntry.date;
+    refBanner.classList.add('show');
+  } else {
+    refBanner.classList.remove('show');
+  }
+
+  const apiKey = getApiKey();
+  if (!apiKey) {
+    reverseQuestions = getFallbackQuestions(prevEntry);
+    renderQuestions(reverseQuestions);
+  } else {
+    try {
+      reverseQuestions = await callReverseAPI(prevEntry, apiKey);
+      renderQuestions(reverseQuestions);
+    } catch(e) {
+      reverseQuestions = getFallbackQuestions(prevEntry);
+      renderQuestions(reverseQuestions);
+    }
+  }
+
+  loading.classList.remove('show');
+  area.classList.add('show');
+  savBtn.classList.add('show');
+  btn.disabled = false;
+};
+
+async function callReverseAPI(prev, apiKey) {
+  const systemPrompt = `あなたは「内省（Naisei）」の逆ジャーナリング問い生成AIです。
+
+【役割】
+ユーザーの直近のジャーナル記録を参照し、ストア派・仏教哲学の視点から
+今日の内省を深める「問い」を3つ生成します。
+
+【問いの設計原則】
+- 前回の記録の「感謝・目標・手放すこと・感じたこと」を具体的に参照する
+- 「昨日〇〇と書きましたが…」のように前回の記録に言及する
+- 答えやすいが表面的にならない、内省を促す深さを持つ
+- 哲学的概念を押しつけず、自然な問いかけの形にする
+- 各問いに適用した哲学（ストア派 or 仏教 or 統合）を明記する
+
+【出力形式】JSONのみ（前後のテキスト・バッククォート不要）：
+[
+  {"num":"一","question":"問いのテキスト","philosophy":"ストア派"},
+  {"num":"二","question":"問いのテキスト","philosophy":"仏教"},
+  {"num":"三","question":"問いのテキスト","philosophy":"統合"}
+]`;
+
+  const userPrompt = prev
+    ? `【参照する直近の記録】
+日付：${prev.dateLabel || prev.date}
+感謝①：${prev.g1 || '未記入'}（なぜなら：${prev.g1w || '未記入'}）
+感謝②：${prev.g2 || '未記入'}
+感謝③：${prev.g3 || '未記入'}
+長期目標1：${prev.goal1 || '未記入'}
+長期目標2：${prev.goal2 || '未記入'}
+今日の取り組み：${prev.action || '未記入'}
+手放したこと：${prev.release || '未記入'}
+気分：${prev.mood ? MOOD_EMOJIS[prev.mood] : '未選択'}
+感じたこと：${prev.reflection || '未記入'}
+
+上記の記録を参照して、今日の内省を深める問いを3つ生成してください。JSONで返してください。`
+    : `まだ過去の記録がありません。初回のユーザーに向けて、ジャーナリングを始めるきっかけとなる問いを3つ生成してください。JSONで返してください。`;
+
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 800,
+      system: systemPrompt,
+      messages: [{ role: 'user', content: userPrompt }]
+    })
+  });
+
+  if (!res.ok) throw new Error('API ' + res.status);
+  const data = await res.json();
+  const text = data.content?.find(c => c.type === 'text')?.text || '';
+  const clean = text.replace(/```json|```/g, '').trim();
+  return JSON.parse(clean);
+}
+
+function getFallbackQuestions(prev) {
+  if (!prev) return [
+    { num:'一', question:'今日、あなたが最もコントロールできることは何でしょうか。そして最もコントロールできないことは何でしょうか。', philosophy:'ストア派' },
+    { num:'二', question:'今この瞬間、あなたの周りにある「当たり前」のうち、本当はかけがえのないものは何ですか。', philosophy:'仏教' },
+    { num:'三', question:'もし今日が人生最後の一日だとしたら、あなたは何に時間を使いたいですか。', philosophy:'統合' },
+  ];
+
+  const g = prev.g1 || '日常の出来事';
+  const r = prev.release || '手放せないもの';
+  const ref = prev.reflection || '';
+  return [
+    { num:'一', question:`${prev.dateLabel || '前回'}に「${g.substring(0,20)}」に感謝されましたが、その恵みに今日どのような形で応えられそうですか。`, philosophy:'ストア派' },
+    { num:'二', question:`「${r.substring(0,20)}」を手放そうとされていましたが、今日その執着はどう変化していますか。`, philosophy:'仏教' },
+    { num:'三', question: ref ? `「${ref.substring(0,30)}…」と感じた経験から、今日あなたが選べる最善の一歩は何でしょうか。` : '昨日の経験を踏まえて、今日あなたが「管轄内」で最善を尽くせることは何でしょうか。', philosophy:'統合' },
+  ];
+}
+
+function renderQuestions(questions) {
+  const today = getTodayKey();
+  const saved = JSON.parse(localStorage.getItem('naisei_reverse_' + today) || '{}');
+
+  const cards = questions.map((q, i) => {
+    const answerId = 'q-answer-' + i;
+    const answered = saved['a' + i] ? `<span class="answered-badge">記録済</span>` : '';
+    return `
+    <div class="q-card">
+      <div class="q-header">
+        <span class="q-num">${q.num}</span>
+        <span class="q-text">${escHtml(q.question)}${answered}</span>
+        <span class="q-philosophy">${escHtml(q.philosophy)}</span>
+      </div>
+      <textarea class="q-textarea" id="${answerId}" rows="3"
+        placeholder="…">${escHtml(saved['a' + i] || '')}</textarea>
+    </div>`;
+  }).join('');
+
+  document.getElementById('q-cards').innerHTML = cards;
+}
+
+window.saveReverseAnswers = function() {
+  const today = getTodayKey();
+  const data = { date: today, questions: reverseQuestions, answers: {} };
+  reverseQuestions.forEach((q, i) => {
+    const el = document.getElementById('q-answer-' + i);
+    data.answers['a' + i] = el ? el.value : '';
+    data['a' + i] = el ? el.value : '';
+  });
+  localStorage.setItem('naisei_reverse_' + today, JSON.stringify(data));
+  showBanner('回答を記録しました');
+  // 記録済バッジを再描画
+  renderQuestions(reverseQuestions);
+};
 </script>
 </body>
 </html>
