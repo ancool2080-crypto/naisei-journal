@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" rx="96" fill="#070B14"/>
+  <circle cx="80"  cy="75"  r="3.2" fill="#E8EFF8" opacity=".8"/>
+  <circle cx="422" cy="58"  r="4.0" fill="#C8A84B" opacity=".9"/>
+  <circle cx="460" cy="147" r="2.7" fill="#E8EFF8" opacity=".6"/>
+  <circle cx="48"  cy="187" r="3.2" fill="#E8EFF8" opacity=".5"/>
+  <circle cx="441" cy="374" r="2.7" fill="#C8A84B" opacity=".7"/>
+  <circle cx="67"  cy="414" r="3.2" fill="#E8EFF8" opacity=".6"/>
+  <circle cx="387" cy="449" r="2.7" fill="#E8EFF8" opacity=".5"/>
+  <circle cx="147" cy="460" r="4.0" fill="#C8A84B" opacity=".8"/>
+  <circle cx="214" cy="48"  r="2.7" fill="#E8EFF8" opacity=".6"/>
+  <circle cx="321" cy="468" r="2.7" fill="#E8EFF8" opacity=".5"/>
+  <line x1="107" y1="118" x2="405" y2="118" stroke="#C8402A" stroke-width="4" opacity=".6"/>
+  <text x="256" y="316"
+    font-family="'Hiragino Mincho ProN','Yu Mincho','Noto Serif JP',serif"
+    font-size="172"
+    font-weight="400"
+    fill="#FAF7F0"
+    text-anchor="middle"
+    letter-spacing="10">内省</text>
+  <line x1="160" y1="380" x2="352" y2="380" stroke="#C8A84B" stroke-width="2.5" opacity=".5" stroke-dasharray="8,10"/>
+  <text x="256" y="432"
+    font-family="'Helvetica Neue','Arial',sans-serif"
+    font-size="30"
+    font-weight="300"
+    fill="#8A9BB5"
+    text-anchor="middle"
+    letter-spacing="8">naisei</text>
+</svg>
