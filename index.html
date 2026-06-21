@@ -701,6 +701,230 @@ body::after {
   font-size:.58rem;color:var(--kin);border:1px solid rgba(200,168,75,.4);
   padding:1px 6px;border-radius:2px;letter-spacing:.08em;vertical-align:middle;
 }
+
+/* ══ 月齢ヘッダー ══ */
+.moon-phase-display {
+  font-size:.75rem;color:var(--kin);letter-spacing:.1em;
+  display:flex;align-items:center;gap:6px;margin-top:3px;
+}
+.moon-phase-icon { font-size:1rem; }
+
+/* ══ 格言ライブラリ ══ */
+.kotowaza-wrap { padding:0; }
+.kotowaza-hero {
+  padding:32px 20px 24px;
+  border-bottom:1px solid var(--night-line);
+  text-align:center;
+}
+.kotowaza-hero-icon { font-size:2rem;margin-bottom:12px; }
+.kotowaza-hero-title {
+  font-family:var(--font-title);font-size:.9rem;color:var(--star);
+  letter-spacing:.25em;margin-bottom:6px;
+}
+.kotowaza-hero-sub { font-size:.68rem;color:var(--star-faint);letter-spacing:.1em; }
+
+.kotowaza-card {
+  margin:20px;
+  border:1px solid var(--night-line);border-radius:var(--r-md);
+  overflow:hidden;background:rgba(255,255,255,.02);
+}
+.kotowaza-card-header {
+  padding:12px 16px;background:rgba(74,127,165,.07);
+  border-bottom:1px solid var(--night-line);
+  display:flex;align-items:center;gap:10px;
+}
+.kotowaza-philosophy {
+  font-family:var(--font-serif);font-size:.68rem;color:var(--ice);
+  letter-spacing:.15em;
+}
+.kotowaza-category {
+  margin-left:auto;font-size:.6rem;color:var(--star-faint);
+  border:1px solid var(--night-line);padding:2px 7px;
+}
+.kotowaza-body { padding:20px 16px; }
+.kotowaza-original {
+  font-size:.72rem;color:var(--star-faint);letter-spacing:.08em;
+  margin-bottom:10px;font-style:italic;line-height:1.7;
+}
+.kotowaza-ja {
+  font-family:var(--font-serif);font-size:1rem;color:var(--star);
+  line-height:1.9;letter-spacing:.05em;margin-bottom:12px;
+}
+.kotowaza-source {
+  font-size:.65rem;color:var(--shu);letter-spacing:.1em;
+  border-left:2px solid var(--shu);padding-left:8px;margin-bottom:16px;
+}
+.kotowaza-commentary {
+  font-size:.8rem;color:var(--star-dim);line-height:1.9;
+  letter-spacing:.03em;padding-top:12px;border-top:1px solid var(--night-line);
+}
+.kotowaza-nav {
+  display:flex;gap:10px;margin:0 20px 20px;
+}
+.kotowaza-btn {
+  flex:1;padding:11px;border:1px solid var(--night-line);
+  border-radius:var(--r-sm);background:none;
+  font-family:var(--font-serif);font-size:.82rem;color:var(--star-dim);
+  cursor:pointer;transition:.2s;letter-spacing:.1em;
+}
+.kotowaza-btn:hover { border-color:var(--kin);color:var(--kin); }
+.kotowaza-filter {
+  display:flex;gap:6px;overflow-x:auto;padding:0 20px 16px;
+}
+.kotowaza-filter-btn {
+  padding:5px 12px;border:1px solid var(--night-line);border-radius:2px;
+  background:none;font-size:.7rem;color:var(--star-faint);
+  cursor:pointer;transition:.2s;white-space:nowrap;letter-spacing:.08em;
+}
+.kotowaza-filter-btn.active { border-color:var(--kin);color:var(--kin); }
+.kotowaza-counter {
+  text-align:center;font-size:.65rem;color:var(--star-faint);
+  letter-spacing:.1em;padding-bottom:4px;
+}
+
+/* ══ 書かない日 ══ */
+.skip-wrap { padding:24px 20px; }
+.skip-card {
+  border:1px solid var(--night-line);border-radius:var(--r-md);
+  overflow:hidden;margin-bottom:16px;
+}
+.skip-card-header {
+  padding:14px 16px;background:rgba(200,64,42,.06);
+  border-bottom:1px solid var(--night-line);
+  font-family:var(--font-serif);font-size:.8rem;color:var(--shu);
+  letter-spacing:.15em;
+}
+.skip-reason-list { padding:4px 0; }
+.skip-reason-btn {
+  width:100%;padding:14px 16px;border:none;background:none;
+  text-align:left;font-family:var(--font-body);font-size:.85rem;
+  color:var(--star-dim);cursor:pointer;transition:.2s;
+  border-bottom:1px solid var(--night-line);letter-spacing:.05em;
+  display:flex;align-items:center;gap:10px;
+}
+.skip-reason-btn:last-child { border-bottom:none; }
+.skip-reason-btn:hover { background:rgba(255,255,255,.03);color:var(--star); }
+.skip-reason-btn.selected { color:var(--kin);background:rgba(200,168,75,.06); }
+.skip-reason-icon { font-size:1rem;min-width:20px; }
+.skip-note-area { padding:16px; }
+.skip-note-label {
+  font-size:.68rem;color:var(--star-faint);letter-spacing:.1em;margin-bottom:8px;
+}
+.skip-save-btn {
+  width:100%;padding:13px;border:1px solid var(--night-line);
+  border-radius:var(--r-sm);background:rgba(255,255,255,.02);
+  color:var(--star-dim);font-family:var(--font-serif);font-size:.85rem;
+  letter-spacing:.15em;cursor:pointer;transition:.2s;
+}
+.skip-save-btn:hover { border-color:var(--shu);color:var(--shu); }
+.skip-history { margin-top:20px; }
+.skip-history-title {
+  font-family:var(--font-serif);font-size:.72rem;color:var(--star-faint);
+  letter-spacing:.15em;margin-bottom:10px;
+}
+.skip-history-item {
+  display:flex;align-items:center;gap:12px;
+  padding:10px 0;border-bottom:1px solid var(--night-line);
+}
+.skip-history-date { font-size:.72rem;color:var(--star-faint);min-width:80px; }
+.skip-history-reason { font-size:.8rem;color:var(--star-dim); }
+
+/* ══ 週次レビュー ══ */
+.weekly-wrap { padding:0; }
+.weekly-header {
+  padding:24px 20px 16px;border-bottom:1px solid var(--night-line);
+}
+.weekly-header-title {
+  font-family:var(--font-title);font-size:.9rem;color:var(--star);
+  letter-spacing:.25em;margin-bottom:6px;
+}
+.weekly-header-sub { font-size:.68rem;color:var(--star-faint);letter-spacing:.1em; }
+.weekly-period {
+  font-size:.72rem;color:var(--kin);margin-top:8px;letter-spacing:.1em;
+}
+
+.gibbs-phase {
+  border-bottom:1px solid var(--night-line);padding:24px 20px;
+}
+.gibbs-phase:last-of-type { border-bottom:none; }
+.gibbs-phase-header {
+  display:flex;align-items:baseline;gap:10px;margin-bottom:16px;
+}
+.gibbs-phase-num {
+  font-family:var(--font-title);font-size:.7rem;color:var(--shu);
+  letter-spacing:.1em;
+}
+.gibbs-phase-title {
+  font-family:var(--font-title);font-size:.9rem;color:var(--star);
+  letter-spacing:.2em;
+}
+.gibbs-phase-sub {
+  font-size:.65rem;color:var(--star-faint);letter-spacing:.08em;margin-left:auto;
+}
+.gibbs-rule {
+  height:1px;background:linear-gradient(90deg,var(--shu) 0%,transparent 60%);
+  margin-bottom:16px;opacity:.5;
+}
+.gibbs-prompt {
+  font-size:.75rem;color:var(--ice);letter-spacing:.08em;
+  margin-bottom:6px;line-height:1.7;
+}
+.weekly-textarea {
+  width:100%;background:rgba(255,255,255,.025);
+  border:none;border-bottom:1px solid var(--night-line);
+  padding:10px 4px;font-family:var(--font-body);font-size:.88rem;
+  color:var(--star);resize:none;outline:none;line-height:1.9;
+  transition:.2s;letter-spacing:.03em;margin-bottom:12px;
+}
+.weekly-textarea:focus { border-bottom-color:var(--ice); }
+.weekly-textarea::placeholder { color:var(--star-faint); }
+.perma-grid {
+  display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;
+}
+.perma-item { }
+.perma-label {
+  font-size:.65rem;color:var(--star-faint);letter-spacing:.1em;margin-bottom:4px;
+}
+.perma-select {
+  width:100%;padding:8px 10px;
+  background:rgba(255,255,255,.03);border:1px solid var(--night-line);
+  border-radius:var(--r-sm);font-family:var(--font-body);font-size:.8rem;
+  color:var(--star);outline:none;
+}
+.weekly-gen-btn {
+  width:calc(100% - 40px);margin:0 20px 24px;
+  padding:14px;border:1px solid var(--night-line);border-radius:var(--r-sm);
+  background:rgba(255,255,255,.02);color:var(--star-dim);
+  font-family:var(--font-serif);font-size:.88rem;
+  letter-spacing:.18em;cursor:pointer;transition:.3s;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+}
+.weekly-gen-btn:hover {
+  border-color:var(--kin);color:var(--kin);
+  box-shadow:0 0 20px rgba(200,168,75,.1);
+}
+.weekly-gen-btn:disabled { opacity:.35;cursor:not-allowed; }
+.weekly-ai-wrap {
+  margin:0 20px 24px;border:1px solid var(--night-line);
+  border-radius:var(--r-md);overflow:hidden;display:none;
+}
+.weekly-ai-header {
+  padding:10px 14px;background:rgba(200,168,75,.07);
+  border-bottom:1px solid var(--night-line);
+  font-family:var(--font-title);font-size:.8rem;color:var(--kin);
+  letter-spacing:.2em;
+}
+.weekly-ai-body { padding:16px; }
+.weekly-ai-text {
+  font-size:.85rem;color:var(--star-dim);line-height:2;letter-spacing:.03em;
+}
+.weekly-save-btn {
+  width:calc(100% - 40px);margin:0 20px 24px;
+  padding:13px;border:1px solid var(--night-line);border-radius:var(--r-sm);
+  background:none;color:var(--star-dim);font-family:var(--font-serif);
+  font-size:.85rem;letter-spacing:.15em;cursor:pointer;transition:.2s;
+}
+.weekly-save-btn:hover { border-color:var(--ice);color:var(--star); }
 </style>
 </head>
 <body>
@@ -746,6 +970,10 @@ body::after {
       <div class="header-left">
         <div class="header-title">内省</div>
         <div class="header-date" id="header-date"></div>
+        <div class="moon-phase-display" id="moon-phase-display">
+          <span class="moon-phase-icon" id="moon-icon">🌑</span>
+          <span id="moon-age-text"></span>
+        </div>
       </div>
       <div class="header-right">
         <div class="streak-badge" id="streak-badge">✦ 0日</div>
@@ -1031,6 +1259,167 @@ body::after {
       </div>
     </section>
 
+
+    <!-- 格言ライブラリ -->
+    <section id="mod-kotowaza" class="module">
+      <div class="kotowaza-wrap">
+        <div class="kotowaza-hero">
+          <div class="kotowaza-hero-icon">✦</div>
+          <div class="kotowaza-hero-title">格言ライブラリ</div>
+          <div class="kotowaza-hero-sub">五本の哲学的柱から今日の言葉</div>
+        </div>
+        <div class="kotowaza-filter" id="kotowaza-filter">
+          <button class="kotowaza-filter-btn active" onclick="filterKotowaza('all',this)">すべて</button>
+          <button class="kotowaza-filter-btn" onclick="filterKotowaza('ストア派',this)">ストア派</button>
+          <button class="kotowaza-filter-btn" onclick="filterKotowaza('仏教',this)">仏教</button>
+          <button class="kotowaza-filter-btn" onclick="filterKotowaza('Frankl',this)">Frankl</button>
+          <button class="kotowaza-filter-btn" onclick="filterKotowaza('儒教',this)">儒教</button>
+          <button class="kotowaza-filter-btn" onclick="filterKotowaza('アリストテレス',this)">アリストテレス</button>
+        </div>
+        <div class="kotowaza-counter" id="kotowaza-counter"></div>
+        <div id="kotowaza-card-area"></div>
+        <div class="kotowaza-nav">
+          <button class="kotowaza-btn" onclick="prevKotowaza()">◀ 前へ</button>
+          <button class="kotowaza-btn" onclick="nextKotowaza()">次へ ▶</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 書かない日 -->
+    <section id="mod-skip" class="module">
+      <div class="skip-wrap">
+        <div class="skip-card">
+          <div class="skip-card-header">今日は書けなかった — その理由を一言</div>
+          <div class="skip-reason-list">
+            <button class="skip-reason-btn" onclick="selectSkipReason('疲れていた',this)">
+              <span class="skip-reason-icon">😴</span> 疲れていた
+            </button>
+            <button class="skip-reason-btn" onclick="selectSkipReason('忙しかった',this)">
+              <span class="skip-reason-icon">⏰</span> 忙しかった
+            </button>
+            <button class="skip-reason-btn" onclick="selectSkipReason('気分が乗らなかった',this)">
+              <span class="skip-reason-icon">🌧</span> 気分が乗らなかった
+            </button>
+            <button class="skip-reason-btn" onclick="selectSkipReason('書くことがなかった',this)">
+              <span class="skip-reason-icon">🍃</span> 書くことがなかった
+            </button>
+            <button class="skip-reason-btn" onclick="selectSkipReason('その他',this)">
+              <span class="skip-reason-icon">✦</span> その他
+            </button>
+          </div>
+          <div class="skip-note-area">
+            <div class="skip-note-label">一言メモ（任意）</div>
+            <textarea class="j-textarea" id="skip-note" rows="2" placeholder="今日の一言…"></textarea>
+          </div>
+        </div>
+        <button class="skip-save-btn" onclick="saveSkipDay()">記録する</button>
+        <div class="skip-history" id="skip-history"></div>
+      </div>
+    </section>
+
+    <!-- 週次レビュー -->
+    <section id="mod-weekly" class="module">
+      <div class="weekly-wrap">
+        <div class="weekly-header">
+          <div class="weekly-header-title">週次レビュー</div>
+          <div class="weekly-header-sub">Gibbsサイクル × 五本の哲学的柱</div>
+          <div class="weekly-period" id="weekly-period"></div>
+        </div>
+
+        <!-- Phase 1: Description -->
+        <div class="gibbs-phase">
+          <div class="gibbs-phase-header">
+            <span class="gibbs-phase-num">Phase I</span>
+            <span class="gibbs-phase-title">事実の記述</span>
+            <span class="gibbs-phase-sub">Description</span>
+          </div>
+          <div class="gibbs-rule"></div>
+          <div class="gibbs-prompt">今週の象徴的な出来事を3つ、評価を交えず客観的に記述してください。</div>
+          <textarea class="weekly-textarea" id="w-desc" rows="4" placeholder="いつ・どこで・何が起きたか…"></textarea>
+          <div class="gibbs-prompt">今週の気分のパターンを振り返ってください。</div>
+          <div class="perma-grid">
+            <div class="perma-item">
+              <div class="perma-label">P — ポジティブ感情</div>
+              <select class="perma-select" id="perma-p"><option value="">—</option><option>1 低い</option><option>2</option><option>3 普通</option><option>4</option><option>5 高い</option></select>
+            </div>
+            <div class="perma-item">
+              <div class="perma-label">E — 没入・フロー</div>
+              <select class="perma-select" id="perma-e"><option value="">—</option><option>1 低い</option><option>2</option><option>3 普通</option><option>4</option><option>5 高い</option></select>
+            </div>
+            <div class="perma-item">
+              <div class="perma-label">R — 人間関係</div>
+              <select class="perma-select" id="perma-r"><option value="">—</option><option>1 低い</option><option>2</option><option>3 普通</option><option>4</option><option>5 高い</option></select>
+            </div>
+            <div class="perma-item">
+              <div class="perma-label">M — 意味・目的</div>
+              <select class="perma-select" id="perma-m"><option value="">—</option><option>1 低い</option><option>2</option><option>3 普通</option><option>4</option><option>5 高い</option></select>
+            </div>
+            <div class="perma-item">
+              <div class="perma-label">A — 達成・遂行</div>
+              <select class="perma-select" id="perma-a"><option value="">—</option><option>1 低い</option><option>2</option><option>3 普通</option><option>4</option><option>5 高い</option></select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phase 2: Evaluation -->
+        <div class="gibbs-phase">
+          <div class="gibbs-phase-header">
+            <span class="gibbs-phase-num">Phase II</span>
+            <span class="gibbs-phase-title">評価・分析</span>
+            <span class="gibbs-phase-sub">Evaluation / Analysis</span>
+          </div>
+          <div class="gibbs-rule"></div>
+          <div class="gibbs-prompt">アリストテレス「中庸」の視点 — 今週、過剰または不足した感情・行動はありましたか？</div>
+          <textarea class="weekly-textarea" id="w-eval" rows="3" placeholder="勇気・節制・正義・思慮の観点で…"></textarea>
+          <div class="gibbs-prompt">ストア派「コントロールの二分法」— 今週エネルギーを浪費した「管轄外」のことは何ですか？</div>
+          <textarea class="weekly-textarea" id="w-control" rows="2" placeholder="他者の評価、結果、環境など…"></textarea>
+        </div>
+
+        <!-- Phase 3: Conclusion -->
+        <div class="gibbs-phase">
+          <div class="gibbs-phase-header">
+            <span class="gibbs-phase-num">Phase III</span>
+            <span class="gibbs-phase-title">学びと意味</span>
+            <span class="gibbs-phase-sub">Conclusion</span>
+          </div>
+          <div class="gibbs-rule"></div>
+          <div class="gibbs-prompt">Frankl「意味の発見」— 今週の経験の中に、あなたにしか気づけない意味がありましたか？</div>
+          <textarea class="weekly-textarea" id="w-meaning" rows="3" placeholder="創造価値・体験価値・態度価値のどれかで…"></textarea>
+          <div class="gibbs-prompt">仏教「無常・縁起」— 今週の感謝の記録を振り返り、どのようなつながりに気づきましたか？</div>
+          <textarea class="weekly-textarea" id="w-gratitude" rows="2" placeholder="見えないつながり、縁起…"></textarea>
+        </div>
+
+        <!-- Phase 4: Action Plan -->
+        <div class="gibbs-phase">
+          <div class="gibbs-phase-header">
+            <span class="gibbs-phase-num">Phase IV</span>
+            <span class="gibbs-phase-title">行動計画</span>
+            <span class="gibbs-phase-sub">Action Plan</span>
+          </div>
+          <div class="gibbs-rule"></div>
+          <div class="gibbs-prompt">儒教「知行合一」— 来週、If-Thenの形で一つだけ決めてください。</div>
+          <textarea class="weekly-textarea" id="w-ifthen" rows="2" placeholder="もし〔状況〕が来たら、私は〔行動〕をする…"></textarea>
+          <div class="gibbs-prompt">仏教「非執着」— 来週、手放すと誓うことを一つ書いてください。</div>
+          <textarea class="weekly-textarea" id="w-release" rows="2" placeholder="手放す執着、手放すパターン…"></textarea>
+        </div>
+
+        <!-- AI週次分析ボタン -->
+        <button class="weekly-gen-btn" id="weekly-gen-btn" onclick="generateWeeklyReview()">
+          <span style="color:var(--kin)">✦</span>
+          AIに週次分析を依頼する
+          <span style="color:var(--kin)">✦</span>
+        </button>
+
+        <!-- AI出力エリア -->
+        <div class="weekly-ai-wrap" id="weekly-ai-wrap">
+          <div class="weekly-ai-header">週次エウダイモニア分析</div>
+          <div class="weekly-ai-body" id="weekly-ai-body"></div>
+        </div>
+
+        <button class="weekly-save-btn" onclick="saveWeeklyReview()">週次レビューを保存する</button>
+      </div>
+    </section>
+
   </main>
 
   <nav class="nav-bar">
@@ -1051,6 +1440,15 @@ body::after {
     </button>
     <button class="nav-tab" onclick="showModule('reverse',this)">
       <div class="nav-icon">✦</div><div>問</div>
+    </button>
+    <button class="nav-tab" onclick="showModule('kotowaza',this)">
+      <div class="nav-icon">◎</div><div>格言</div>
+    </button>
+    <button class="nav-tab" onclick="showModule('weekly',this)">
+      <div class="nav-icon">◈</div><div>週次</div>
+    </button>
+    <button class="nav-tab" onclick="showModule('skip',this)">
+      <div class="nav-icon">🍃</div><div>休む</div>
     </button>
     <button class="nav-tab" onclick="showModule('settings',this)">
       <div class="nav-icon">⚙</div><div>設定</div>
@@ -1815,6 +2213,421 @@ if('serviceWorker' in navigator){
       .catch(e => console.warn('SW failed:', e));
   });
 }
+
+// ══════════════════════════════════════════════════
+// ⑦ 月齢計算・連動
+// ══════════════════════════════════════════════════
+function calcMoonAge(date) {
+  // 新月基準日：2000-01-06（既知の新月）
+  const base = new Date('2000-01-06T18:14:00Z');
+  const synodicMonth = 29.53058867;
+  const diff = (date - base) / (1000 * 60 * 60 * 24);
+  const age = ((diff % synodicMonth) + synodicMonth) % synodicMonth;
+  return age;
+}
+
+function getMoonIcon(age) {
+  if (age < 1.85)  return '🌑';
+  if (age < 5.53)  return '🌒';
+  if (age < 9.22)  return '🌓';
+  if (age < 12.91) return '🌔';
+  if (age < 16.61) return '🌕';
+  if (age < 20.30) return '🌖';
+  if (age < 23.99) return '🌗';
+  if (age < 27.68) return '🌘';
+  return '🌑';
+}
+
+function getMoonLabel(age) {
+  if (age < 1.85)  return '新月';
+  if (age < 5.53)  return '三日月';
+  if (age < 9.22)  return '上弦の月';
+  if (age < 12.91) return '十三夜';
+  if (age < 16.61) return '満月';
+  if (age < 20.30) return '十六夜';
+  if (age < 23.99) return '下弦の月';
+  if (age < 27.68) return '有明月';
+  return '新月前夜';
+}
+
+function updateMoonDisplay() {
+  const now = new Date();
+  const age = calcMoonAge(now);
+  const icon = document.getElementById('moon-icon');
+  const text = document.getElementById('moon-age-text');
+  if (icon) icon.textContent = getMoonIcon(age);
+  if (text) text.textContent = `${getMoonLabel(age)}（月齢 ${age.toFixed(1)}）`;
+}
+
+// ══════════════════════════════════════════════════
+// ③ 格言ライブラリ
+// ══════════════════════════════════════════════════
+const KOTOWAZA_DB = [
+  // ストア派
+  { philosophy:'ストア派', category:'逆境・受容',
+    original:'Ignis aurum probat, miseria fortes viros.',
+    ja:'火は金を試す試金石であり、逆境は強き人々を試す試金石である。',
+    source:'セネカ『摂理について』4.17',
+    commentary:'外部の試練そのものに意味はない。しかしその試練に対してあなたがどのような態度を選ぶかが、あなたという人間を形成する。管轄外の出来事に心を乱すのではなく、管轄内の「選択の質」に全力を注ぐこと。' },
+  { philosophy:'ストア派', category:'感情・判断',
+    original:'Εἴ τί σοι τῶν ἐκτὸς λυπηρόν ἐστιν... τοῦτο δὲ ἤδη ἐξαλείψαι ἐπὶ σοί ἐστιν.',
+    ja:'もし君が外部の事柄によって苦しんでいるなら、その苦痛はその事柄自体によるのではなく、それに対する君の判断によるものである。そして君はその判断を今すぐ消し去る力を持っている。',
+    source:'マルクス・アウレリウス『自省録』第8巻47節',
+    commentary:'ストア派哲学の核心。出来事そのものではなく、出来事に対する解釈が苦しみを生む。この洞察は現代の認知行動療法（CBT）の直接的な源流となっている。' },
+  { philosophy:'ストア派', category:'時間・現在',
+    original:'Omnia aliena sunt, tempus tantum nostrum est.',
+    ja:'すべては他者のものだ。ただ時間だけが私たちのものである。',
+    source:'セネカ『ルキリウスへの書簡』第1章1節',
+    commentary:'セネカはルキリウスへの最初の書簡をこの言葉で開く。財産も名声も健康も奪われうる。しかし今この瞬間をどう使うかという選択だけは、誰も奪えない。' },
+  { philosophy:'ストア派', category:'目標・行動',
+    original:'Εὐθὺς οὖν πάσῃ φαντασίᾳ τραχείᾳ μελέτα ἐπιλέγειν ὅτι φαντασία εἶ...',
+    ja:'あらゆる過酷な印象に対して「お前は単なる印象にすぎず、決して現れ通りの実体ではない」と即座に言えるよう訓練せよ。',
+    source:'エピクテトス『エンキリディオン』第1章',
+    commentary:'印象（ファンタジア）への安易な同意を保留することがストア派実践の要。恐怖や怒りも、それに同意しなければ力を持てない。' },
+
+  // 仏教
+  { philosophy:'仏教', category:'無常・受容',
+    original:'sabbe saṅkhārā aniccā ti yadā paññāya passati...',
+    ja:'すべてのつくられたものは無常である。知恵をもってそれを見るとき、人は苦しみから遠ざかる。これこそが清らかさに至る道である。',
+    source:'ダンマパダ第20章277番',
+    commentary:'諸行無常は仏教の根本洞察。変化を敵視するのではなく、あらゆる現象が生じては滅する自然のプロセスとして受け入れるとき、苦しみの根が断ち切られる。' },
+  { philosophy:'仏教', category:'自己・行動',
+    original:'attā hi attano nātho ko hi nātho paro siyā...',
+    ja:'自分こそが自分の主である。他人がどうして自分の主となり得ようか。自分をよく整えたならば、得難き主（拠り所）を得る。',
+    source:'ダンマパダ第12章160番',
+    commentary:'仏教は究極的には自己の修養を強調する。外部の権威や他者への依存から離れ、自分自身の内なる光（良知）を磨くこと。これは儒教の「致良知」とも深く共鳴する。' },
+  { philosophy:'仏教', category:'慈悲・他者',
+    original:'mātā yathā niyaṃ puttaṃ āyusā ekaputtamanurakkhe...',
+    ja:'あたかも母親が、自己のひとり子を、命を賭して護るように、生きとし生けるものの上に、限りなき慈しみの意を注げ。',
+    source:'スッタニパータ「慈経」第149詩節',
+    commentary:'慈悲（メッタ）の実践。自己への愛を起点として、他者へと同心円状に広げていく。利己的な感謝から、縁起的な感謝へと深化するための基礎。' },
+  { philosophy:'仏教', category:'無常・受容',
+    original:'suññato lokaṃ avehi...',
+    ja:'世界を空（くう）として見よ。常にマインドフルであれ。自己という見解を除いた者は、死を乗り越える。',
+    source:'スッタニパータ第1119偈',
+    commentary:'固定的な「自己」という幻想を手放すとき、執着から生まれる苦しみは消える。これはFranklの「自己超越」とも共鳴し、より大きな何かへの開放を示す。' },
+
+  // Frankl
+  { philosophy:'Frankl', category:'意味・目的',
+    original:'"Hat man sein Warum des Lebens, so verträgt man sich mit fast jedem Wie." — Nietzsche, cited by Frankl',
+    ja:'なぜ生きるかを知っている者は、ほとんどあらゆるいかにも耐えられる。',
+    source:'ニーチェ『偶像の黄昏』格言と矢 第12条（フランクル『夜と霧』にて引用）',
+    commentary:'フランクルが強制収容所の体験から見出した核心。目的（なぜ）を持つ者は、手段（いかに）のいかなる苦難にも耐えうる。長期目標を設定するとき、その「なぜ」を深く問うことが意味療法の実践。' },
+  { philosophy:'Frankl', category:'愛・自己超越',
+    original:'"The truth—that love is the ultimate and the highest goal to which man can aspire."',
+    ja:'愛は人間が到達できる最高の、そして究極の目標である。人間の救いは、愛を通した、愛のなかでの救いである。',
+    source:'フランクル『夜と霧』池田香代子訳・57-58頁',
+    commentary:'凍える行進の中でフランクルが妻のイメージと対話した体験から生まれた洞察。愛する者の精神的現実は、肉体的別離を超えて存在する。感謝の記録は、この愛の体験価値を精神の貯蔵庫に刻む行為。' },
+  { philosophy:'Frankl', category:'自由・責任',
+    original:'"Man does not simply exist but always decides what his existence will be."',
+    ja:'人はたんに存在するのではない。みずからがいかなる存在になるか、次の瞬間に何になるかを常に決定しているのである。',
+    source:'フランクル『夜と霧』池田香代子訳・160-161頁',
+    commentary:'実存的自由の宣言。遺伝も環境も人間を完全に規定しない。あらゆる状況で、次の自分を選ぶ自由が残されている。この自由は同時に、選択への責任でもある。' },
+  { philosophy:'Frankl', category:'苦しみ・態度価値',
+    original:'"When we are no longer able to change a situation, we are challenged to change ourselves."',
+    ja:'状況を変えることができなくなったとき、私たちは自分自身を変えるよう求められる。',
+    source:'フランクル『意味への意志』',
+    commentary:'態度価値の本質。不可避の状況への姿勢を選ぶことが、人間に残された最後の自由。手放すこと欄に記述する際、この視点で捉え直してみる。' },
+
+  // 儒教
+  { philosophy:'儒教', category:'恕・他者',
+    original:'己所不欲、勿施於人。',
+    ja:'自分が望まないことは、他人に対しても行ってはならない。',
+    source:'孔子『論語』衛霊公第十五 第二十四章',
+    commentary:'一生を通じて守るべき一言として孔子が示した「恕（じょ）」の実践。感謝ジャーナリングを、自己への恩恵の受け取りに留めず、他者への返礼として行動化する際の指針。' },
+  { philosophy:'儒教', category:'自己修養',
+    original:'吾日三省吾身、爲人謀而不忠乎、與朋友交而不信乎、傳不習乎。',
+    ja:'私は毎日三たび我が身を省みる。人のために誠意を尽くしたか。友と交わって誠実であったか。十分に習得していないことを人に教えなかったか。',
+    source:'曾子『論語』学而第一 第四章',
+    commentary:'儒教的内省の三基準。自己承認や感情の慰めではなく、他者志向的な問いへの応答。日次ジャーナリングを「曾子の三省」として実践する視点。' },
+  { philosophy:'儒教', category:'知行合一',
+    original:'知は行の始め、行は知の成なり。（知是行之始、行是知之成。）',
+    ja:'知ることは行うことの端緒であり、行うことは知ることの完成である。',
+    source:'王陽明『伝習録』巻上 第八条',
+    commentary:'知行合一の核心。「やるべきだとわかっている」だけでは、まだ真に知っていない。今日の取り組みをIf-Then形式で記述することは、知を行へと即時変換する実践。' },
+  { philosophy:'儒教', category:'修養・実践',
+    original:'人須在事上磨練、做功夫。乃有益。',
+    ja:'人は毎日の具体的な現実の中で自分を磨き、工夫を重ねるべきである。そうであってこそ初めて成果が上がる。',
+    source:'王陽明『伝習録』下 第二百五十五条',
+    commentary:'事上磨錬。静座や内省だけでは不十分で、現実の出来事（事上）の中に飛び込み、そこで生じる心の揺らぎを軌道修正する実践こそが本当の修養。ジャーナリングはその振り返りの場。' },
+  { philosophy:'儒教', category:'自己・内なる賊',
+    original:'破山中賊易、破心中賊難。',
+    ja:'山の中の賊を破るは易く、心の中の賊を破るは難し。',
+    source:'王陽明『王陽明全集』巻二十六「書楊仕徳巻」',
+    commentary:'外的な課題の解決より、内なる私欲・恐怖・欺瞞という「心中賊」のコントロールこそが最大の戦い。手放すこと欄に書くべき「心中賊」を毎日一つ特定する実践。' },
+
+  // アリストテレス
+  { philosophy:'アリストテレス', category:'善く生きること',
+    original:'τὸ ἀνθρώπινον ἀγαθὸν ψυχῆς ἐνέργεια γίνεται κατ᾽ ἀρετήν...',
+    ja:'人間の善とは、卓越性（徳）に即した魂の活動である。もし卓越性が複数あるならば、最も優れ、最も完全な卓越性に即した活動である。',
+    source:'アリストテレス『ニコマコス倫理学』第1巻第7章（1098a）',
+    commentary:'エウダイモニアの定義。幸福とは一時的な快楽ではなく、自分の最も優れた能力を発揮し続ける持続的な活動そのもの。今日の取り組みを「アレテーの発揮」として評価する視点。' },
+  { philosophy:'アリストテレス', category:'習慣・徳の形成',
+    original:'οἰκοδομοῦντες οἰκοδόμοι γίγνονται καὶ κιθαρίζοντες κιθαρισταί...',
+    ja:'家を建てることによって建築家になり、竪琴を弾くことによって竪琴奏者になる。正義の行いをすることによって、私たちは正義の人になる。',
+    source:'アリストテレス『ニコマコス倫理学』第2巻第1章',
+    commentary:'習慣化（エティスモス）による徳の形成。徳は天賦の才ではなく、正しい行為の反復によって形成される安定した性格（ヘクシス）。日次ジャーナリング自体がこの習慣化の実践。' },
+  { philosophy:'アリストテレス', category:'中庸・実践知',
+    original:'...τὸ πρὸς ἡμᾶς μέσον, ὃ οὔτε πλεονάζει οὔτε ἐλλείπει...',
+    ja:'中庸とは、私たちに関して、過剰でも不足でもない点のことである。これは人によって異なり、適切な時に、適切な仕方で、適切な程度において行うことだ。',
+    source:'アリストテレス『ニコマコス倫理学』第2巻第6章（1106b）',
+    commentary:'中庸は算術的な平均値ではなく、状況と人に応じた最適点。週次レビューで「今週の感情や行動に過剰・不足はなかったか」と問うのはこの視点から。' },
+];
+
+let currentKotowazaFilter = 'all';
+let currentKotowazaIndex = 0;
+let filteredKotowaza = [...KOTOWAZA_DB];
+
+function filterKotowaza(filter, el) {
+  currentKotowazaFilter = filter;
+  currentKotowazaIndex = 0;
+  document.querySelectorAll('.kotowaza-filter-btn').forEach(b => b.classList.remove('active'));
+  if(el) el.classList.add('active');
+  filteredKotowaza = filter === 'all' ? [...KOTOWAZA_DB]
+    : KOTOWAZA_DB.filter(k => k.philosophy === filter);
+  renderKotowaza();
+}
+window.filterKotowaza = filterKotowaza;
+
+function renderKotowaza() {
+  const area = document.getElementById('kotowaza-card-area');
+  const counter = document.getElementById('kotowaza-counter');
+  if(!area) return;
+  if(!filteredKotowaza.length) {
+    area.innerHTML = '<div style="padding:32px;text-align:center;color:var(--star-faint);font-size:.82rem;">格言が見つかりません</div>';
+    return;
+  }
+  const k = filteredKotowaza[currentKotowazaIndex];
+  if(counter) counter.textContent = `${currentKotowazaIndex+1} / ${filteredKotowaza.length}`;
+  area.innerHTML = `
+    <div class="kotowaza-card">
+      <div class="kotowaza-card-header">
+        <span class="kotowaza-philosophy">${escHtml(k.philosophy)}</span>
+        <span class="kotowaza-category">${escHtml(k.category)}</span>
+      </div>
+      <div class="kotowaza-body">
+        <div class="kotowaza-original">${escHtml(k.original)}</div>
+        <div class="kotowaza-ja">「${escHtml(k.ja)}」</div>
+        <div class="kotowaza-source">— ${escHtml(k.source)} —</div>
+        <div class="kotowaza-commentary">${escHtml(k.commentary)}</div>
+      </div>
+    </div>`;
+}
+
+window.nextKotowaza = function() {
+  currentKotowazaIndex = (currentKotowazaIndex + 1) % filteredKotowaza.length;
+  renderKotowaza();
+};
+window.prevKotowaza = function() {
+  currentKotowazaIndex = (currentKotowazaIndex - 1 + filteredKotowaza.length) % filteredKotowaza.length;
+  renderKotowaza();
+};
+
+// 格言モジュール初期化
+function initKotowaza() {
+  const today = new Date();
+  currentKotowazaIndex = today.getDate() % KOTOWAZA_DB.length;
+  filteredKotowaza = [...KOTOWAZA_DB];
+  renderKotowaza();
+}
+
+// ══════════════════════════════════════════════════
+// ⑤ 書かない日の記録
+// ══════════════════════════════════════════════════
+let selectedSkipReason = '';
+
+window.selectSkipReason = function(reason, el) {
+  selectedSkipReason = reason;
+  document.querySelectorAll('.skip-reason-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+};
+
+window.saveSkipDay = function() {
+  const today = getTodayKey();
+  const note = (document.getElementById('skip-note')||{}).value || '';
+  if(!selectedSkipReason) { showBanner('理由を選んでください'); return; }
+  const data = {
+    date: today,
+    type: 'skip',
+    reason: selectedSkipReason,
+    note: note,
+    id: Date.now(),
+  };
+  // localStorageに保存
+  const all = getLocalEntries();
+  const existing = all.findIndex(e => e.date === today);
+  if(existing >= 0) all[existing] = {...all[existing], skipReason: selectedSkipReason, skipNote: note};
+  else all.push({...data, dateLabel: document.getElementById('header-date').textContent});
+  localStorage.setItem('naisei_entries', JSON.stringify(all));
+
+  // skip専用ストレージ
+  const skips = JSON.parse(localStorage.getItem('naisei_skips')||'[]');
+  const si = skips.findIndex(s=>s.date===today);
+  if(si>=0) skips[si]=data; else skips.push(data);
+  localStorage.setItem('naisei_skips', JSON.stringify(skips));
+
+  showBanner('今日の記録を保存しました');
+  renderSkipHistory();
+  // リセット
+  selectedSkipReason='';
+  document.querySelectorAll('.skip-reason-btn').forEach(b=>b.classList.remove('selected'));
+  const noteEl = document.getElementById('skip-note'); if(noteEl) noteEl.value='';
+};
+
+function renderSkipHistory() {
+  const el = document.getElementById('skip-history');
+  if(!el) return;
+  const skips = JSON.parse(localStorage.getItem('naisei_skips')||'[]').sort((a,b)=>b.id-a.id).slice(0,7);
+  if(!skips.length) { el.innerHTML=''; return; }
+  el.innerHTML = `<div class="skip-history-title">最近の記録</div>` +
+    skips.map(s=>`
+      <div class="skip-history-item">
+        <div class="skip-history-date">${s.date}</div>
+        <div class="skip-history-reason">${escHtml(s.reason)}${s.note?`　${escHtml(s.note.substring(0,20))}`:''}</div>
+      </div>`).join('');
+}
+
+// ══════════════════════════════════════════════════
+// ② 週次レビュー（Gibbsサイクル × 五本柱）
+// ══════════════════════════════════════════════════
+function getWeekRange() {
+  const now = new Date();
+  const day = now.getDay(); // 0=日
+  const monday = new Date(now); monday.setDate(now.getDate() - (day===0?6:day-1));
+  const sunday = new Date(monday); sunday.setDate(monday.getDate()+6);
+  const fmt = d => `${d.getMonth()+1}/${d.getDate()}`;
+  return { start: monday.toISOString().split('T')[0], end: sunday.toISOString().split('T')[0],
+           label: `${fmt(monday)}（月）〜 ${fmt(sunday)}（日）` };
+}
+
+function getWeekEntries() {
+  const {start, end} = getWeekRange();
+  return getLocalEntries().filter(e => e.date >= start && e.date <= end);
+}
+
+function initWeekly() {
+  const {label} = getWeekRange();
+  const el = document.getElementById('weekly-period');
+  if(el) el.textContent = label;
+  // 保存済み内容を復元
+  const wk = getWeekRange().start;
+  const saved = JSON.parse(localStorage.getItem('naisei_weekly_'+wk)||'{}');
+  ['w-desc','w-eval','w-control','w-meaning','w-gratitude','w-ifthen','w-release'].forEach(id=>{
+    const el=document.getElementById(id); if(el&&saved[id]) el.value=saved[id];
+  });
+  ['perma-p','perma-e','perma-r','perma-m','perma-a'].forEach(id=>{
+    const el=document.getElementById(id); if(el&&saved[id]) el.value=saved[id];
+  });
+}
+
+window.saveWeeklyReview = function() {
+  const wk = getWeekRange().start;
+  const data = {};
+  ['w-desc','w-eval','w-control','w-meaning','w-gratitude','w-ifthen','w-release'].forEach(id=>{
+    const el=document.getElementById(id); if(el) data[id]=el.value;
+  });
+  ['perma-p','perma-e','perma-r','perma-m','perma-a'].forEach(id=>{
+    const el=document.getElementById(id); if(el) data[id]=el.value;
+  });
+  data.date = wk;
+  localStorage.setItem('naisei_weekly_'+wk, JSON.stringify(data));
+  showBanner('週次レビューを保存しました');
+};
+
+window.generateWeeklyReview = async function() {
+  const btn = document.getElementById('weekly-gen-btn');
+  const wrap = document.getElementById('weekly-ai-wrap');
+  const body = document.getElementById('weekly-ai-body');
+  btn.disabled=true; btn.innerHTML='<span style="color:var(--kin)">✦</span> 分析中… <span style="color:var(--kin)">✦</span>';
+
+  const apiKey = getApiKey();
+  const entries = getWeekEntries();
+  const {label} = getWeekRange();
+  const get = id => (document.getElementById(id)||{}).value||'未記入';
+
+  wrap.style.display='block';
+  body.innerHTML='<div class="advice-loading"><div class="dot-flicker"><span></span><span></span><span></span></div><span>週次分析を生成中…</span></div>';
+
+  const permaData = `P:${get('perma-p')} E:${get('perma-e')} R:${get('perma-r')} M:${get('perma-m')} A:${get('perma-a')}`;
+  const weekSummary = entries.length > 0
+    ? entries.map(e=>`[${e.date}] 感謝:${e.g1||''} 取組:${(e.action||'').substring(0,40)} 気分:${e.mood||'—'} 感じたこと:${(e.reflection||'').substring(0,60)}`).join('
+')
+    : '（今週の日次記録なし）';
+
+  const prompt = `【週次ジャーナル分析依頼】
+期間：${label}
+
+▼ Gibbsリフレクション記述
+事実：${get('w-desc')}
+評価（中庸の観点）：${get('w-eval')}
+管轄外への浪費：${get('w-control')}
+意味の発見（Frankl）：${get('w-meaning')}
+感謝の縁起：${get('w-gratitude')}
+来週のIf-Then：${get('w-ifthen')}
+手放す誓約：${get('w-release')}
+
+▼ PERMA自己評価
+${permaData}
+
+▼ 今週の日次記録（概要）
+${weekSummary}
+
+以上をもとに、以下の構成でエウダイモニア的週次分析を日本語で生成してください（です・ます調）：
+
+1. 【卓越性の発揮】今週のアレテー（強みの発揮）パターンと感謝の傾向（3〜4文）
+2. 【哲学的コメント】PERMA評価と記述内容への統合的な哲学的コメント（3〜4文・ストア派/仏教/Frankl/儒教/アリストテレスから最適な視点で）
+3. 【来週への問い】今週の分析から導かれる、来週の内省を深める問いかけ（1文のみ）
+
+余分な見出し記号・マークダウンは不要です。各セクションは改行で区切ってください。`;
+
+  if(!apiKey) {
+    body.innerHTML = `<div class="weekly-ai-text">APIキーが未設定のため、AIによる週次分析を表示できません。設定タブからClaude APIキーを入力してください。<br><br>記録された内容はすでに保存されています。来週もこの週次レビューを続けることで、パターンが見えてきます。</div>`;
+  } else {
+    try {
+      const res = await fetch('https://api.anthropic.com/v1/messages',{
+        method:'POST',
+        headers:{
+          'Content-Type':'application/json',
+          'x-api-key':apiKey,
+          'anthropic-version':'2023-06-01',
+          'anthropic-dangerous-direct-browser-access':'true'
+        },
+        body:JSON.stringify({
+          model:'claude-sonnet-4-6',
+          max_tokens:1000,
+          system:`あなたはアリストテレスの徳倫理学、Frankl意味療法、ストア派哲学、仏教、儒教に精通したエウダイモニック・ライフコーチです。週次ジャーナルデータを分析し、ユーザーが「善く生きること（エウダイモニア）」のための洞察を提供します。トーンは知性的・温かく・説教せず、ソクラテス的に問い返す姿勢で。`,
+          messages:[{role:'user',content:prompt}]
+        })
+      });
+      const data = await res.json();
+      const text = data.content?.find(c=>c.type==='text')?.text||'';
+      const parts = text.split(/
+{2,}/);
+      body.innerHTML = parts.map(p=>`<div class="weekly-ai-text" style="margin-bottom:14px;">${escHtml(p)}</div>`).join('');
+    } catch(e) {
+      body.innerHTML = `<div class="weekly-ai-text">通信エラーが発生しました。ネットワークを確認してください。</div>`;
+    }
+  }
+  btn.disabled=false; btn.innerHTML='<span style="color:var(--kin)">✦</span> AIに週次分析を依頼する <span style="color:var(--kin)">✦</span>';
+};
+
+// ══════════════════════════════════════════════════
+// showModule拡張（新タブ対応）
+// ══════════════════════════════════════════════════
+const _origShowModule = window.showModule;
+window.showModule = function(name, el) {
+  _origShowModule(name, el);
+  if(name==='kotowaza') initKotowaza();
+  if(name==='weekly')   initWeekly();
+  if(name==='skip')     renderSkipHistory();
+};
+
+// initApp拡張
+const _origInitApp = window.initApp;
+window.initApp = function() {
+  _origInitApp();
+  updateMoonDisplay();
+};
 </script>
 </body>
 </html>
