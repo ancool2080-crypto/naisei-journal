@@ -946,6 +946,166 @@ body::after {
   cursor:pointer;letter-spacing:.08em;
   font-family:var(--font-serif);
 }
+
+/* ══ 今日の一言（自由記述）モード ══ */
+.quicknote-wrap {
+  padding:0;
+}
+.quicknote-header {
+  padding:28px 20px 20px;
+  border-bottom:1px solid var(--night-line);
+}
+.quicknote-header-title {
+  font-family:var(--font-title);font-size:.9rem;color:var(--star);
+  letter-spacing:.25em;margin-bottom:4px;
+}
+.quicknote-header-sub {
+  font-size:.68rem;color:var(--star-faint);letter-spacing:.1em;
+}
+.quicknote-body {
+  padding:24px 20px;
+}
+.quicknote-date-label {
+  font-size:.68rem;color:var(--star-faint);letter-spacing:.12em;
+  margin-bottom:12px;
+}
+.quicknote-textarea {
+  width:100%;min-height:200px;
+  background:rgba(255,255,255,.025);
+  border:none;border-bottom:1px solid var(--night-line);
+  padding:12px 4px;font-family:var(--font-body);font-size:.95rem;
+  color:var(--star);resize:none;outline:none;
+  line-height:2;letter-spacing:.04em;transition:.2s;
+}
+.quicknote-textarea:focus {
+  border-bottom-color:var(--ice);
+  background:rgba(74,127,165,.03);
+}
+.quicknote-textarea::placeholder { color:var(--star-faint); }
+
+.quicknote-mood-row {
+  display:flex;gap:0;border:1px solid var(--night-line);
+  border-radius:var(--r-sm);overflow:hidden;margin:16px 0;
+}
+.quicknote-mood-btn {
+  flex:1;padding:10px 4px;border:none;background:none;
+  font-size:1.2rem;cursor:pointer;transition:.2s;
+  border-right:1px solid var(--night-line);
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+}
+.quicknote-mood-btn:last-child { border-right:none; }
+.quicknote-mood-btn.selected { background:rgba(200,168,75,.1); }
+.quicknote-mood-btn .qm-kanji {
+  font-family:var(--font-title);font-size:.6rem;color:var(--star-faint);
+  transition:.2s;
+}
+.quicknote-mood-btn.selected .qm-kanji { color:var(--kin); }
+
+.quicknote-save-btn {
+  width:100%;padding:14px;border:1px solid var(--night-line);
+  border-radius:var(--r-sm);background:rgba(255,255,255,.02);
+  color:var(--star-dim);font-family:var(--font-serif);font-size:.88rem;
+  letter-spacing:.18em;cursor:pointer;transition:.3s;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  margin-top:4px;
+}
+.quicknote-save-btn:hover {
+  border-color:var(--ice);color:var(--star);
+  box-shadow:0 0 16px rgba(74,127,165,.1);
+}
+.quicknote-char-count {
+  text-align:right;font-size:.62rem;color:var(--star-faint);
+  letter-spacing:.08em;margin-top:6px;
+}
+.quicknote-tags {
+  display:flex;flex-wrap:wrap;gap:6px;margin:12px 0;
+}
+.quicknote-tag {
+  padding:4px 10px;border:1px solid var(--night-line);border-radius:2px;
+  font-size:.68rem;color:var(--star-faint);cursor:pointer;transition:.2s;
+  letter-spacing:.08em;
+}
+.quicknote-tag.selected {
+  border-color:var(--kin);color:var(--kin);
+  background:rgba(200,168,75,.07);
+}
+.quicknote-tag-label {
+  font-size:.65rem;color:var(--star-faint);letter-spacing:.1em;margin-bottom:6px;
+}
+
+/* ══ 全文検索 ══ */
+.search-wrap { padding:0; }
+.search-header {
+  padding:20px 20px 16px;
+  border-bottom:1px solid var(--night-line);
+  position:sticky;top:60px;z-index:50;
+  background:rgba(7,11,20,.95);backdrop-filter:blur(12px);
+}
+.search-input-wrap {
+  display:flex;align-items:center;gap:10px;
+  border:1px solid var(--night-line);border-radius:var(--r-sm);
+  padding:10px 14px;background:rgba(255,255,255,.03);
+  transition:.2s;
+}
+.search-input-wrap:focus-within {
+  border-color:var(--ice);background:rgba(74,127,165,.04);
+}
+.search-icon { color:var(--star-faint);font-size:.9rem; }
+.search-input {
+  flex:1;background:none;border:none;outline:none;
+  font-family:var(--font-body);font-size:.9rem;color:var(--star);
+  letter-spacing:.05em;
+}
+.search-input::placeholder { color:var(--star-faint); }
+.search-clear {
+  color:var(--star-faint);cursor:pointer;font-size:.8rem;
+  background:none;border:none;padding:0;
+}
+.search-stats {
+  font-size:.65rem;color:var(--star-faint);letter-spacing:.1em;
+  margin-top:8px;
+}
+.search-results { padding:0 20px 20px; }
+.search-result-item {
+  padding:16px 0;border-bottom:1px solid var(--night-line);
+  cursor:pointer;transition:.2s;
+}
+.search-result-item:hover .search-result-text { color:var(--star); }
+.search-result-header {
+  display:flex;align-items:center;gap:10px;margin-bottom:6px;
+}
+.search-result-date {
+  font-size:.7rem;color:var(--star-faint);letter-spacing:.08em;
+  font-family:var(--font-serif);
+}
+.search-result-tags {
+  display:flex;gap:4px;margin-left:auto;
+}
+.search-result-tag {
+  font-size:.58rem;color:var(--star-faint);
+  border:1px solid var(--night-line);padding:1px 6px;letter-spacing:.06em;
+}
+.search-result-text {
+  font-size:.83rem;color:var(--star-dim);line-height:1.8;
+  letter-spacing:.03em;transition:.2s;
+}
+.search-highlight {
+  color:var(--kin);background:rgba(200,168,75,.12);
+  border-radius:2px;padding:0 2px;
+}
+.search-empty {
+  text-align:center;padding:48px 20px;color:var(--star-faint);
+}
+.search-empty p { font-size:.82rem;line-height:2;letter-spacing:.05em; }
+.search-filter-row {
+  display:flex;gap:6px;overflow-x:auto;margin-top:10px;padding-bottom:2px;
+}
+.search-filter-btn {
+  padding:4px 12px;border:1px solid var(--night-line);border-radius:2px;
+  background:none;font-size:.68rem;color:var(--star-faint);
+  cursor:pointer;transition:.2s;white-space:nowrap;letter-spacing:.08em;
+}
+.search-filter-btn.active { border-color:var(--ice);color:var(--star); }
 </style>
 </head>
 <body>
@@ -1441,6 +1601,88 @@ body::after {
       </div>
     </section>
 
+
+    <!-- 今日の一言（自由記述） -->
+    <section id="mod-quicknote" class="module">
+      <div class="quicknote-wrap">
+        <div class="quicknote-header">
+          <div class="quicknote-header-title">今日の一言</div>
+          <div class="quicknote-header-sub">構造なし・自由に書く</div>
+        </div>
+        <div class="quicknote-body">
+          <div class="quicknote-date-label" id="qn-date-label"></div>
+
+          <textarea class="quicknote-textarea" id="qn-text"
+            placeholder="今日感じたこと、気づいたこと、ただの一言でも。&#10;&#10;書くことがなければ、今この瞬間の呼吸を一つ描写するだけでもいい。"></textarea>
+          <div class="quicknote-char-count" id="qn-char-count">0字</div>
+
+          <div class="quicknote-tag-label">タグ（任意・複数選択可）</div>
+          <div class="quicknote-tags" id="qn-tags">
+            <button class="quicknote-tag" onclick="toggleQnTag('気づき',this)">気づき</button>
+            <button class="quicknote-tag" onclick="toggleQnTag('感謝',this)">感謝</button>
+            <button class="quicknote-tag" onclick="toggleQnTag('悩み',this)">悩み</button>
+            <button class="quicknote-tag" onclick="toggleQnTag('学び',this)">学び</button>
+            <button class="quicknote-tag" onclick="toggleQnTag('仕事',this)">仕事</button>
+            <button class="quicknote-tag" onclick="toggleQnTag('家族',this)">家族</button>
+            <button class="quicknote-tag" onclick="toggleQnTag('身体',this)">身体</button>
+            <button class="quicknote-tag" onclick="toggleQnTag('問い',this)">問い</button>
+          </div>
+
+          <div class="quicknote-tag-label" style="margin-top:14px;">今の気分</div>
+          <div class="quicknote-mood-row" id="qn-mood-row">
+            <button class="quicknote-mood-btn" data-mood="1" onclick="selectQnMood(1,this)">
+              <div>🌑</div><div class="qm-kanji">苦</div>
+            </button>
+            <button class="quicknote-mood-btn" data-mood="2" onclick="selectQnMood(2,this)">
+              <div>🌒</div><div class="qm-kanji">憂</div>
+            </button>
+            <button class="quicknote-mood-btn" data-mood="3" onclick="selectQnMood(3,this)">
+              <div>🌓</div><div class="qm-kanji">平</div>
+            </button>
+            <button class="quicknote-mood-btn" data-mood="4" onclick="selectQnMood(4,this)">
+              <div>🌔</div><div class="qm-kanji">安</div>
+            </button>
+            <button class="quicknote-mood-btn" data-mood="5" onclick="selectQnMood(5,this)">
+              <div>🌕</div><div class="qm-kanji">喜</div>
+            </button>
+          </div>
+
+          <button class="quicknote-save-btn" onclick="saveQuickNote()">
+            <span style="color:var(--kin)">✦</span>
+            記録する
+            <span style="color:var(--kin)">✦</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 全文検索 -->
+    <section id="mod-search" class="module">
+      <div class="search-wrap">
+        <div class="search-header">
+          <div class="search-input-wrap">
+            <span class="search-icon">🔍</span>
+            <input type="search" class="search-input" id="search-input"
+              placeholder="キーワードで検索…"
+              oninput="onSearchInput(this.value)"
+              autocomplete="off" autocorrect="off" spellcheck="false">
+            <button class="search-clear" onclick="clearSearch()" id="search-clear-btn" style="display:none;">✕</button>
+          </div>
+          <div class="search-filter-row">
+            <button class="search-filter-btn active" onclick="setSearchFilter('all',this)">すべて</button>
+            <button class="search-filter-btn" onclick="setSearchFilter('journal',this)">記録</button>
+            <button class="search-filter-btn" onclick="setSearchFilter('quicknote',this)">一言</button>
+          </div>
+          <div class="search-stats" id="search-stats"></div>
+        </div>
+        <div class="search-results" id="search-results">
+          <div class="search-empty">
+            <p>キーワードを入力して<br>過去の記録を検索できます。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <nav class="nav-bar">
@@ -1470,6 +1712,12 @@ body::after {
     </button>
     <button class="nav-tab" onclick="showModule('skip',this)">
       <div class="nav-icon">🍃</div><div>休む</div>
+    </button>
+    <button class="nav-tab" onclick="showModule('quicknote',this)">
+      <div class="nav-icon">🖊</div><div>一言</div>
+    </button>
+    <button class="nav-tab" onclick="showModule('search',this)">
+      <div class="nav-icon">🔍</div><div>検索</div>
     </button>
     <button class="nav-tab" onclick="showModule('settings',this)">
       <div class="nav-icon">⚙</div><div>設定</div>
@@ -2677,6 +2925,255 @@ const _origInitApp = window.initApp;
 window.initApp = function() {
   _origInitApp();
   updateMoonDisplay();
+};
+
+// ══════════════════════════════════════════════════
+// 今日の一言（自由記述）
+// ══════════════════════════════════════════════════
+let qnMood = 0;
+let qnTags = [];
+
+function initQuickNote() {
+  const today = getTodayKey();
+  const el = document.getElementById('qn-date-label');
+  if(el) el.textContent = document.getElementById('header-date').textContent;
+
+  // 保存済みを復元
+  const saved = JSON.parse(localStorage.getItem('naisei_qn_' + today) || '{}');
+  const ta = document.getElementById('qn-text');
+  if(ta && saved.text) ta.value = saved.text;
+  updateQnCharCount();
+
+  // タグ復元
+  qnTags = saved.tags || [];
+  document.querySelectorAll('.quicknote-tag').forEach(b => {
+    if(qnTags.includes(b.textContent)) b.classList.add('selected');
+    else b.classList.remove('selected');
+  });
+
+  // 気分復元
+  qnMood = saved.mood || 0;
+  document.querySelectorAll('.quicknote-mood-btn').forEach(b => {
+    b.classList.toggle('selected', parseInt(b.dataset.mood) === qnMood);
+  });
+}
+
+function updateQnCharCount() {
+  const ta = document.getElementById('qn-text');
+  const cc = document.getElementById('qn-char-count');
+  if(ta && cc) cc.textContent = `${ta.value.length}字`;
+}
+
+// テキスト入力のたびに文字数更新＆自動保存
+document.addEventListener('input', e => {
+  if(e.target.id === 'qn-text') { updateQnCharCount(); autoSaveQn(); }
+});
+
+function autoSaveQn() {
+  const today = getTodayKey();
+  const ta = document.getElementById('qn-text');
+  if(!ta) return;
+  const draft = JSON.parse(localStorage.getItem('naisei_qn_' + today) || '{}');
+  draft.text = ta.value;
+  localStorage.setItem('naisei_qn_' + today, JSON.stringify(draft));
+}
+
+window.toggleQnTag = function(tag, el) {
+  if(qnTags.includes(tag)) {
+    qnTags = qnTags.filter(t => t !== tag);
+    el.classList.remove('selected');
+  } else {
+    qnTags.push(tag);
+    el.classList.add('selected');
+  }
+};
+
+window.selectQnMood = function(v, el) {
+  qnMood = v;
+  document.querySelectorAll('.quicknote-mood-btn').forEach(b =>
+    b.classList.toggle('selected', parseInt(b.dataset.mood) === v));
+};
+
+window.saveQuickNote = function() {
+  const today = getTodayKey();
+  const ta = document.getElementById('qn-text');
+  const text = ta ? ta.value.trim() : '';
+  if(!text) { showBanner('一言書いてみてください'); return; }
+
+  const note = {
+    id: Date.now(),
+    date: today,
+    dateLabel: document.getElementById('header-date').textContent,
+    text,
+    tags: [...qnTags],
+    mood: qnMood,
+    type: 'quicknote',
+  };
+
+  // quicknote専用ストレージ
+  const all = JSON.parse(localStorage.getItem('naisei_quicknotes') || '[]');
+  const idx = all.findIndex(n => n.date === today);
+  if(idx >= 0) all[idx] = note; else all.push(note);
+  localStorage.setItem('naisei_quicknotes', JSON.stringify(all));
+  localStorage.setItem('naisei_qn_' + today, JSON.stringify(note));
+
+  showBanner('記録しました ✦');
+  updateStreak();
+};
+
+// ══════════════════════════════════════════════════
+// 全文検索
+// ══════════════════════════════════════════════════
+let searchFilter = 'all';
+let searchDebounce = null;
+
+function setSearchFilter(filter, el) {
+  searchFilter = filter;
+  document.querySelectorAll('.search-filter-btn').forEach(b => b.classList.remove('active'));
+  if(el) el.classList.add('active');
+  const q = (document.getElementById('search-input') || {}).value || '';
+  runSearch(q);
+}
+window.setSearchFilter = setSearchFilter;
+
+function onSearchInput(q) {
+  const clearBtn = document.getElementById('search-clear-btn');
+  if(clearBtn) clearBtn.style.display = q ? 'block' : 'none';
+  clearTimeout(searchDebounce);
+  searchDebounce = setTimeout(() => runSearch(q), 250);
+}
+window.onSearchInput = onSearchInput;
+
+window.clearSearch = function() {
+  const inp = document.getElementById('search-input');
+  if(inp) inp.value = '';
+  const clearBtn = document.getElementById('search-clear-btn');
+  if(clearBtn) clearBtn.style.display = 'none';
+  document.getElementById('search-results').innerHTML =
+    '<div class="search-empty"><p>キーワードを入力して<br>過去の記録を検索できます。</p></div>';
+  document.getElementById('search-stats').textContent = '';
+};
+
+function runSearch(q) {
+  const resultsEl = document.getElementById('search-results');
+  const statsEl   = document.getElementById('search-stats');
+  if(!q.trim()) {
+    resultsEl.innerHTML = '<div class="search-empty"><p>キーワードを入力して<br>過去の記録を検索できます。</p></div>';
+    statsEl.textContent = '';
+    return;
+  }
+
+  // 全エントリ収集
+  const journals = getLocalEntries().map(e => ({ ...e, _type: 'journal' }));
+  const quicknotes = JSON.parse(localStorage.getItem('naisei_quicknotes') || '[]')
+    .map(n => ({ ...n, _type: 'quicknote' }));
+
+  let all = [];
+  if(searchFilter === 'all')       all = [...journals, ...quicknotes];
+  else if(searchFilter === 'journal')   all = journals;
+  else if(searchFilter === 'quicknote') all = quicknotes;
+
+  // 検索フィールド（journalは全フィールド、quicknoteはtext+tags）
+  const keywords = q.toLowerCase().split(/\s+/).filter(Boolean);
+
+  const results = all.filter(entry => {
+    const fields = entry._type === 'journal'
+      ? [entry.g1, entry.g1w, entry.g2, entry.g2w, entry.g3, entry.g3w,
+         entry.goal1, entry.goal2, entry.goal3,
+         entry.action, entry.release, entry.reflection].filter(Boolean)
+      : [entry.text, ...(entry.tags || [])];
+    const haystack = fields.join(' ').toLowerCase();
+    return keywords.every(kw => haystack.includes(kw));
+  }).sort((a, b) => b.id - a.id);
+
+  statsEl.textContent = results.length ? `${results.length}件見つかりました` : '';
+
+  if(!results.length) {
+    resultsEl.innerHTML = `<div class="search-empty"><p>「${escHtml(q)}」に一致する<br>記録は見つかりませんでした。</p></div>`;
+    return;
+  }
+
+  resultsEl.innerHTML = results.map(entry => {
+    const snippet = buildSnippet(entry, keywords);
+    const tags = entry._type === 'quicknote' && entry.tags?.length
+      ? entry.tags.map(t => `<span class="search-result-tag">${escHtml(t)}</span>`).join('')
+      : (entry._type === 'journal' ? '<span class="search-result-tag">記録</span>' : '');
+    const mood = entry.mood ? MOOD_EMOJIS[entry.mood] || '' : '';
+    return `
+      <div class="search-result-item" onclick="openSearchResult('${entry.id}','${entry._type}')">
+        <div class="search-result-header">
+          <span class="search-result-date">${escHtml(entry.dateLabel || entry.date)}</span>
+          ${mood ? `<span style="font-size:.9rem;">${mood.split(' ')[0]}</span>` : ''}
+          <div class="search-result-tags">${tags}</div>
+        </div>
+        <div class="search-result-text">${snippet}</div>
+      </div>`;
+  }).join('');
+}
+
+function buildSnippet(entry, keywords) {
+  // 全テキストを結合してヒット箇所周辺を抽出
+  let text = '';
+  if(entry._type === 'journal') {
+    text = [entry.g1, entry.g2, entry.g3, entry.action, entry.release, entry.reflection]
+      .filter(Boolean).join(' ');
+  } else {
+    text = entry.text || '';
+  }
+
+  // 最初のキーワードのヒット位置周辺60文字を切り出す
+  const lower = text.toLowerCase();
+  let start = 0;
+  for(const kw of keywords) {
+    const pos = lower.indexOf(kw);
+    if(pos >= 0) { start = Math.max(0, pos - 20); break; }
+  }
+  let snippet = (start > 0 ? '…' : '') + text.substring(start, start + 100) + (text.length > start + 100 ? '…' : '');
+
+  // キーワードをハイライト
+  keywords.forEach(kw => {
+    const re = new RegExp(kw.replace(/[.*+?^${}()|[\]\]/g, '\$&'), 'gi');
+    snippet = snippet.replace(re, m => `<mark class="search-highlight">${escHtml(m)}</mark>`);
+  });
+
+  return snippet;
+}
+
+window.openSearchResult = function(id, type) {
+  if(type === 'journal') {
+    openEntryModal(id);
+  } else {
+    // quicknote モーダル
+    const notes = JSON.parse(localStorage.getItem('naisei_quicknotes') || '[]');
+    const note = notes.find(n => String(n.id) === String(id));
+    if(!note) return;
+    const body = document.getElementById('modal-body');
+    body.innerHTML = `
+      <div class="modal-date">${escHtml(note.dateLabel || note.date)}　${note.mood ? MOOD_EMOJIS[note.mood].split(' ')[0] : ''}</div>
+      ${note.tags?.length ? `<div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:12px;">
+        ${note.tags.map(t=>`<span class="search-result-tag">${escHtml(t)}</span>`).join('')}
+      </div>` : ''}
+      <div class="modal-section">
+        <div class="modal-text" style="font-size:.9rem;line-height:2;">${escHtml(note.text).replace(/
+/g,'<br>')}</div>
+      </div>`;
+    document.getElementById('modal-overlay').classList.add('open');
+  }
+};
+
+// ══════════════════════════════════════════════════
+// showModule拡張に quicknote・search を追加
+// ══════════════════════════════════════════════════
+const _origShowModule2 = window.showModule;
+window.showModule = function(name, el) {
+  _origShowModule2(name, el);
+  if(name === 'quicknote') initQuickNote();
+  if(name === 'search') {
+    setTimeout(() => {
+      const inp = document.getElementById('search-input');
+      if(inp) inp.focus();
+    }, 100);
+  }
 };
 </script>
 </body>
