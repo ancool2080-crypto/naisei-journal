@@ -1,5 +1,5 @@
 // 内省 Naisei Journal — Service Worker
-const CACHE_NAME = 'naisei-v1';
+const CACHE_NAME = 'naisei-20260621';
 const FONTS_CACHE = 'naisei-fonts-v1';
 
 // オフラインで動作させるファイル
@@ -44,7 +44,13 @@ self.addEventListener('activate', event => {
           .filter(k => k !== CACHE_NAME && k !== FONTS_CACHE)
           .map(k => caches.delete(k))
       )
-    ).then(() => self.clients.claim())
+    ).then(() => {
+      // 全クライアントに更新通知
+      return self.clients.matchAll({type:'window'}).then(clients => {
+        clients.forEach(client => client.postMessage({type:'SW_UPDATED', version:CACHE_NAME}));
+        return self.clients.claim();
+      });
+    })
   );
 });
 
