@@ -2676,7 +2676,7 @@ let currentKotowazaFilter = 'all';
 let currentKotowazaIndex = 0;
 let filteredKotowaza = [...KOTOWAZA_DB];
 
-function filterKotowaza(filter, el) {
+window.filterKotowaza = function(filter, el) {
   currentKotowazaFilter = filter;
   currentKotowazaIndex = 0;
   document.querySelectorAll('.kotowaza-filter-btn').forEach(b => b.classList.remove('active'));
@@ -2684,8 +2684,7 @@ function filterKotowaza(filter, el) {
   filteredKotowaza = filter === 'all' ? [...KOTOWAZA_DB]
     : KOTOWAZA_DB.filter(k => k.philosophy === filter);
   renderKotowaza();
-}
-window.filterKotowaza = filterKotowaza;
+};
 
 function renderKotowaza() {
   const area = document.getElementById('kotowaza-card-area');
@@ -2912,13 +2911,7 @@ ${weekSummary}
 // ══════════════════════════════════════════════════
 // showModule拡張（新タブ対応）
 // ══════════════════════════════════════════════════
-const _origShowModule = window.showModule;
-window.showModule = function(name, el) {
-  _origShowModule(name, el);
-  if(name==='kotowaza') initKotowaza();
-  if(name==='weekly')   initWeekly();
-  if(name==='skip')     renderSkipHistory();
-};
+
 
 // initApp拡張
 const _origInitApp = window.initApp;
@@ -3162,11 +3155,13 @@ window.openSearchResult = function(id, type) {
 };
 
 // ══════════════════════════════════════════════════
-// showModule拡張に quicknote・search を追加
-// ══════════════════════════════════════════════════
-const _origShowModule2 = window.showModule;
+// ══ showModule統合ラッパー ══
+const _origShowModuleBase = window.showModule;
 window.showModule = function(name, el) {
-  _origShowModule2(name, el);
+  _origShowModuleBase(name, el);
+  if(name === 'kotowaza')  initKotowaza();
+  if(name === 'weekly')    initWeekly();
+  if(name === 'skip')      renderSkipHistory();
   if(name === 'quicknote') initQuickNote();
   if(name === 'search') {
     setTimeout(() => {
