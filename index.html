@@ -1134,6 +1134,35 @@ body::after {
 </style>
 </head>
 <body>
+<script>
+// ══ グローバル関数（DOMより先に定義 ・ onclick対応）══
+window.toggleMoreMenu = function() {
+  const menu = document.getElementById('more-menu');
+  if(!menu) return;
+  const isOpen = menu.style.display !== 'none';
+  menu.style.display = isOpen ? 'none' : 'block';
+  const btn = document.getElementById('nav-more');
+  if(btn) btn.classList.toggle('active', !isOpen);
+};
+window.closeMoreMenu = function() {
+  const menu = document.getElementById('more-menu');
+  if(menu) menu.style.display = 'none';
+  const btn = document.getElementById('nav-more');
+  if(btn) btn.classList.remove('active');
+};
+window.showModuleFromMore = function(name) {
+  window.closeMoreMenu();
+  if(typeof window.showModule === 'function') {
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    const btn = document.getElementById('nav-more');
+    if(btn) btn.classList.add('active');
+    window.showModule(name, null);
+  } else {
+    // showModuleがまだ未定義の場合は遅延実行
+    setTimeout(() => window.showModuleFromMore(name), 100);
+  }
+};
+</script>
 
 <!-- ローディング -->
 <div id="app-loading">
@@ -1728,30 +1757,31 @@ body::after {
     </button>
   </nav>
 
-  <!-- もっとメニュー -->
-  <div id="more-menu" style="display:none;position:fixed;inset:0;z-index:200;">
-    <div onclick="closeMoreMenu()" style="position:absolute;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);"></div>
-    <div class="more-menu-panel">
-      <div class="more-menu-title">メニュー</div>
-      <button class="more-menu-item" onclick="showModuleFromMore('history')">
-        <span class="more-menu-icon">◎</span><span>履歴</span>
-      </button>
-      <button class="more-menu-item" onclick="showModuleFromMore('stats')">
-        <span class="more-menu-icon">◈</span><span>統計</span>
-      </button>
-      <button class="more-menu-item" onclick="showModuleFromMore('kotowaza')">
-        <span class="more-menu-icon">✦</span><span>格言ライブラリ</span>
-      </button>
-      <button class="more-menu-item" onclick="showModuleFromMore('weekly')">
-        <span class="more-menu-icon">◈</span><span>週次レビュー</span>
-      </button>
-      <button class="more-menu-item" onclick="showModuleFromMore('skip')">
-        <span class="more-menu-icon">🍃</span><span>書かない日</span>
-      </button>
-      <button class="more-menu-item" onclick="showModuleFromMore('settings')">
-        <span class="more-menu-icon">⚙</span><span>設定</span>
-      </button>
-    </div>
+</div>
+
+<!-- もっとメニュー（app-main外・z-index最前面） -->
+<div id="more-menu" style="display:none;position:fixed;inset:0;z-index:500;">
+  <div onclick="closeMoreMenu()" style="position:absolute;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);"></div>
+  <div class="more-menu-panel">
+    <div class="more-menu-title">メニュー</div>
+    <button class="more-menu-item" onclick="showModuleFromMore('history')">
+      <span class="more-menu-icon">◎</span><span>履歴</span>
+    </button>
+    <button class="more-menu-item" onclick="showModuleFromMore('stats')">
+      <span class="more-menu-icon">◈</span><span>統計</span>
+    </button>
+    <button class="more-menu-item" onclick="showModuleFromMore('kotowaza')">
+      <span class="more-menu-icon">✦</span><span>格言ライブラリ</span>
+    </button>
+    <button class="more-menu-item" onclick="showModuleFromMore('weekly')">
+      <span class="more-menu-icon">◈</span><span>週次レビュー</span>
+    </button>
+    <button class="more-menu-item" onclick="showModuleFromMore('skip')">
+      <span class="more-menu-icon">🍃</span><span>書かない日</span>
+    </button>
+    <button class="more-menu-item" onclick="showModuleFromMore('settings')">
+      <span class="more-menu-icon">⚙</span><span>設定</span>
+    </button>
   </div>
 </div>
 
@@ -3200,33 +3230,7 @@ window.showModule = function(name, el) {
   }
 };
 
-// ══ もっとメニュー ══
-window.toggleMoreMenu = function() {
-  const menu = document.getElementById('more-menu');
-  if(!menu) return;
-  menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
-  // nav-moreをactive表示
-  const moreBtn = document.getElementById('nav-more');
-  if(moreBtn) moreBtn.classList.toggle('active', menu.style.display === 'block');
-};
-
-window.closeMoreMenu = function() {
-  const menu = document.getElementById('more-menu');
-  if(menu) menu.style.display = 'none';
-  const moreBtn = document.getElementById('nav-more');
-  if(moreBtn) moreBtn.classList.remove('active');
-};
-
-window.showModuleFromMore = function(name) {
-  closeMoreMenu();
-  // ナビタブのactive状態をリセット（メインナビ4つ）
-  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-  // もっとボタンをactive表示
-  const moreBtn = document.getElementById('nav-more');
-  if(moreBtn) moreBtn.classList.add('active');
-  // モジュール切替
-  window.showModule(name, null);
-};
+// もっとメニュー関数は先行定義済み
 </script>
 </body>
 </html>
