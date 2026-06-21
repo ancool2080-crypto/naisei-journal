@@ -925,6 +925,27 @@ body::after {
   font-size:.85rem;letter-spacing:.15em;cursor:pointer;transition:.2s;
 }
 .weekly-save-btn:hover { border-color:var(--ice);color:var(--star); }
+
+/* ══ 更新通知バナー ══ */
+.update-banner {
+  position:fixed;bottom:calc(68px + env(safe-area-inset-bottom,0px) + 8px);
+  left:50%;transform:translateX(-50%) translateY(20px);
+  background:rgba(13,21,37,.97);color:var(--star);
+  padding:10px 16px;border:1px solid var(--kin);
+  border-radius:var(--r-sm);font-size:.78rem;letter-spacing:.08em;
+  z-index:500;opacity:0;transition:.4s;pointer-events:none;
+  display:flex;align-items:center;gap:12px;white-space:nowrap;
+  box-shadow:0 0 20px rgba(200,168,75,.15);
+}
+.update-banner.show {
+  opacity:1;transform:translateX(-50%) translateY(0);pointer-events:all;
+}
+.update-banner button {
+  padding:4px 12px;border:1px solid var(--kin);border-radius:2px;
+  background:none;color:var(--kin);font-size:.72rem;
+  cursor:pointer;letter-spacing:.08em;
+  font-family:var(--font-serif);
+}
 </style>
 </head>
 <body>
@@ -1467,6 +1488,10 @@ body::after {
 
 <!-- バナー -->
 <div class="save-banner" id="save-banner">記録しました</div>
+<div class="update-banner" id="update-banner">
+  <span>✦ アプリが更新されました</span>
+  <button onclick="reloadApp()">再読み込み</button>
+</div>
 
 <!-- Firebase -->
 <script type="module">
@@ -2209,10 +2234,35 @@ window.saveReverseAnswers = function() {
 if('serviceWorker' in navigator){
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('sw.js')
-      .then(r => console.log('SW registered'))
+      .then(reg => {
+        console.log('SW registered');
+        reg.addEventListener('updatefound', () => {
+          const newWorker = reg.installing;
+          newWorker.addEventListener('statechange', () => {
+            if(newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+              newWorker.postMessage('SKIP_WAITING');
+            }
+          });
+        });
+      })
       .catch(e => console.warn('SW failed:', e));
+    navigator.serviceWorker.addEventListener('message', event => {
+      if(event.data && event.data.type === 'SW_UPDATED') {
+        const banner = document.getElementById('update-banner');
+        if(banner) banner.classList.add('show');
+      }
+    });
+    let refreshing = false;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if(!refreshing) {
+        refreshing = true;
+        const banner = document.getElementById('update-banner');
+        if(banner) banner.classList.add('show');
+      }
+    });
   });
 }
+window.reloadApp = function() { window.location.reload(true); };
 
 // ══════════════════════════════════════════════════
 // ⑦ 月齢計算・連動
