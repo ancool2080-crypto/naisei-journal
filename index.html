@@ -1106,6 +1106,31 @@ body::after {
   cursor:pointer;transition:.2s;white-space:nowrap;letter-spacing:.08em;
 }
 .search-filter-btn.active { border-color:var(--ice);color:var(--star); }
+
+/* ══ もっとメニュー ══ */
+.more-menu-panel {
+  position:absolute;bottom:calc(68px + env(safe-area-inset-bottom,0px));
+  left:0;right:0;
+  background:var(--night-mid);
+  border-top:1px solid var(--night-line);
+  border-radius:var(--r-lg) var(--r-lg) 0 0;
+  padding:20px 20px calc(8px + env(safe-area-inset-bottom,0px));
+  animation:slideUp .25s ease;
+}
+.more-menu-title {
+  font-family:var(--font-title);font-size:.72rem;color:var(--star-faint);
+  letter-spacing:.2em;margin-bottom:14px;text-align:center;
+}
+.more-menu-item {
+  width:100%;padding:14px 16px;border:none;background:none;
+  display:flex;align-items:center;gap:14px;
+  font-family:var(--font-body);font-size:.9rem;color:var(--star-dim);
+  cursor:pointer;transition:.2s;border-bottom:1px solid var(--night-line);
+  text-align:left;letter-spacing:.05em;
+}
+.more-menu-item:last-child { border-bottom:none; }
+.more-menu-item:hover { color:var(--star);background:rgba(255,255,255,.03); }
+.more-menu-icon { font-size:1rem;min-width:20px;text-align:center;color:var(--star-faint); }
 </style>
 </head>
 <body>
@@ -1686,43 +1711,48 @@ body::after {
   </main>
 
   <nav class="nav-bar">
-    <button class="nav-tab active" onclick="showModule('journal',this)">
-      <div class="nav-icon">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <line x1="3" y1="17" x2="17" y2="3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
-          <path d="M14 3 L17 6 L7 16 L3 17 L4 13 Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round" fill="none"/>
-          <line x1="3" y1="17" x2="5" y2="19" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity="0.5"/>
-        </svg>
-      </div><div>記録</div>
+    <button class="nav-tab active" id="nav-journal" onclick="showModule('journal',this)">
+      <div class="nav-icon">✍</div><div>記録</div>
     </button>
-    <button class="nav-tab" onclick="showModule('history',this)">
-      <div class="nav-icon">◎</div><div>履歴</div>
-    </button>
-    <button class="nav-tab" onclick="showModule('stats',this)">
-      <div class="nav-icon">◈</div><div>統計</div>
-    </button>
-    <button class="nav-tab" onclick="showModule('reverse',this)">
-      <div class="nav-icon">✦</div><div>問</div>
-    </button>
-    <button class="nav-tab" onclick="showModule('kotowaza',this)">
-      <div class="nav-icon">◎</div><div>格言</div>
-    </button>
-    <button class="nav-tab" onclick="showModule('weekly',this)">
-      <div class="nav-icon">◈</div><div>週次</div>
-    </button>
-    <button class="nav-tab" onclick="showModule('skip',this)">
-      <div class="nav-icon">🍃</div><div>休む</div>
-    </button>
-    <button class="nav-tab" onclick="showModule('quicknote',this)">
+    <button class="nav-tab" id="nav-quicknote" onclick="showModule('quicknote',this)">
       <div class="nav-icon">🖊</div><div>一言</div>
     </button>
-    <button class="nav-tab" onclick="showModule('search',this)">
+    <button class="nav-tab" id="nav-reverse" onclick="showModule('reverse',this)">
+      <div class="nav-icon">✦</div><div>問</div>
+    </button>
+    <button class="nav-tab" id="nav-search" onclick="showModule('search',this)">
       <div class="nav-icon">🔍</div><div>検索</div>
     </button>
-    <button class="nav-tab" onclick="showModule('settings',this)">
-      <div class="nav-icon">⚙</div><div>設定</div>
+    <button class="nav-tab" id="nav-more" onclick="toggleMoreMenu()">
+      <div class="nav-icon">☰</div><div>もっと</div>
     </button>
   </nav>
+
+  <!-- もっとメニュー -->
+  <div id="more-menu" style="display:none;position:fixed;inset:0;z-index:200;">
+    <div onclick="closeMoreMenu()" style="position:absolute;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);"></div>
+    <div class="more-menu-panel">
+      <div class="more-menu-title">メニュー</div>
+      <button class="more-menu-item" onclick="showModuleFromMore('history')">
+        <span class="more-menu-icon">◎</span><span>履歴</span>
+      </button>
+      <button class="more-menu-item" onclick="showModuleFromMore('stats')">
+        <span class="more-menu-icon">◈</span><span>統計</span>
+      </button>
+      <button class="more-menu-item" onclick="showModuleFromMore('kotowaza')">
+        <span class="more-menu-icon">✦</span><span>格言ライブラリ</span>
+      </button>
+      <button class="more-menu-item" onclick="showModuleFromMore('weekly')">
+        <span class="more-menu-icon">◈</span><span>週次レビュー</span>
+      </button>
+      <button class="more-menu-item" onclick="showModuleFromMore('skip')">
+        <span class="more-menu-icon">🍃</span><span>書かない日</span>
+      </button>
+      <button class="more-menu-item" onclick="showModuleFromMore('settings')">
+        <span class="more-menu-icon">⚙</span><span>設定</span>
+      </button>
+    </div>
+  </div>
 </div>
 
 <!-- 詳細モーダル -->
@@ -1830,7 +1860,11 @@ const MOOD_LABELS = {1:'とても辛い',2:'少し辛い',3:'普通',4:'良い',
 const MOOD_EMOJIS = {1:'🌑 苦',2:'🌒 憂',3:'🌓 平',4:'🌔 安',5:'🌕 喜'};
 
 window.initApp = function() {
-  setHeaderDate(); updateStreak(); updateApiStatus(); loadTodayDraft();
+  setHeaderDate();
+  updateStreak();
+  updateApiStatus();
+  loadTodayDraft();
+  updateMoonDisplay();
 };
 
 function setHeaderDate() {
@@ -2913,12 +2947,7 @@ ${weekSummary}
 // ══════════════════════════════════════════════════
 
 
-// initApp拡張
-const _origInitApp = window.initApp;
-window.initApp = function() {
-  _origInitApp();
-  updateMoonDisplay();
-};
+
 
 // ══════════════════════════════════════════════════
 // 今日の一言（自由記述）
@@ -3169,6 +3198,34 @@ window.showModule = function(name, el) {
       if(inp) inp.focus();
     }, 100);
   }
+};
+
+// ══ もっとメニュー ══
+window.toggleMoreMenu = function() {
+  const menu = document.getElementById('more-menu');
+  if(!menu) return;
+  menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+  // nav-moreをactive表示
+  const moreBtn = document.getElementById('nav-more');
+  if(moreBtn) moreBtn.classList.toggle('active', menu.style.display === 'block');
+};
+
+window.closeMoreMenu = function() {
+  const menu = document.getElementById('more-menu');
+  if(menu) menu.style.display = 'none';
+  const moreBtn = document.getElementById('nav-more');
+  if(moreBtn) moreBtn.classList.remove('active');
+};
+
+window.showModuleFromMore = function(name) {
+  closeMoreMenu();
+  // ナビタブのactive状態をリセット（メインナビ4つ）
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  // もっとボタンをactive表示
+  const moreBtn = document.getElementById('nav-more');
+  if(moreBtn) moreBtn.classList.add('active');
+  // モジュール切替
+  window.showModule(name, null);
 };
 </script>
 </body>
