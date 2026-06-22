@@ -2751,15 +2751,25 @@ window.filterKotowaza = function(filter, el) {
 };
 
 function renderKotowaza() {
-  const area = document.getElementById('kotowaza-card-area');
+  const area    = document.getElementById('kotowaza-card-area');
   const counter = document.getElementById('kotowaza-counter');
-  if(!area) return;
-  if(!filteredKotowaza.length) {
-    area.innerHTML = '<div style="padding:32px;text-align:center;color:var(--star-faint);font-size:.82rem;">格言が見つかりません</div>';
+  if(!area) { console.warn('kotowaza-card-area not found'); return; }
+
+  if(!filteredKotowaza || !filteredKotowaza.length) {
+    area.innerHTML = '<div style="padding:32px 20px;text-align:center;color:var(--star-faint);font-size:.82rem;">格言が見つかりません</div>';
+    if(counter) counter.textContent = '';
     return;
   }
+
+  // インデックスの範囲チェック
+  if(currentKotowazaIndex >= filteredKotowaza.length) currentKotowazaIndex = 0;
+  if(currentKotowazaIndex < 0) currentKotowazaIndex = filteredKotowaza.length - 1;
+
   const k = filteredKotowaza[currentKotowazaIndex];
+  if(!k) { area.innerHTML = '<div style="padding:32px;text-align:center;color:var(--star-faint);">読み込みエラー</div>'; return; }
+
   if(counter) counter.textContent = `${currentKotowazaIndex+1} / ${filteredKotowaza.length}`;
+
   area.innerHTML = `
     <div class="kotowaza-card">
       <div class="kotowaza-card-header">
@@ -2776,10 +2786,12 @@ function renderKotowaza() {
 }
 
 window.nextKotowaza = function() {
+  if(!filteredKotowaza.length) return;
   currentKotowazaIndex = (currentKotowazaIndex + 1) % filteredKotowaza.length;
   renderKotowaza();
 };
 window.prevKotowaza = function() {
+  if(!filteredKotowaza.length) return;
   currentKotowazaIndex = (currentKotowazaIndex - 1 + filteredKotowaza.length) % filteredKotowaza.length;
   renderKotowaza();
 };
@@ -2787,8 +2799,15 @@ window.prevKotowaza = function() {
 // 格言モジュール初期化
 function initKotowaza() {
   const today = new Date();
-  currentKotowazaIndex = today.getDate() % KOTOWAZA_DB.length;
+  // フィルターをリセットしてallに戻す
+  currentKotowazaFilter = 'all';
   filteredKotowaza = [...KOTOWAZA_DB];
+  // 今日の日付をインデックスに使う（毎日違う格言から始まる）
+  currentKotowazaIndex = today.getDate() % filteredKotowaza.length;
+  // フィルターボタンのactive状態を初期化
+  document.querySelectorAll('.kotowaza-filter-btn').forEach((b,i) => {
+    b.classList.toggle('active', i === 0);
+  });
   renderKotowaza();
 }
 
